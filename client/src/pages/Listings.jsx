@@ -49,11 +49,15 @@ export default function Listings() {
   const initialCategory = searchParams.get("category") || "all";
   const initialCity = searchParams.get("city") || "";
 
+  const categoryValues = useMemo(() => categories.filter(c => c.value !== "all").map(c => c.value), []);
+
   const [searchQuery, setSearchQuery] = useState(initialCity);
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedCategories, setSelectedCategories] = useState(
+    initialCategory === "all" ? categoryValues : [initialCategory]
+  );
   const [selectedCity, setSelectedCity] = useState("All Cities");
   const [priceRange, setPriceRange] = useState([0, 50000]);
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true); // Show filters by default now
   const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("rating");
   const [listings, setListings] = useState([]);
@@ -81,8 +85,7 @@ export default function Listings() {
   const filteredListings = useMemo(() => {
     return listings
       .filter((listing) => {
-        const matchesCategory =
-          selectedCategory === "all" || listing.category === selectedCategory;
+        const matchesCategory = selectedCategories.includes(listing.category);
         const matchesCity =
           selectedCity === "All Cities" || listing.city === selectedCity;
         const matchesSearch =
@@ -100,7 +103,15 @@ export default function Listings() {
         if (sortBy === "reviews") return b.reviews - a.reviews;
         return 0;
       });
-  }, [selectedCategory, selectedCity, searchQuery, priceRange, sortBy]);
+  }, [selectedCategories, selectedCity, searchQuery, priceRange, sortBy, listings]);
+
+  const toggleCategory = (category) => {
+    setSelectedCategories(prev =>
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
 
   if (!isAuthenticated) {
     return null;
@@ -124,21 +135,9 @@ export default function Listings() {
                   placeholder="Search by name or location..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-12 bg-card border-0"
+                  className="pl-12 h-12 bg-card border-0 shadow-sm"
                 />
               </div>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-full md:w-48 h-12 bg-card border-0">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
               <Button
                 variant="hero-outline"
                 size="lg"
@@ -146,7 +145,7 @@ export default function Listings() {
                 className="h-12"
               >
                 <SlidersHorizontal className="w-5 h-5" />
-                Filters
+                {showFilters ? "Hide Filters" : "Show Filters"}
               </Button>
             </div>
           </div>
@@ -159,7 +158,7 @@ export default function Listings() {
               <motion.aside
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="w-full lg:w-72 space-y-6 p-6 bg-card rounded-2xl shadow-card h-fit"
+                className="w-full lg:w-72 space-y-6 p-6 bg-card rounded-2xl shadow-card h-fit border border-border"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="font-display font-semibold text-lg">Filters</h3>
@@ -169,6 +168,36 @@ export default function Listings() {
                   >
                     <X className="w-5 h-5" />
                   </button>
+                </div>
+
+                {/* Categories Multi-select */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="font-medium">Categories</Label>
+                    <button
+                      onClick={() => setSelectedCategories(categoryValues)}
+                      className="text-xs text-primary hover:underline font-medium"
+                    >
+                      Select All
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {categories.filter(c => c.value !== "all").map((category) => (
+                      <div key={category.value} className="flex items-center gap-2">
+                        <Checkbox
+                          id={`cat-${category.value}`}
+                          checked={selectedCategories.includes(category.value)}
+                          onCheckedChange={() => toggleCategory(category.value)}
+                        />
+                        <Label
+                          htmlFor={`cat-${category.value}`}
+                          className="text-sm font-normal cursor-pointer flex-1"
+                        >
+                          {category.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* City Filter */}
@@ -189,7 +218,7 @@ export default function Listings() {
                 </div>
 
                 {/* Price Range */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Label className="font-medium">
                     Price Range: ₹{priceRange[0].toLocaleString()} - ₹
                     {priceRange[1].toLocaleString()}
@@ -199,12 +228,12 @@ export default function Listings() {
                     onValueChange={setPriceRange}
                     max={50000}
                     step={500}
-                    className="py-4"
+                    className="py-2"
                   />
                 </div>
 
                 {/* Amenities */}
-                <div className="space-y-3">
+                <div className="space-y-3 pt-2">
                   <Label className="font-medium">Amenities</Label>
                   {["WiFi", "AC", "Meals", "Gym", "24/7 Access"].map((amenity) => (
                     <div key={amenity} className="flex items-center gap-2">
@@ -216,13 +245,13 @@ export default function Listings() {
                   ))}
                 </div>
 
-                <Button variant="outline" className="w-full" onClick={() => {
-                  setSelectedCategory("all");
+                <Button variant="outline" className="w-full mt-4" onClick={() => {
+                  setSelectedCategories(categoryValues);
                   setSelectedCity("All Cities");
                   setPriceRange([0, 50000]);
                   setSearchQuery("");
                 }}>
-                  Clear All Filters
+                  Reset All
                 </Button>
               </motion.aside>
             )}
@@ -268,7 +297,7 @@ export default function Listings() {
                 <div className="text-center py-20">
                   <p className="text-muted-foreground text-lg">No listings found matching your criteria.</p>
                   <Button variant="outline" className="mt-4" onClick={() => {
-                    setSelectedCategory("all");
+                    setSelectedCategories(categoryValues);
                     setSelectedCity("All Cities");
                     setPriceRange([0, 50000]);
                     setSearchQuery("");

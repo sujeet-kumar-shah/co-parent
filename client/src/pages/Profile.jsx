@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft } from "lucide-react";
 
 export default function Profile() {
-    const { user, isAuthenticated, login } = useAuth(); // login function updates user context
+    const { user, isAuthenticated, token } = useAuth();
     const navigate = useNavigate();
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
@@ -59,7 +59,6 @@ export default function Profile() {
         }
 
         try {
-            const token = localStorage.getItem("token");
             const response = await fetch("http://localhost:5000/api/auth/profile", {
                 method: "PUT",
                 headers: {
