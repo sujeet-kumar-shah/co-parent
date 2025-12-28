@@ -33,7 +33,7 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="bg-foreground text-primary-foreground">
-      <div className="container py-16">
+      <div className="container py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
@@ -114,7 +114,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-6 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-primary-foreground/50 text-sm">
             © 2024 CO-PARENTS. All rights reserved.
           </p>
