@@ -5,11 +5,7 @@ import { Menu, X, User, Building2, LogOut, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+const navLinks = [];
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
