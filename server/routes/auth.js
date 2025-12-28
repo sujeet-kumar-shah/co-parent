@@ -40,6 +40,8 @@ router.post('/register', async (req, res) => {
                 name: user.name,
                 email: user.email,
                 type: user.type,
+                phone: user.phone,
+                businessName: user.businessName,
                 token: generateToken(user._id),
             });
         } else {
@@ -65,6 +67,8 @@ router.post('/login', async (req, res) => {
                 name: user.name,
                 email: user.email,
                 type: user.type,
+                phone: user.phone,
+                businessName: user.businessName,
                 token: generateToken(user._id),
             });
         } else {
