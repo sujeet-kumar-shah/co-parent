@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         // Only required if type is vendor, but we'll handle validation logically or in controller
     },
+    profileImage: {
+        type: String,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

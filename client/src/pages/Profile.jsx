@@ -22,6 +22,7 @@ export default function Profile() {
         // location: "", // Not yet in backend, can add later
         password: "", // Optional
         confirmPassword: "",
+        profileImage: "",
     });
 
     useEffect(() => {
@@ -36,9 +37,19 @@ export default function Profile() {
                 email: user.email || "",
                 phone: user.phone || "",
                 businessName: user.businessName || "",
+                profileImage: user.profileImage || "",
             }));
         }
     }, [user, isAuthenticated, authLoading, navigate]);
+
+    const [preview, setPreview] = useState("");
+
+    useEffect(() => {
+        // If user has profileImage set, use it for preview
+        if (user && user.profileImage) {
+            setPreview(user.profileImage);
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -71,6 +82,7 @@ export default function Profile() {
                     phone: formData.phone,
                     businessName: user.type === "vendor" ? formData.businessName : undefined,
                     password: formData.password || undefined,
+                    profileImage: formData.profileImage || undefined,
                 }),
             });
 
@@ -110,6 +122,19 @@ export default function Profile() {
         }
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        // Simple preview using FileReader -> data URL, and store in formData.profileImage
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreview(reader.result);
+            setFormData((prev) => ({ ...prev, profileImage: reader.result }));
+        };
+        reader.readAsDataURL(file);
+    };
+
     if (authLoading) {
         return (
             <div className="min-h-screen bg-background">
@@ -133,17 +158,22 @@ export default function Profile() {
                     Back to Home
                 </Link>
                 <div className="bg-card rounded-2xl shadow-card p-8">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
-                            {user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />}
-                        </div>
+                        <label className={`w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`} htmlFor="user-image-input">
+                            {preview ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                            ) : (
+                                (user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />)
+                            )}
+                        </label>
+                        <input id="user-image-input" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" />
                         <div>
                             <h1 className="font-display text-2xl font-bold">Profile Settings</h1>
                             <p className="text-muted-foreground">Manage your account information</p>
                         </div>
                     </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Full Name</Label>

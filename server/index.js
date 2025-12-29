@@ -11,7 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(express.json());
+// Allow larger JSON bodies to support base64 image uploads from client
+app.use(express.json({ limit: '5mb' }));
 app.use(cookieParser());
 app.use(cors({
     origin: ['http://localhost:5173', 'http://localhost:8080'], // Allow Vite default and 8080

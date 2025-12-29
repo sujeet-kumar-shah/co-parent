@@ -39,6 +39,7 @@ router.post('/register', async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                profileImage: user.profileImage,
                 type: user.type,
                 phone: user.phone,
                 businessName: user.businessName,
@@ -66,6 +67,7 @@ router.post('/login', async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                profileImage: user.profileImage,
                 type: user.type,
                 phone: user.phone,
                 businessName: user.businessName,
@@ -90,6 +92,7 @@ router.get('/profile', protect, async (req, res) => {
         phone: req.user.phone,
         type: req.user.type,
         businessName: req.user.businessName,
+        profileImage : req.user.profileImage
     });
 });
 
@@ -103,6 +106,7 @@ router.put('/profile', protect, async (req, res) => {
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
         user.phone = req.body.phone || user.phone;
+        user.profileImage = req.body.profileImage || user.profileImage;
         if (req.body.password) {
             user.password = req.body.password;
         }
@@ -116,6 +120,7 @@ router.put('/profile', protect, async (req, res) => {
             _id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
+            profileImage: updatedUser.profileImage,
             phone: updatedUser.phone,
             type: updatedUser.type,
             businessName: updatedUser.businessName,

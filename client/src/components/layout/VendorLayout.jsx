@@ -123,7 +123,7 @@ const VendorLayout = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
                                     <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
-                                        <AvatarImage src={user?.avatar} alt={user?.name} />
+                                        <AvatarImage src={user?.profileImage} alt={user?.name} />
                                         <AvatarFallback className="bg-primary/10 text-primary font-bold">
                                             {user?.name?.charAt(0).toUpperCase()}
                                         </AvatarFallback>
