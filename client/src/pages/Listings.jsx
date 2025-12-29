@@ -45,7 +45,7 @@ const cities = ["All Cities", "Pune", "Bangalore", "Delhi", "Chennai", "Jaipur"]
 export default function Listings() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const initialCategory = searchParams.get("category") || "all";
   const initialCity = searchParams.get("city") || "";
 
@@ -77,10 +77,10 @@ export default function Listings() {
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!loading && !isAuthenticated) {
       navigate("/login", { state: { from: `/listings?category=${initialCategory}` } });
     }
-  }, [isAuthenticated, navigate, initialCategory]);
+  }, [isAuthenticated, loading, navigate, initialCategory]);
 
   const filteredListings = useMemo(() => {
     return listings
@@ -113,9 +113,11 @@ export default function Listings() {
     );
   };
 
-  if (!isAuthenticated) {
-    return null;
+  if (loading) {
+    return <div className="min-h-screen pt-20 text-center">Loading...</div>;
   }
+
+  if (!isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-background">

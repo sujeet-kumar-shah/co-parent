@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft } from "lucide-react";
 
 export default function Profile() {
-    const { user, isAuthenticated, token } = useAuth();
+    const { user, isAuthenticated, token, loading: authLoading } = useAuth();
     const navigate = useNavigate();
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function Profile() {
     });
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!authLoading && !isAuthenticated) {
             navigate("/login");
             return;
         }
@@ -38,7 +38,7 @@ export default function Profile() {
                 businessName: user.businessName || "",
             }));
         }
-    }, [user, isAuthenticated, navigate]);
+    }, [user, isAuthenticated, authLoading, navigate]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -110,6 +110,18 @@ export default function Profile() {
         }
     };
 
+    if (authLoading) {
+        return (
+            <div className="min-h-screen bg-background">
+                <Header />
+                <main className="pt-24 pb-16 container max-w-2xl">
+                    <div className="text-center">Loading...</div>
+                </main>
+                <Footer />
+            </div>
+        );
+    }
+
     if (!user) return null;
 
     return (
@@ -173,7 +185,7 @@ export default function Profile() {
                                         value={formData.phone}
                                         onChange={handleChange}
                                         className="pl-9"
-                                        placeholder="+91 98765 43210"
+                                        placeholder="+91 90571 76565"
                                     />
                                 </div>
                             </div>

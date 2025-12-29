@@ -36,7 +36,7 @@ import { useAuth } from "@/context/AuthContext";
 export default function ListingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liked, setLiked] = useState(false);
   const [listing, setListing] = useState(null);
@@ -88,10 +88,10 @@ export default function ListingDetail() {
   }, [id]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       navigate("/login", { state: { from: `/listing/${id}` } });
     }
-  }, [isAuthenticated, navigate, id]);
+  }, [isAuthenticated, authLoading, navigate, id]);
 
   const nextImage = () => {
     if (!listing) return;
@@ -107,8 +107,9 @@ export default function ListingDetail() {
     );
   };
 
+  if (authLoading) return <div className="min-h-screen pt-20 text-center">Loading...</div>;
   if (!isAuthenticated) return null;
-  if (loading) return <div className="min-h-screen pt-20 text-center">Loading...</div>;
+  if (loading) return <div className="min-h-screen pt-20 text-center">Loading listing...</div>;
   if (!listing) return <div className="min-h-screen pt-20 text-center">Listing not found</div>;
 
   // Adapt API data to UI structure if needed
@@ -348,13 +349,29 @@ export default function ListingDetail() {
 
                 {/* Contact Buttons */}
                 <div className="space-y-3 mb-6">
-                  <Button variant="hero" size="lg" className="w-full">
-                    <Phone className="w-5 h-5" />
-                    Call Now
+                  <Button
+                    variant="hero"
+                    size="lg"
+                    className="w-full flex-col h-auto py-4"
+                    onClick={() => window.location.href = 'tel:+919057176565'}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-5 h-5" />
+                      <span>Call Now</span>
+                    </div>
+                    <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
                   </Button>
-                  <Button variant="accent" size="lg" className="w-full">
-                    <MessageCircle className="w-5 h-5" />
-                    WhatsApp
+                  <Button
+                    variant="accent"
+                    size="lg"
+                    className="w-full flex-col h-auto py-4"
+                    onClick={() => window.open('https://wa.me/919057176565', '_blank')}
+                  >
+                    <div className="flex items-center gap-2">
+                      <MessageCircle className="w-5 h-5" />
+                      <span>WhatsApp</span>
+                    </div>
+                    <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
                   </Button>
                 </div>
 
