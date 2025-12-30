@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft, Edit } from "lucide-react";
+import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft, Edit, Eye, EyeOff } from "lucide-react";
 
 export default function Profile() {
     const { user, isAuthenticated, token, loading: authLoading } = useAuth();
@@ -68,6 +68,8 @@ export default function Profile() {
             setPreview(user.profileImage);
         }
     }, [user]);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -111,15 +113,6 @@ export default function Profile() {
                     title: "Success",
                     description: "Profile updated successfully",
                 });
-                // Update local user context if method available, or simpler just reload/re-fetch
-                // Our context's 'login' or 'register' sets user.
-                // Ideally we should have a 'updateUser' in context, but 'login' might accept just user object if we tweak it,
-                // OR we just rely on fetchProfile which runs on mount in AuthContext.
-                // For immediate UI update, we might need to refresh or manually set user.
-                // Checking AuthContext... it has setUser. But it's not exposed?
-                // Let's rely on page refresh or navigate for now, or assume context fetches profile on route change if we implemented it that way.
-                // Actually, AuthContext typically fetches profile on mount.
-                // We can expose a refreshUser method in context or just reload.
                 window.location.reload();
             } else {
                 toast({
@@ -262,29 +255,51 @@ export default function Profile() {
                         </div>
 
                         <div className="border-t border-border pt-6">
-                            <h3 className="font-semibold mb-4">Change Password (Optional)</h3>
+                            <h3 className="font-semibold mb-4">Change Password </h3>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="password">New Password</Label>
-                                    <Input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        placeholder="Password"
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            id="password"
+                                            name="password"
+                                            type={showPassword ? "text" : "password"}
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            placeholder="Leave blank to keep current"
+                                            className="pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                                    <Input
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        type="password"
-                                        value={formData.confirmPassword}
-                                        onChange={handleChange}
-                                        placeholder="Confirm new password"
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            placeholder="Confirm new password"
+                                            className="pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                                        >
+                                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

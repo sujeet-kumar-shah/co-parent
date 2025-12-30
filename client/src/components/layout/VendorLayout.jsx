@@ -144,10 +144,10 @@ const VendorLayout = () => {
                                     <User className="mr-2 h-4 w-4" />
                                     <span>Profile</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
+                                {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
                                     <Home className="mr-2 h-4 w-4" />
                                     <span>Home Website</span>
-                                </DropdownMenuItem>
+                                </DropdownMenuItem> */}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
                                     <LogOut className="mr-2 h-4 w-4" />
