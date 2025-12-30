@@ -164,8 +164,18 @@ const VendorLayout = () => {
                         <Outlet />
                     </div>
                 </main>
+                <footer className="bg-white ">
+                    <div className="container py-4">
+                    {/* Bottom Bar */}
+                        <div className="mt-1 pb-2  border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <p className="  text-black text-sm">
+                            © 2026 CO-PARENTS. All rights reserved.
+                            </p>
+                        </div>
+                    </div>
+                </footer>
             </div>
-            <Toaster />
+        <Toaster />
         </div>
     );
 };
