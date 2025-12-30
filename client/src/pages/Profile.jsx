@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft } from "lucide-react";
+import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft, Edit } from "lucide-react";
 
 export default function Profile() {
     const { user, isAuthenticated, token, loading: authLoading } = useAuth();
@@ -24,7 +24,25 @@ export default function Profile() {
         confirmPassword: "",
         profileImage: "",
     });
+    const resetForm = () => {
+        // Reset controlled form values back to the user's current data
+        setFormData({
+            name: user?.name || "",
+            email: user?.email || "",
+            phone: user?.phone || "",
+            businessName: user?.businessName || "",
+            password: "",
+            confirmPassword: "",
+            profileImage: user?.profileImage || "",
+        });
 
+        // Reset preview image back to user's saved image (or empty)
+        setPreview(user?.profileImage || "");
+
+        // Clear the file input value if present
+        const fileInput = document.getElementById("user-image-input");
+        if (fileInput) fileInput.value = "";
+    };
     useEffect(() => {
         if (!authLoading && !isAuthenticated) {
             navigate("/login");
@@ -160,13 +178,18 @@ export default function Profile() {
                 <div className="bg-card rounded-2xl shadow-card p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex items-center gap-4 mb-8">
-                        <label className={`w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`} htmlFor="user-image-input">
+                        <label className={`relative w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`} htmlFor="user-image-input">
                             {preview ? (
                                 // eslint-disable-next-line @next/next/no-img-element
                                 <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                             ) : (
                                 (user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />)
                             )}
+                            {/* Edit icon overlay to indicate editability */}
+                            <span className="sr-only">Edit profile image</span>
+                            <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-gray-100">
+                                <Edit className="w-4 h-4 text-gray-600" />
+                            </div>
                         </label>
                         <input id="user-image-input" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" />
                         <div>
@@ -249,7 +272,7 @@ export default function Profile() {
                                         type="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                        placeholder="Leave blank to keep current"
+                                        placeholder="Password"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -267,6 +290,9 @@ export default function Profile() {
                         </div>
 
                         <div className="flex justify-end pt-4">
+                            <Button type="button" size="lg" className="me-2" onClick={resetForm}>
+                                Cancel
+                            </Button>
                             <Button type="submit" size="lg" disabled={loading}>
                                 {loading ? (
                                     <>
