@@ -157,17 +157,19 @@ export default function Profile() {
             </div>
         );
     }
-
+    const handleBack = () => {
+        navigate(-1); 
+    }
     if (!user) return null;
 
     return (
         <div className="min-h-screen bg-background">
             <Header />
             <main className="pt-24 pb-16 container max-w-2xl">
-                <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6">
+                <button className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                    Back to Home
-                </Link>
+                      Back
+                </button>
                 <div className="bg-card rounded-2xl shadow-card p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex items-center gap-4 mb-8">

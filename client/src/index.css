@@ -148,11 +148,11 @@
   }
 
   .shadow-card {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
   }
 
   .shadow-card-hover {
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
   }
 
   .shadow-glow {
@@ -161,7 +161,7 @@
 
   .glass {
     backdrop-filter: blur(12px);
-    background: hsl(var(--background) / 0.8);
+    background: hsl(var(--background) / 0.9);
   }
 }
 
