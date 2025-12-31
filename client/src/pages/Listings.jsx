@@ -84,18 +84,18 @@ export default function Listings() {
 
   const filteredListings = useMemo(() => {
     return listings
-      // .filter((listing) => {
-      //   const matchesCategory = selectedCategories.includes(listing.category);
-      //   const matchesCity =
-      //     selectedCity === "All Cities" || listing.city === selectedCity;
-      //   const matchesSearch =
-      //     !searchQuery ||
-      //     listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      //     listing.location.toLowerCase().includes(searchQuery.toLowerCase());
-      //   const matchesPrice =
-      //     listing.price >= priceRange[0] && listing.price <= priceRange[1];
-      //   return matchesCategory && matchesCity && matchesSearch && matchesPrice;
-      // })
+      .filter((listing) => {
+        const matchesCategory = selectedCategories.includes(listing.category);
+        const matchesCity =
+          selectedCity === "All Cities" || listing.city === selectedCity;
+        const matchesSearch =
+          !searchQuery ||
+          listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          listing.location.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesPrice =
+          listing.price >= priceRange[0] && listing.price <= priceRange[1];
+        return matchesCategory && matchesCity && matchesSearch && matchesPrice;
+      })
       .sort((a, b) => {
         if (sortBy === "rating") return b.rating - a.rating;
         if (sortBy === "price-low") return a.price - b.price;
@@ -202,8 +202,8 @@ export default function Listings() {
                   </div>
                 </div>
 
-                {/* City Filter
-                <div className="space-y-3">
+                {/* /* City Filter */}
+                <div className="space-y-3 hidden">
                   <Label className="font-medium">City</Label>
                   <Select value={selectedCity} onValueChange={setSelectedCity}>
                     <SelectTrigger>
@@ -217,7 +217,7 @@ export default function Listings() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div> */}
+                </div> 
 
                 {/* Price Range */}
                 <div className="space-y-4">

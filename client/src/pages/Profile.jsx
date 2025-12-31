@@ -266,7 +266,7 @@ export default function Profile() {
                                             type={showPassword ? "text" : "password"}
                                             value={formData.password}
                                             onChange={handleChange}
-                                            placeholder="Leave blank to keep current"
+                                            placeholder="Password"
                                             className="pr-10"
                                         />
                                         <button

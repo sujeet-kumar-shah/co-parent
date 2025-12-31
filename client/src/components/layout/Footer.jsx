@@ -26,7 +26,7 @@ const footerLinks = {
 const socialLinks = [
   { icon: Facebook, href: "#", label: "Facebook" },
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Instagram, href: "https://www.instagram.com/coparentsofficial", label: "Instagram" },
   { icon: Linkedin, href: "#", label: "LinkedIn" },
 ];
 
