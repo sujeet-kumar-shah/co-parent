@@ -3,7 +3,7 @@ import heroImage from "@/assets/hero-students.jpg";
 
 const stats = [
   { value: "10,000+", label: "Verified Listings" },
-  { value: "50+", label: "Cities" },
+  // { value: "50+", label: "Cities" },
   { value: "25,000+", label: "Happy Students" },
   { value: "500+", label: "Trusted Vendors" },
 ];
