@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { MapPin, Phone, Mail, Youtube, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const footerLinks = {
   services: [
@@ -24,10 +24,10 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Twitter, href: "#", label: "Twitter" },
+  // { icon: Facebook, href: "#", label: "Facebook" },
+  // { icon: Twitter, href: "#", label: "Twitter" },
   { icon: Instagram, href: "https://www.instagram.com/coparentsofficial", label: "Instagram" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Youtube, href: "https://youtube.com/@coparents_official?si=zaRKXH8Y4DUYDZUw", label: "Youtube" },
 ];
 
 export function Footer() {
