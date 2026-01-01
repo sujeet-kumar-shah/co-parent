@@ -11,14 +11,14 @@ const footerLinks = {
   ],
   company: [
     { label: "About Us", href: "/about" },
-    { label: "Careers", href: "/careers" },
+    // { label: "Careers", href: "/careers" },
     { label: "Blog", href: "/blog" },
-    { label: "Press", href: "/press" },
+    // { label: "Press", href: "/press" },
   ],
   support: [
-    { label: "Help Center", href: "/help" },
+    // { label: "Help Center", href: "/help" },
     { label: "Contact Us", href: "/contact" },
-    { label: "Privacy Policy", href: "/privacy" },
+    // { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
   ],
 };
@@ -26,14 +26,14 @@ const footerLinks = {
 const socialLinks = [
   { icon: Facebook, href: "#", label: "Facebook" },
   { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Instagram, href: "https://www.instagram.com/coparentsofficial", label: "Instagram" },
   { icon: Linkedin, href: "#", label: "LinkedIn" },
 ];
 
 export function Footer() {
   return (
     <footer className="bg-foreground text-primary-foreground">
-      <div className="container py-8">
+      <div className="container py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
@@ -58,7 +58,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4" />
-                <span>hello@coparents.in</span>
+                <span>support@coparents.in</span>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-6 pt-8 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-primary-foreground/50 text-sm">
-            © 2024 CO-PARENTS. All rights reserved.
+            © 2026 CO-PARENTS. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             {socialLinks.map((social) => (

@@ -60,8 +60,8 @@ const Contact = () => {
                                         </div>
                                         <div>
                                             <h3 className="font-medium mb-1">Call Us</h3>
-                                            <p className="text-muted-foreground">+91 1800 123 4567</p>
-                                            <p className="text-muted-foreground">Mon - Fri, 9am - 6pm</p>
+                                            <p className="text-muted-foreground">+91 905 717 6565</p>
+                                            <p className="text-muted-foreground hidden">Mon - Fri, 9am - 6pm</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4">

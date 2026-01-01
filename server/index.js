@@ -11,7 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(express.json());
+// Allow larger JSON bodies to support base64 image uploads from client
+app.use(express.json({ limit: '5mb' }));
 app.use(cookieParser());
 app.use(cors({
     origin: ['http://localhost:5173', 'http://localhost:8080'], // Allow Vite default and 8080
@@ -33,6 +34,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/vendor', vendorRoutes);
 app.use('/api/admin', adminRoutes);
+
+// Serve uploaded files (images) statically
+import fs from 'fs';
+const uploadsDir = './uploads';
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
 
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'Server is running' });

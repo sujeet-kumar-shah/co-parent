@@ -2,6 +2,15 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, User, Building2, LogOut, LayoutDashboard } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
@@ -61,17 +70,53 @@ export function Header() {
                   </Button>
                 </Link>
               ) : (
-                <Link to="/profile">
-                  <Button variant="ghost" className="gap-2">
-                    <User className="w-4 h-4" />
-                    {user?.name}
-                  </Button>
-                </Link>
+
+              <div className="flex items-center gap-4">
+                  <div className="hidden sm:flex flex-col items-end mr-2">
+                      <span className="text-sm font-semibold text-gray-900">{user?.name}</span>
+                      {/* <span className="text-xs text-muted-foreground">{user?.businessName || "Vendor"}</span> */}
+                  </div>
+                {/* // For students show avatar + dropdown similar to vendor */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
+                      <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
+                        <AvatarImage src={user?.profileImage} alt={user?.name} />
+                        <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                          {user?.name?.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user?.name}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                    {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer"> */}
+                      {/* <LayoutDashboard className="mr-2 h-4 w-4" />
+                      <span>Home Website</span> */}
+                    {/* </DropdownMenuItem> */}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               )}
-              <Button variant="outline" size="sm" onClick={handleLogout}>
+              {/* <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
-              </Button>
+              </Button> */}
             </>
           ) : (
             <>

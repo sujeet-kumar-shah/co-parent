@@ -20,7 +20,7 @@ import AdminListings from "./pages/admin/AdminListings";
 import AdminUsers from "./pages/admin/AdminUsers";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-
+import AuthUser from "./pages/authUser";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -33,7 +33,7 @@ const App = () => (
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={ <AuthUser><Login /></AuthUser>}  />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/listings" element={<Listings />} />

@@ -202,8 +202,8 @@ export default function Listings() {
                   </div>
                 </div>
 
-                {/* City Filter */}
-                <div className="space-y-3">
+                {/* /* City Filter */}
+                <div className="space-y-3 hidden">
                   <Label className="font-medium">City</Label>
                   <Select value={selectedCity} onValueChange={setSelectedCity}>
                     <SelectTrigger>
@@ -217,7 +217,7 @@ export default function Listings() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
+                </div> 
 
                 {/* Price Range */}
                 <div className="space-y-4">

@@ -137,6 +137,22 @@ export default function ListingDetail() {
     }
   ];
 
+  const shareUrl = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "CO-Parents",
+          text: "Check this out!",
+          url: window.location.href,
+        });
+      } catch (err) {
+        console.log("Share cancelled", err);
+      }
+    } else {
+      console.log("Sharing not supported on this browser");
+    }
+  };
+  
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
 
   return (
@@ -197,7 +213,7 @@ export default function ListingDetail() {
               >
                 <Heart className={`w-5 h-5 ${liked ? "fill-accent text-accent" : ""}`} />
               </button>
-              <button className="w-10 h-10 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors">
+              <button className="w-10 h-10 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors" onClick={shareUrl}>
                 <Share2 className="w-5 h-5" />
               </button>
             </div>

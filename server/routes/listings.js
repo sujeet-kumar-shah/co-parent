@@ -2,12 +2,25 @@
 import express from 'express';
 import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
+import  multer from 'multer';
 
 const router = express.Router();
 
 // @desc    Get all listings
 // @route   GET /api/listings
 // @access  Public
+
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            // Ensure the 'uploads' directory exists
+            cb(null, './uploads/'); 
+        },
+        filename: function (req, file, cb) {
+            // Generate a unique filename (e.g., timestamp-originalName)
+            cb(null, Date.now() + '-' + file.originalname);
+        }   
+    })
+    const upload = multer({ storage: storage });
 router.get('/', async (req, res) => {
     try {
         const { category, city, search, minPrice, maxPrice, sort } = req.query;
@@ -73,7 +86,7 @@ router.get('/:id', async (req, res) => {
 // @desc    Create a listing
 // @route   POST /api/listings
 // @access  Private (Vendor only)
-router.post('/', protect, async (req, res) => {
+router.post('/', protect,upload.fields([{ name: 'image', maxCount: 1 },{ name: 'images', maxCount: 5 }]), async (req, res) => {
     try {
         if (req.user.type !== 'vendor') {
             return res.status(403).json({ message: 'Only vendors can create listings' });
@@ -87,15 +100,34 @@ router.post('/', protect, async (req, res) => {
             city,
             address,
             price,
-            image,
-            images,
             videos,
             features,
             amenities,
             gender,
             status
         } = req.body;
+    //   // parse possible JSON-encoded arrays from multipart/form-data
+    //   const parseArrayField = (val) => {
+    //       if (!val) return [];
+    //       if (Array.isArray(val)) return val;
+    //       if (typeof val === 'string') {
+    //           try {
+    //               const parsed = JSON.parse(val);
+    //               if (Array.isArray(parsed)) return parsed;
+    //           } catch (e) {
+    //               // fallback to comma-separated
+    //               return val.split(',').map(s => s.trim()).filter(Boolean);
+    //           }
+    //       }
+    //       return [];
+    //   };
 
+    //   const parsedVideos = parseArrayField(videos);
+    //   const parsedAmenities = parseArrayField(amenities);
+
+      const image = req.files?.image?.[0]?.filename || null;
+      const images = req.files?.images?.map(f => f.filename) || [];
+        
         const listing = new Listing({
             vendor: req.user._id,
             title,

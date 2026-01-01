@@ -17,13 +17,16 @@ const ListingForm = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(isEditMode);
-
+    const [mainImage, setMainImage] = useState(null);
+    const [otherImages, setOtherImages] = useState([]);
+    const [mainPreview, setMainPreview] = useState('');
+    const [otherPreviews, setOtherPreviews] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         category: 'hostel',
         gender: 'unisex',
-        price: '',
+        price: '0',
         city: '',
         location: '', // General area
         street: '', // Address street
@@ -73,7 +76,11 @@ const ListingForm = () => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
-
+    const preventNegativeNumber = (e) => {
+         if (['e', 'E', '+', '-'].includes(e.key)) {
+            e.preventDefault();
+        }
+    }
     const handleSubmit = async (e, statusOverride = null) => {
         e.preventDefault();
 
@@ -90,18 +97,34 @@ const ListingForm = () => {
 
         const status = statusOverride || formData.status;
 
-        const payload = {
-            ...formData,
-            status,
-            price: Number(formData.price),
-            images: formData.images.split(',').map(s => s.trim()).filter(Boolean),
-            videos: formData.videos.split(',').map(s => s.trim()).filter(Boolean),
-            amenities: formData.amenities.split(',').map(s => s.trim()).filter(Boolean),
-            address: {
-                street: formData.street,
-                // coordinates would go here
-            }
-        };
+      const form = new FormData();
+
+        form.append('title', formData.title);
+        form.append('description', formData.description);
+        form.append('category', formData.category);
+        form.append('gender', formData.gender);
+        form.append('price', Number(formData.price));
+        form.append('city', formData.city);
+        form.append('location', formData.location);
+        form.append('status', statusOverride || formData.status);
+
+        // arrays
+        form.append('videos', JSON.stringify(
+        formData.videos.split(',').map(v => v.trim()).filter(Boolean)
+        ));
+
+        form.append('amenities', JSON.stringify(
+        formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
+        ));
+
+        form.append('address', JSON.stringify({
+        street: formData.street,
+        }));
+
+        // files
+        if (mainImage) form.append('image', mainImage);
+        otherImages.forEach(file => form.append('images', file));
+
 
         try {
             const url = isEditMode
@@ -132,10 +155,9 @@ const ListingForm = () => {
             const response = await fetch(reqUrl, {
                 method: method,
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(payload)
+                body: form
             });
 
             if (response.ok) {
@@ -158,11 +180,59 @@ const ListingForm = () => {
             setLoading(false);
         }
     };
+//    const {addreshDropdown,setAddressDropdown } = useState('')
+    // const handleChangeLocation = (e) =>{
+    //     const { name, value } = e.target;
+    //     setFormData(prev => ({ ...prev, [name]: value }));
+    //     getLocation(e)
+    // }
+// 
+    // const getLocation = (e) =>{
+    //   const query = e.target.value;
+    //   if (query.length < 2) {
+    //       return;
+    //   }
+
+    //    fetch(`https://us1.locationiq.com/v1/autocomplete?key=pk.560cd22f136c354bbff2b87d1ea17e3b&q=${encodeURIComponent(query)}&format=json`)
+    //     .then(res => res.json())
+    //     .then(res => console.log(res))
+    //     .catch(err => console.error(err));
+        // }
+ 
+    const mainImagePreview = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+         setMainImage(file);
+        // Simple preview using FileReader -> data URL, and store in formData.profileImage
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setMainPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+    }
+    const handleOtherImages = async (e) => {
+        const files = Array.from(e.target.files || []);
+        setOtherImages(files);
+
+        const toDataUrl = (file) => new Promise((res, rej) => {
+            const reader = new FileReader();
+            reader.onloadend = () => res(reader.result);
+            reader.onerror = rej;
+            reader.readAsDataURL(file);
+        });
+
+        try {
+            const previews = await Promise.all(files.map(f => toDataUrl(f)));
+            setOtherPreviews(previews);
+        } catch (err) {
+            console.error('Failed to read other images', err);
+        }
+    };
 
     if (fetching) return <div>Loading...</div>;
 
     return (
-        <div className="max-w-3xl mx-auto space-y-6">
+        <div className=" mx-auto space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-3xl font-bold tracking-tight">
                     {isEditMode ? 'Edit Listing' : 'Add New Listing'}
@@ -179,7 +249,7 @@ const ListingForm = () => {
                     <CardTitle>Listing Details</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={(e) => handleSubmit(e)} className="space-y-6">
+                    <form onSubmit={(e) => handleSubmit(e, 'submitted')} className="space-y-6" encType="multipart/form-data">
                         <div className="space-y-2">
                             <Label htmlFor="title">Title</Label>
                             <Input id="title" name="title" value={formData.title} onChange={handleChange} required placeholder="e.g. Sunrise Boys Hostel" />
@@ -226,27 +296,40 @@ const ListingForm = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="price">Monthly Price (₹)</Label>
-                                <Input id="price" name="price" type="number" value={formData.price} onChange={handleChange} required />
+                                <Input id="price" name="price" min="0" type="number" value={formData.price} onChange={handleChange} onKeyDown={preventNegativeNumber} required />
                             </div>
                         </div>
 
                         <div className="space-y-2">
                             <Label>Location</Label>
+                            <Input name="street" value={formData.street} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
                             <div className="grid grid-cols-2 gap-4">
                                 <Input name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
                                 <Input name="location" value={formData.location} onChange={handleChange} placeholder="Area / Locality" required />
                             </div>
-                            <Input name="street" value={formData.street} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
+                           
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="image">Main Image URL</Label>
-                            <Input id="image" name="image" value={formData.image} onChange={handleChange} required placeholder="https://..." />
+                            <Label htmlFor="image">Main Image</Label>
+                            <Input id="image" name="image" type="file" onChange={mainImagePreview} required={!isEditMode} placeholder="Image" />
+                            <div className="mt-2">
+                                {mainPreview ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={mainPreview} alt="Main preview" className="w-48 h-32 object-cover rounded-md" id="previewImage" />
+                                ) : null}
+                            </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="images">Additional Images (Comma separated URLs)</Label>
-                            <Textarea id="images" name="images" value={formData.images} onChange={handleChange} placeholder="https://..., https://..." />
+                            <Label htmlFor="images">Additional Images</Label>
+                            <Input id="images" name="images" type="file" multiple onChange={handleOtherImages} placeholder="" />
+                            <div className="mt-2 flex flex-wrap gap-2">
+                                {otherPreviews.map((p, idx) => (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img key={idx} src={p} alt={`preview-${idx}`} className="w-28 h-20 object-cover rounded-md" />
+                                ))}
+                            </div>
                         </div>
 
                         <div className="space-y-2">
@@ -274,7 +357,6 @@ const ListingForm = () => {
                                 type="submit"
                                 className="w-full"
                                 disabled={loading}
-                                onClick={(e) => handleSubmit(e, 'submitted')}
                             >
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Submit Listing

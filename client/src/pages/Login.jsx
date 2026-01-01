@@ -51,8 +51,8 @@ export default function Login() {
           navigate("/vendor/dashboard", { replace: true });
         } else if (result.user.type === 'admin') {
           navigate("/admin/dashboard", { replace: true });
-        } else {
-          navigate(from, { replace: true });
+        } else if(result.user.type === 'student'){
+          navigate('/listings', { replace: true });
         }
       } else {
         toast({

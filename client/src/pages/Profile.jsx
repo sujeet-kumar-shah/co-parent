@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft } from "lucide-react";
+import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft, Edit, Eye, EyeOff } from "lucide-react";
 
 export default function Profile() {
     const { user, isAuthenticated, token, loading: authLoading } = useAuth();
@@ -22,8 +22,27 @@ export default function Profile() {
         // location: "", // Not yet in backend, can add later
         password: "", // Optional
         confirmPassword: "",
+        profileImage: "",
     });
+    const resetForm = () => {
+        // Reset controlled form values back to the user's current data
+        setFormData({
+            name: user?.name || "",
+            email: user?.email || "",
+            phone: user?.phone || "",
+            businessName: user?.businessName || "",
+            password: "",
+            confirmPassword: "",
+            profileImage: user?.profileImage || "",
+        });
 
+        // Reset preview image back to user's saved image (or empty)
+        setPreview(user?.profileImage || "");
+
+        // Clear the file input value if present
+        const fileInput = document.getElementById("user-image-input");
+        if (fileInput) fileInput.value = "";
+    };
     useEffect(() => {
         if (!authLoading && !isAuthenticated) {
             navigate("/login");
@@ -36,9 +55,21 @@ export default function Profile() {
                 email: user.email || "",
                 phone: user.phone || "",
                 businessName: user.businessName || "",
+                profileImage: user.profileImage || "",
             }));
         }
     }, [user, isAuthenticated, authLoading, navigate]);
+
+    const [preview, setPreview] = useState("");
+
+    useEffect(() => {
+        // If user has profileImage set, use it for preview
+        if (user && user.profileImage) {
+            setPreview(user.profileImage);
+        }
+    }, [user]);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -71,6 +102,7 @@ export default function Profile() {
                     phone: formData.phone,
                     businessName: user.type === "vendor" ? formData.businessName : undefined,
                     password: formData.password || undefined,
+                    profileImage: formData.profileImage || undefined,
                 }),
             });
 
@@ -81,15 +113,6 @@ export default function Profile() {
                     title: "Success",
                     description: "Profile updated successfully",
                 });
-                // Update local user context if method available, or simpler just reload/re-fetch
-                // Our context's 'login' or 'register' sets user.
-                // Ideally we should have a 'updateUser' in context, but 'login' might accept just user object if we tweak it,
-                // OR we just rely on fetchProfile which runs on mount in AuthContext.
-                // For immediate UI update, we might need to refresh or manually set user.
-                // Checking AuthContext... it has setUser. But it's not exposed?
-                // Let's rely on page refresh or navigate for now, or assume context fetches profile on route change if we implemented it that way.
-                // Actually, AuthContext typically fetches profile on mount.
-                // We can expose a refreshUser method in context or just reload.
                 window.location.reload();
             } else {
                 toast({
@@ -110,6 +133,19 @@ export default function Profile() {
         }
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+
+        // Simple preview using FileReader -> data URL, and store in formData.profileImage
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreview(reader.result);
+            setFormData((prev) => ({ ...prev, profileImage: reader.result }));
+        };
+        reader.readAsDataURL(file);
+    };
+
     if (authLoading) {
         return (
             <div className="min-h-screen bg-background">
@@ -121,29 +157,41 @@ export default function Profile() {
             </div>
         );
     }
-
+    const handleBack = () => {
+        navigate(-1); 
+    }
     if (!user) return null;
 
     return (
         <div className="min-h-screen bg-background">
             <Header />
             <main className="pt-24 pb-16 container max-w-2xl">
-                <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6">
+                <button className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                    Back to Home
-                </Link>
+                      Back
+                </button>
                 <div className="bg-card rounded-2xl shadow-card p-8">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="flex items-center gap-4 mb-8">
-                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
-                            {user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />}
-                        </div>
+                        <label className={`relative w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`} htmlFor="user-image-input">
+                            {preview ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                            ) : (
+                                (user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />)
+                            )}
+                            {/* Edit icon overlay to indicate editability */}
+                            <span className="sr-only">Edit profile image</span>
+                            <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-gray-100">
+                                <Edit className="w-4 h-4 text-gray-600" />
+                            </div>
+                        </label>
+                        <input id="user-image-input" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" />
                         <div>
                             <h1 className="font-display text-2xl font-bold">Profile Settings</h1>
                             <p className="text-muted-foreground">Manage your account information</p>
                         </div>
                     </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Full Name</Label>
@@ -209,34 +257,59 @@ export default function Profile() {
                         </div>
 
                         <div className="border-t border-border pt-6">
-                            <h3 className="font-semibold mb-4">Change Password (Optional)</h3>
+                            <h3 className="font-semibold mb-4">Change Password </h3>
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="password">New Password</Label>
-                                    <Input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        placeholder="Leave blank to keep current"
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            id="password"
+                                            name="password"
+                                            type={showPassword ? "text" : "password"}
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            placeholder="Password"
+                                            className="pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                                    <Input
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        type="password"
-                                        value={formData.confirmPassword}
-                                        onChange={handleChange}
-                                        placeholder="Confirm new password"
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            placeholder="Confirm new password"
+                                            className="pr-10"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
+                                        >
+                                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex justify-end pt-4">
+                            <Button type="button" size="lg" className="me-2" onClick={resetForm}>
+                                Cancel
+                            </Button>
                             <Button type="submit" size="lg" disabled={loading}>
                                 {loading ? (
                                     <>

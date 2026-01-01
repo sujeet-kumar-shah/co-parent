@@ -49,7 +49,7 @@ const AdminLayout = () => {
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full bg-white">
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
                     <Shield className="w-8 h-8 text-primary" />
                     <h1 className="text-xl font-bold font-display text-gray-900">Admin Panel</h1>
@@ -154,6 +154,16 @@ const AdminLayout = () => {
                         <Outlet />
                     </div>
                 </main>
+               <footer className="bg-white ">
+                    <div className="container py-4">
+                    {/* Bottom Bar */}
+                        <div className="mt-1 pb-2  border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <p className="  text-black text-sm">
+                            © 2026 CO-PARENTS. All rights reserved.
+                            </p>
+                        </div>
+                    </div>
+                </footer>
             </div>
             <Toaster />
         </div>

@@ -49,7 +49,7 @@ const VendorLayout = () => {
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full bg-white">
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
                     <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
                     <h1 className="text-xl font-bold font-display text-gray-900">Vendor Panel</h1>
@@ -123,7 +123,7 @@ const VendorLayout = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
                                     <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
-                                        <AvatarImage src={user?.avatar} alt={user?.name} />
+                                        <AvatarImage src={user?.profileImage} alt={user?.name} />
                                         <AvatarFallback className="bg-primary/10 text-primary font-bold">
                                             {user?.name?.charAt(0).toUpperCase()}
                                         </AvatarFallback>
@@ -144,10 +144,10 @@ const VendorLayout = () => {
                                     <User className="mr-2 h-4 w-4" />
                                     <span>Profile</span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
+                                {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
                                     <Home className="mr-2 h-4 w-4" />
                                     <span>Home Website</span>
-                                </DropdownMenuItem>
+                                </DropdownMenuItem> */}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
                                     <LogOut className="mr-2 h-4 w-4" />
@@ -164,8 +164,18 @@ const VendorLayout = () => {
                         <Outlet />
                     </div>
                 </main>
+                <footer className="bg-white ">
+                    <div className="container py-4">
+                    {/* Bottom Bar */}
+                        <div className="mt-1 pb-2  border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <p className="  text-black text-sm">
+                            © 2026 CO-PARENTS. All rights reserved.
+                            </p>
+                        </div>
+                    </div>
+                </footer>
             </div>
-            <Toaster />
+        <Toaster />
         </div>
     );
 };

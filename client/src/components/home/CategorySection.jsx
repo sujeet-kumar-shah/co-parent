@@ -66,12 +66,16 @@ const itemVariants = {
 
 export function CategorySection() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated,user } = useAuth();
 
   const handleCategoryClick = (categoryId) => {
-    if (isAuthenticated) {
+    if (isAuthenticated &&  user.type === 'student') {
       navigate(`/listings?category=${categoryId}`);
-    } else {
+    } else if(user.type === 'vendor' ){
+      navigate("/", { state: true });
+    } else if(isAuthenticated &&  user.type === 'Admin'){
+       navigate(`/listings?category=${categoryId}`);
+    }else{
       navigate("/login", { state: { from: `/listings?category=${categoryId}` } });
     }
   };
