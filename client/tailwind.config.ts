@@ -67,6 +67,7 @@ export default {
         coaching: "hsl(var(--coaching))",
         library: "hsl(var(--library))",
         mess: "hsl(var(--mess))",
+        counseling: "hsl(var(--counseling))",
       },
       borderRadius: {
         lg: "var(--radius)",

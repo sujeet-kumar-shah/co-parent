@@ -49,6 +49,15 @@ const categories = [
     color: "mess",
     gradient: "from-mess/20 to-mess/5",
   },
+  {
+    id: "counseling",
+    name: "counseling",
+    description: "student caounseling ",
+    icon: Utensils,
+    count: 1400,
+    color: "counseling",
+    gradient: "from-counseling/20 to-counseling/5",
+  },
 ];
 
 const containerVariants = {

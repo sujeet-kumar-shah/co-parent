@@ -9,10 +9,11 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Check, X, Eye } from 'lucide-react';
+import { Check, X, Eye,ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {useNavigate} from 'react-router-dom'
 
 const AdminListings = () => {
     const [listings, setListings] = useState([]);
@@ -20,6 +21,7 @@ const AdminListings = () => {
     const [filter, setFilter] = useState('submitted'); // Default to pending
     const { token } = useAuth();
     const { toast } = useToast();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchListings();
@@ -90,6 +92,10 @@ const AdminListings = () => {
         return <Badge variant={variants[status] || "outline"} className={className}>{status.toUpperCase()}</Badge>;
     };
 
+     const handleBack = () => {
+        navigate(-1); 
+    }
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -97,6 +103,10 @@ const AdminListings = () => {
                     <h2 className="text-3xl font-bold tracking-tight">Manage Listings</h2>
                     <p className="text-muted-foreground">Approve or reject vendor listings.</p>
                 </div>
+                <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                    <ArrowLeft className="w-4 h-4" />
+                        Back
+                </button>
             </div>
 
             <Tabs defaultValue="submitted" onValueChange={setFilter} className="w-full">

@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2,ArrowLeft } from 'lucide-react';
 
 const ListingForm = () => {
     const { id } = useParams();
@@ -198,7 +198,9 @@ const ListingForm = () => {
     //     .then(res => console.log(res))
     //     .catch(err => console.error(err));
         // }
- 
+    const handleBack = () => {
+        navigate(-1); 
+    }
     const mainImagePreview = (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
@@ -237,10 +239,14 @@ const ListingForm = () => {
                 <h2 className="text-3xl font-bold tracking-tight">
                     {isEditMode ? 'Edit Listing' : 'Add New Listing'}
                 </h2>
-                <div className="flex gap-2 hidden">
-                    <Button variant="outline" onClick={() => navigate('/vendor/listings')}>
+                <div className="flex gap-2 ">
+                    <Button variant="outline" className="hidden" onClick={() => navigate('/vendor/listings')}>
                         Cancel
                     </Button>
+                    <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                        <ArrowLeft className="w-4 h-4" />
+                            Back
+                    </button>
                 </div>
             </div>
 
