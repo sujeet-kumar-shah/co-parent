@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight } from "lucide-react";
+import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight,Brain } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const categories = [
@@ -53,7 +53,7 @@ const categories = [
     id: "counseling",
     name: "counseling",
     description: "student caounseling ",
-    icon: Utensils,
+    icon: Brain,
     count: 1400,
     color: "counseling",
     gradient: "from-counseling/20 to-counseling/5",
@@ -80,7 +80,7 @@ export function CategorySection() {
   const handleCategoryClick = (categoryId) => {
     if (isAuthenticated &&  user.type === 'student') {
       navigate(`/listings?category=${categoryId}`);
-    } else if(user.type === 'vendor' ){
+    } else if(isAuthenticated && user.type === 'vendor' ){
       navigate("/", { state: true });
     } else if(isAuthenticated &&  user.type === 'Admin'){
        navigate(`/listings?category=${categoryId}`);
