@@ -3,6 +3,7 @@ import express from 'express';
 import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
 import  multer from 'multer';
+import Liked from '../models/liked.js';
 
 const router = express.Router();
 
@@ -71,9 +72,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id).populate('vendor', 'name email');
-
+        const likedStatus = await Liked.findOne({listingId:req.params.id})
         if (listing) {
-            res.json(listing);
+            console.log(likedStatus);
+            res.json({listing,likedStatus});
         } else {
             res.status(404).json({ message: 'Listing not found' });
         }
@@ -153,6 +155,30 @@ router.post('/', protect,upload.fields([{ name: 'image', maxCount: 1 },{ name: '
     }
 });
 
+router.post('/like', async (req, res) => {
+    try {
+        const propertyId = req.body.propertyId;
+        const userId = req.body.userId;
+        const status = !req.body.liked;
+
+        if (!propertyId) {
+            return res.status(400).json({ message: 'propertyId is required' });
+        }
+
+        // Upsert like record
+        let record = await Liked.findOne({ listingId: propertyId, userId });
+        if (record) {
+            record.status = status;
+            await record.save();
+        } else {
+            record = await Liked.create({ listingId: propertyId, userId, status });
+        }
+
+        res.json({ success: true, liked: record.status });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 // @desc    Seed initial data (For demo purposes)
 // @route   POST /api/listings/seed
 // @access  Public (Should be private in prod)

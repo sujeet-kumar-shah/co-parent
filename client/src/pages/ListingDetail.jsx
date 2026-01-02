@@ -30,13 +30,13 @@ import { Label } from "@/components/ui/label";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
-
+import axios from 'axios';
 // listingData removed
 
 export default function ListingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated,user, loading: authLoading } = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liked, setLiked] = useState(false);
   const [listing, setListing] = useState(null);
@@ -74,7 +74,8 @@ export default function ListingDetail() {
         const response = await fetch(`http://localhost:5000/api/listings/${id}`);
         if (response.ok) {
           const data = await response.json();
-          setListing(data);
+          setListing(data.listing);
+          setLiked(data.likedStatus.status)
         } else {
           console.error("Failed to fetch listing");
         }
@@ -106,7 +107,17 @@ export default function ListingDetail() {
       prev === 0 ? (listing.images ? listing.images.length : 1) - 1 : prev - 1
     );
   };
-
+  const handleLike =() =>{ 
+      setLiked(!liked)
+      axios.post('http://localhost:5000/api/listings/like',{
+        propertyId:id,
+        liked:liked,
+        userId:user._id
+      })
+      .then(function(responce){
+        console.log(responce)
+      })
+  }
   if (authLoading) return <div className="min-h-screen pt-20 text-center">Loading...</div>;
   if (!isAuthenticated) return null;
   if (loading) return <div className="min-h-screen pt-20 text-center">Loading listing...</div>;
@@ -208,7 +219,7 @@ export default function ListingDetail() {
             </div>
             <div className="absolute top-4 right-4 flex gap-2">
               <button
-                onClick={() => setLiked(!liked)}
+                onClick={handleLike}
                 className="w-10 h-10 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors"
               >
                 <Heart className={`w-5 h-5 ${liked ? "fill-accent text-accent" : ""}`} />
