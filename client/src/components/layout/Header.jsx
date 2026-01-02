@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-
+import { useToast } from "@/hooks/use-toast";
 const navLinks = [];
 
 export function Header() {
@@ -21,8 +21,12 @@ export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
-
+  const { toast } = useToast();
   const handleLogout = () => {
+    toast({
+        title: "Logged out!",
+        description: "You’ve been logged out securely. See you soon!",
+    });
     logout();
     setMobileMenuOpen(false);
     navigate("/");

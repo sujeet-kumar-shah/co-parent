@@ -22,12 +22,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const VendorLayout = () => {
     const { user, logout, loading, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
-
+    const { toast } = useToast();
     useEffect(() => {
         if (!loading && (!isAuthenticated || user?.type !== 'vendor')) {
             navigate('/login');
@@ -37,6 +38,10 @@ const VendorLayout = () => {
     if (loading) return <div>Loading...</div>;
 
     const handleLogout = () => {
+         toast({
+            title: "Logged out!",
+            description: "You’ve been logged out securely. See you soon!",
+         });
         logout();
         navigate('/login');
     };

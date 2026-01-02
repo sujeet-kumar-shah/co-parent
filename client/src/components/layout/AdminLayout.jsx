@@ -22,12 +22,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const AdminLayout = () => {
     const { user, logout, loading, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
-
+    const { toast } = useToast();
     useEffect(() => {
         if (!loading && (!isAuthenticated || user?.type !== 'admin')) {
             navigate('/login');
@@ -37,6 +38,10 @@ const AdminLayout = () => {
     if (loading) return <div>Loading...</div>; // Or a spinner component
 
     const handleLogout = () => {
+        toast({
+            title: "Logged out!",
+            description: "You’ve been logged out securely. See you soon!",
+        });
         logout();
         navigate('/login');
     };
