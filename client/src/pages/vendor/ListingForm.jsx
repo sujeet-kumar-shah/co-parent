@@ -237,7 +237,7 @@ const ListingForm = () => {
                 <h2 className="text-3xl font-bold tracking-tight">
                     {isEditMode ? 'Edit Listing' : 'Add New Listing'}
                 </h2>
-                <div className="flex gap-2">
+                <div className="flex gap-2 hidden">
                     <Button variant="outline" onClick={() => navigate('/vendor/listings')}>
                         Cancel
                     </Button>
@@ -272,7 +272,7 @@ const ListingForm = () => {
                                 >
                                     <option value="hostel">Hostel</option>
                                     <option value="pg">PG</option>
-                                    <option value="coaching">Coaching</option>
+                                    {/* <option value="coaching">Coaching</option> */}
                                     <option value="library">Library</option>
                                     <option value="mess">Mess</option>
                                 </select>
@@ -316,7 +316,7 @@ const ListingForm = () => {
                             <div className="mt-2">
                                 {mainPreview ? (
                                     // eslint-disable-next-line @next/next/no-img-element
-                                    <img src={mainPreview} alt="Main preview" className="w-48 h-32 object-cover rounded-md" id="previewImage" />
+                                    <img src={mainPreview} alt="Main preview" className="w-48 h-32 object-fit rounded-md" id="previewImage" />
                                 ) : null}
                             </div>
                         </div>
@@ -327,7 +327,7 @@ const ListingForm = () => {
                             <div className="mt-2 flex flex-wrap gap-2">
                                 {otherPreviews.map((p, idx) => (
                                     // eslint-disable-next-line @next/next/no-img-element
-                                    <img key={idx} src={p} alt={`preview-${idx}`} className="w-28 h-20 object-cover rounded-md" />
+                                    <img key={idx} src={p} alt={`preview-${idx}`} className="w-28 h-20 object-fit rounded-md" />
                                 ))}
                             </div>
                         </div>
@@ -346,12 +346,15 @@ const ListingForm = () => {
                             <Button
                                 type="button"
                                 variant="secondary"
-                                className="w-full"
+                                className="w-full hidden"
                                 disabled={loading}
                                 onClick={(e) => handleSubmit(e, 'draft')}
                             >
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Save as Draft
+                            </Button>
+                            <Button variant="outline"  className="w-full " onClick={() => navigate('/vendor/listings')}>
+                                Cancel
                             </Button>
                             <Button
                                 type="submit"

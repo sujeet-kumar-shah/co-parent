@@ -137,7 +137,7 @@ const VendorListings = () => {
                                     <TableCell>{getStatusBadge(listing.status)}</TableCell>
                                     <TableCell>{listing.views}</TableCell>
                                     <TableCell className="text-right">
-                                        <div className="flex justify-end gap-2">
+                                        <div className="flex justify-end gap-1">
                                             <Button
                                                 variant="ghost"
                                                 size="icon"

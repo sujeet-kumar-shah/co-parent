@@ -56,7 +56,7 @@ const AdminLayout = () => {
         <div className="flex flex-col h-full bg-white">
             <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                    <Shield className="w-8 h-8 text-primary" />
+                    <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
                     <h1 className="text-xl font-bold font-display text-gray-900">Admin Panel</h1>
                 </div>
             </div>

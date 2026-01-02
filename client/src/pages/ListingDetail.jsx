@@ -189,9 +189,9 @@ export default function ListingDetail() {
               key={currentImageIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              src={images[currentImageIndex]}
+              src={`http://localhost:5000/uploads/${images[currentImageIndex]}`}
               alt={listing.title}
-              className="w-full h-[300px] md:h-[500px] object-cover"
+              className="w-full h-[300px] md:h-[500px] object-fit"
             />
             <button
               onClick={prevImage}
@@ -232,7 +232,7 @@ export default function ListingDetail() {
 
           {/* Thumbnails */}
           <div className="flex gap-4 mt-4 overflow-x-auto pb-2">
-            {images.map((image, index) => (
+            {images.map((images, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
@@ -241,7 +241,7 @@ export default function ListingDetail() {
                   : "border-transparent opacity-60 hover:opacity-100"
                   }`}
               >
-                <img src={image} alt="" className="w-full h-full object-cover" />
+                <img src={`http://localhost:5000/uploads/${images}`} alt="" className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
