@@ -109,6 +109,7 @@ const VendorListings = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead>Image</TableHead>
                             <TableHead>Title</TableHead>
                             <TableHead>Category</TableHead>
                             <TableHead>Location</TableHead>
@@ -128,6 +129,7 @@ const VendorListings = () => {
                         ) : (
                             listings.map((listing) => (
                                 <TableRow key={listing._id}>
+                                     <TableCell className="font-medium"><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></TableCell>
                                     <TableCell className="font-medium">{listing.title}</TableCell>
                                     <TableCell className="capitalize">{listing.category}</TableCell>
                                     <TableCell>{listing.city}</TableCell>

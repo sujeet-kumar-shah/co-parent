@@ -112,6 +112,7 @@ const AdminListings = () => {
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead>Image</TableHead>
                             <TableHead>Title</TableHead>
                             <TableHead>Vendor</TableHead>
                             <TableHead>Location</TableHead>
@@ -134,6 +135,7 @@ const AdminListings = () => {
                         ) : (
                             listings.map((listing) => (
                                 <TableRow key={listing._id}>
+                                    <TableCell className="font-medium"><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></TableCell>
                                     <TableCell className="font-medium">
                                         <div>{listing.title}</div>
                                         <div className="text-xs text-muted-foreground capitalize">{listing.category}</div>
