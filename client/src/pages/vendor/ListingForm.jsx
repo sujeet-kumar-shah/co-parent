@@ -47,19 +47,19 @@ const ListingForm = () => {
                     if (response.ok) {
                         const data = await response.json();
                         setFormData({
-                            title: data.title,
-                            description: data.description || '',
-                            category: data.category,
-                            gender: data.gender,
-                            price: data.price,
-                            city: data.city,
-                            location: data.location,
-                            street: data.address?.street || '',
-                            image: data.image,
-                            images: data.images ? data.images.join(', ') : '',
-                            videos: data.videos ? data.videos.join(', ') : '',
-                            amenities: data.amenities ? data.amenities.join(', ') : '',
-                            status: data.status
+                            title: data.listing.title,
+                            description: data.listing.description || '',
+                            category: data.listing.category,
+                            gender: data.listing.gender,
+                            price: data.listing.price,
+                            city: data.listing.city,
+                            location: data.listing.location,
+                            street: data.listing.address?.street || '',
+                            // image: data.listing.image,
+                            // images: data.listing.images ? data.listing.images.join(', ') : '',
+                            videos: data.listing.videos ? data.listing.videos.join(', ') : '',
+                            amenities: data.listing.amenities ? data.listing.amenities.join(', ') : '',
+                            status: data.listing.status
                         });
                     }
                 } catch (error) {
