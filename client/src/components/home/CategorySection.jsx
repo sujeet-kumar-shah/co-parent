@@ -51,7 +51,7 @@ const categories = [
   },
   {
     id: "counseling",
-    name: "counseling",
+    name: "Career Counselor",
     description: "student caounseling ",
     icon: Brain,
     count: 1400,

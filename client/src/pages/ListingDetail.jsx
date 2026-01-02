@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
+import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
 // listingData removed
 
@@ -165,14 +166,16 @@ export default function ListingDetail() {
   };
   
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
-
+  const handleBack = () => {
+        navigate(-1); 
+  }
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-20">
         {/* Breadcrumb */}
-        <div className="container py-4">
+        <div className="container py-4 flex justify-between items-center">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Link to="/" className="hover:text-primary">Home</Link>
             <span>/</span>
@@ -180,6 +183,10 @@ export default function ListingDetail() {
             <span>/</span>
             <span className="text-foreground">{listing.title}</span>
           </div>
+          <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+              <ArrowLeft className="w-4 h-4" />
+                  Back
+          </button>
         </div>
 
         {/* Image Gallery */}
@@ -278,7 +285,7 @@ export default function ListingDetail() {
                 <TabsList className="w-full justify-start bg-secondary p-1 rounded-xl">
                   <TabsTrigger value="overview" className="rounded-lg">Overview</TabsTrigger>
                   <TabsTrigger value="amenities" className="rounded-lg">Amenities</TabsTrigger>
-                  <TabsTrigger value="reviews" className="rounded-lg">Reviews</TabsTrigger>
+                  <TabsTrigger value="reviews" className="rounded-lg hidden">Reviews</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
@@ -431,7 +438,7 @@ export default function ListingDetail() {
                 </div>
 
                 {/* Vendor Info */}
-                <div className="border-t border-border mt-6 pt-6">
+                <div className="border-t border-border mt-6 pt-6  hidden">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                       <span className="font-display font-bold text-primary">SP</span>

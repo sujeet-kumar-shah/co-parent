@@ -92,7 +92,7 @@ const AdminListings = () => {
         return <Badge variant={variants[status] || "outline"} className={className}>{status.toUpperCase()}</Badge>;
     };
 
-     const handleBack = () => {
+    const handleBack = () => {
         navigate(-1); 
     }
 
