@@ -158,7 +158,7 @@ export default function Profile() {
         );
     }
     const handleBack = () => {
-        navigate(-1); 
+        navigate(-1);
     }
     if (!user) return null;
 
@@ -166,32 +166,35 @@ export default function Profile() {
         <div className="min-h-screen bg-background">
             <Header />
             <main className="pt-24 pb-16 container max-w-2xl">
-                <button className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
-                    <ArrowLeft className="w-4 h-4" />
-                      Back
-                </button>
+                <div className="container py-4 flex justify-between items-centers">
+                    <div></div>
+                    <button className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                        <ArrowLeft className="w-4 h-4" />
+                        Back
+                    </button>
+                </div>
                 <div className="bg-card rounded-2xl shadow-card p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="flex items-center gap-4 mb-8">
-                        <label className={`relative w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`} htmlFor="user-image-input">
-                            {preview ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img src={preview} alt="Preview" className="w-full h-full object-cover" />
-                            ) : (
-                                (user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />)
-                            )}
-                            {/* Edit icon overlay to indicate editability */}
-                            <span className="sr-only">Edit profile image</span>
-                            <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-gray-100">
-                                <Edit className="w-4 h-4 text-gray-600" />
+                        <div className="flex items-center gap-4 mb-8">
+                            <label className={`relative w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer ${user.type === 'vendor' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`} htmlFor="user-image-input">
+                                {preview ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                ) : (
+                                    (user.type === 'vendor' ? <Building2 className="w-8 h-8" /> : <User className="w-8 h-8" />)
+                                )}
+                                {/* Edit icon overlay to indicate editability */}
+                                <span className="sr-only">Edit profile image</span>
+                                <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm border border-gray-100">
+                                    <Edit className="w-4 h-4 text-gray-600" />
+                                </div>
+                            </label>
+                            <input id="user-image-input" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" />
+                            <div>
+                                <h1 className="font-display text-2xl font-bold">Profile Settings</h1>
+                                <p className="text-muted-foreground">Manage your account information</p>
                             </div>
-                        </label>
-                        <input id="user-image-input" type="file" accept="image/*" onChange={handleImageChange} className="sr-only" />
-                        <div>
-                            <h1 className="font-display text-2xl font-bold">Profile Settings</h1>
-                            <p className="text-muted-foreground">Manage your account information</p>
                         </div>
-                    </div>
                         <div className="grid md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Full Name</Label>
