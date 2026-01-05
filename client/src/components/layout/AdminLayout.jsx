@@ -10,6 +10,7 @@ import {
     Menu,
     Shield,
     Mail,
+    User,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -130,6 +131,7 @@ const AdminLayout = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
                                     <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
+                                        <AvatarImage src={user?.profileImage} alt={user?.name} />
                                         <AvatarFallback className="bg-primary/10 text-primary font-bold">
                                             {user?.name?.charAt(0).toUpperCase()}
                                         </AvatarFallback>
@@ -145,6 +147,15 @@ const AdminLayout = () => {
                                         </p>
                                     </div>
                                 </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Profile</span>
+                                </DropdownMenuItem>
+                                {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
+                                    <Home className="mr-2 h-4 w-4" />
+                                    <span>Home Website</span>
+                                </DropdownMenuItem> */}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
                                     <LogOut className="mr-2 h-4 w-4" />
