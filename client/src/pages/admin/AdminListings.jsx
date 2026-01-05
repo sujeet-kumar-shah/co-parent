@@ -9,7 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Check, X, Eye,ArrowLeft } from 'lucide-react';
+import { Check, X, Eye,ArrowLeft,Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -76,7 +76,34 @@ const AdminListings = () => {
             });
         }
     };
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this listing?")) return;
 
+        try {
+            const response = await fetch(`http://localhost:5000/api/vendor/listings/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                setListings(listings.filter(l => l._id !== id));
+                toast({
+                    title: "Success",
+                    description: "Listing deleted successfully."
+                });
+            } else {
+                throw new Error('Failed to delete');
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to delete listing.",
+                variant: "destructive"
+            });
+        }
+    };
     const getStatusBadge = (status) => {
         const variants = {
             draft: "secondary",
@@ -181,6 +208,26 @@ const AdminListings = () => {
                                                 </>
                                             )}
                                         </div>
+                                        {listing.status === 'approved' && (    
+                                        <div className="text-right">
+                                            <div className="flex justify-end gap-1">
+                                                {/* <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => navigate(`/vendor/listings/edit/${listing._id}`)}
+                                                >
+                                                    <Edit className="h-4 w-4 text-blue-600" />
+                                                </Button> */}
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => handleDelete(listing._id)}
+                                                >
+                                                    <Trash2 className="h-4 w-4 text-red-600" />
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        ) } 
                                     </TableCell>
                                 </TableRow>
                             ))
