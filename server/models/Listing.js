@@ -28,12 +28,9 @@ const listingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    address: {
-        street: String,
-        coordinates: {
-            lat: Number,
-            lng: Number
-        }
+    street: {
+        type:String,
+        required:true
     },
     price: {
         type: Number,

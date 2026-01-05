@@ -270,7 +270,7 @@ export default function ListingDetail() {
                 <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
-                    {listing.location}
+                    {listing.location},{listing.street},{listing.city}
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 fill-accent text-accent" />
@@ -392,8 +392,8 @@ export default function ListingDetail() {
                     <div className="flex items-center gap-2">
                       <Phone className="w-5 h-5" />
                       <span>Call Now</span>
-                    </div>
                     <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
+                    </div>
                   </Button>
                   <Button
                     variant="accent"
@@ -404,8 +404,8 @@ export default function ListingDetail() {
                     <div className="flex items-center gap-2">
                       <MessageCircle className="w-5 h-5" />
                       <span>WhatsApp</span>
-                    </div>
                     <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
+                    </div>
                   </Button>
                 </div>
 
@@ -419,7 +419,7 @@ export default function ListingDetail() {
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" placeholder="Your phone number" className="mt-1" />
+                      <Input id="phone" placeholder="Your phone number" maxLength="10" className="mt-1" />
                     </div>
                     <div>
                       <Label htmlFor="message">Message</Label>

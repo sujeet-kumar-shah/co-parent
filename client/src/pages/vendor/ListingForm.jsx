@@ -117,9 +117,7 @@ const ListingForm = () => {
         formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
         ));
 
-        form.append('address', JSON.stringify({
-        street: formData.street,
-        }));
+        form.append('street',formData.street,);
 
         // files
         if (mainImage) form.append('image', mainImage);
@@ -308,10 +306,16 @@ const ListingForm = () => {
 
                         <div className="space-y-2">
                             <Label>Location</Label>
-                            <Input name="street" value={formData.street} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
+                            <Input name="location" value={formData.location} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
                             <div className="grid grid-cols-2 gap-4">
-                                <Input name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
-                                <Input name="location" value={formData.location} onChange={handleChange} placeholder="Area / Locality" required />
+                                <div>
+                                    <label htmlFor="city">City</label>
+                                    <Input name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="street">Area / Locality</label>
+                                    <Input name="street" value={formData.street} onChange={handleChange} placeholder="Area / Locality" required />
+                                </div>
                             </div>
                            
                         </div>

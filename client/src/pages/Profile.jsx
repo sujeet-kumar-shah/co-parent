@@ -233,6 +233,7 @@ export default function Profile() {
                                     <Input
                                         id="phone"
                                         name="phone"
+                                         maxLength="10"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         className="pl-9"
