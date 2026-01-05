@@ -21,6 +21,8 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import AuthUser from "./pages/authUser";
+import CounselingForm from "./pages/counselingForm";
+import AdminQuery from "./pages/admin/counselingQuery"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -38,7 +40,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/listings" element={<Listings />} />
             <Route path="/listing/:id" element={<ListingDetail />} />
-
+            <Route path="/counseling" element = {<CounselingForm />} />
             {/* Protected User Route */}
             <Route path="/profile" element={<Profile />} />
 
@@ -47,6 +49,7 @@ const App = () => (
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="listings" element={<AdminListings />} />
               <Route path="users" element={<AdminUsers />} />
+              <Route path="query" element={<AdminQuery />} />
             </Route>
 
             {/* Vendor Routes */}

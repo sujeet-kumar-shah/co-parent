@@ -52,7 +52,7 @@ export default function Login() {
         } else if (result.user.type === 'admin') {
           navigate("/admin/dashboard", { replace: true });
         } else if(result.user.type === 'student'){
-          navigate('/listings', { replace: true });
+          navigate('/', { replace: true });
         }
       } else {
         toast({

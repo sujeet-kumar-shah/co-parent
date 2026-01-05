@@ -125,6 +125,7 @@ const AdminListings = () => {
                             <TableHead>Image</TableHead>
                             <TableHead>Title</TableHead>
                             <TableHead>Vendor</TableHead>
+                            <TableHead>Contact Number</TableHead>
                             <TableHead>Location</TableHead>
                             <TableHead>Price</TableHead>
                             <TableHead>Status</TableHead>
@@ -154,6 +155,7 @@ const AdminListings = () => {
                                         <div>{listing.vendor?.name}</div>
                                         <div className="text-xs text-muted-foreground">{listing.vendor?.businessName}</div>
                                     </TableCell>
+                                    <TableCell>{listing.vendor?.phone}</TableCell>
                                     <TableCell>{listing.city}</TableCell>
                                     <TableCell>₹{listing.price}</TableCell>
                                     <TableCell>{getStatusBadge(listing.status)}</TableCell>

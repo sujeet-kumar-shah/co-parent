@@ -8,7 +8,8 @@ import {
     LogOut,
     Home,
     Menu,
-    Shield
+    Shield,
+    Mail,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -50,6 +51,7 @@ const AdminLayout = () => {
         { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
         { icon: List, label: 'Manage Listings', path: '/admin/listings' },
         { icon: Users, label: 'Manage Users', path: '/admin/users' },
+        { icon: Mail, label: 'Counseling Query', path: '/admin/query' },
     ];
 
     const SidebarContent = () => (
