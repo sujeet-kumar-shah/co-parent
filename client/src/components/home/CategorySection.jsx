@@ -59,7 +59,7 @@ const categories = [
     gradient: "from-counseling/20 to-counseling/5",
   },
    {
-    id: "Personal Support",
+    id: "Personal_Support",
     name: "Personal Support",
     description: "Student Career caounseling ",
     icon: Brain,
@@ -97,7 +97,7 @@ export function CategorySection() {
   const { isAuthenticated,user } = useAuth();
 
   const handleCategoryClick = (categoryId) => {
-    if(isAuthenticated && user.type === 'student' && categoryId==="counseling"){
+    if(isAuthenticated && user.type === 'student' && categoryId==="counseling" || categoryId === 'Personal_Support'){
       navigate(`/counseling`)
     }else if (isAuthenticated &&  user.type === 'student') {
       navigate(`/listings?category=${categoryId}`);

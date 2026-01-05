@@ -20,6 +20,7 @@ import AdminListings from "./pages/admin/AdminListings";
 import AdminUsers from "./pages/admin/AdminUsers";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
 import AuthUser from "./pages/authUser";
 import CounselingForm from "./pages/counselingForm";
 import AdminQuery from "./pages/admin/counselingQuery"
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/login" element={ <AuthUser><Login /></AuthUser>}  />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/listings" element={<Listings />} />
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/counseling" element = {<CounselingForm />} />

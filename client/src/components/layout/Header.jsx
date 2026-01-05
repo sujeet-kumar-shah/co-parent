@@ -36,7 +36,9 @@ export function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 mr-8">
           <img src="/logo.jpg" alt="Logo" className="h-8 w-8 rounded-lg object-contain" />
-          <span className="hidden font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
+          {isAuthenticated && (
+            <span className=" font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
+          )}
         </Link>
 
         {/* Navigation (same on all viewports) */}
