@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {  Phone, ArrowLeft } from "lucide-react";
+import {  Phone, ArrowLeft,Book } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,37 +13,38 @@ export default function forget() {
  
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    phone: "",
+    phone:"",
+    otp: "",
   });
 
-  const { forgetPassword } = useAuth();
+  const { otpVerify } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
 
-  const from = location.state?.from || "/";
-
+//   const from = location.state?.from || "/";
+  const phone = location.state?.phone
   const handleInputChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-
+formData.phone =  phone
   const handleForget = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-   if (formData.phone ) {
-      const result = await forgetPassword(formData);
+   if (formData.otp ) {
+      const result = await otpVerify(formData);
       if (result.success) {
         toast({
-            title: "OTP Sent",
+            title: " Wrong OTP ",
             description: "Please enter the OTP sent to your registered phone number.",
         });
 
         
         // if (result.user.type === 'vendor') {
-          navigate("/verify-otp", { replace: true ,state: { phone: formData.phone }});
+        //   navigate("/vendor/dashboard", { replace: true });
         // } else if (result.user.type === 'admin') {
         //   navigate("/admin/dashboard", { replace: true });
         // } else if(result.user.type === 'student'){
@@ -93,23 +94,22 @@ export default function forget() {
         {/* Auth Card */}
         <div className="bg-card rounded-2xl shadow-card p-6">
           <h1 className="font-display text-2xl font-bold mb-2">
-           Forget Password
+           Verify Otp
           </h1>
           <p className="text-muted-foreground mb-6">
-            Enter your Register Phone Number
+            Please enter 4 digit code send to your number 
+              +91 ******{phone?.slice(-4)}
           </p>
-
-         
               <form onSubmit={handleForget} className="space-y-4">
                
                  <div className="space-y-2 ">
-                  <Label htmlFor="login-phone">Phone Number</Label>
+                  <Label htmlFor="login-phone">Enter otp</Label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Book className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
-                      id="login-phone"
-                      name="phone"
-                      placeholder="Enter your Phone Number"
+                      id="login-otp"
+                      name="otp"
+                      placeholder="Enter your otp"
                        onKeyPress={(e) => {
                             if (!/[0-9]/.test(e.key)) {
                               e.preventDefault();
@@ -117,12 +117,12 @@ export default function forget() {
                       onChange={handleInputChange}
                       className="pl-10"
                       required
-                      maxLength="10"
+                      maxLength="4"
                     />
                   </div>
                 </div>
                 <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Countinue"}
+                  {isLoading ? "Logging in..." : "Submit"}
                 </Button>
               </form>
             

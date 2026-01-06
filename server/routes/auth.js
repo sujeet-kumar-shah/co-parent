@@ -151,4 +151,24 @@ router.post('/forget', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+router.post('/otp',async (req,res) =>{
+     const { phone } = req.body;
+
+    try {
+        const user = await User.findOne({ phone });
+
+        if (user && user.isActive === true) {
+            var min = 1000;
+            var max = 9999;
+            var rand =  min + (Math.random() * (max-min));
+            res.json({
+                rand
+            });
+        } else {
+            res.status(401).json({ message: 'Invalid phone' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message }); 
+    }
+})
 export default router;

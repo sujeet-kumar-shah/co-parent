@@ -91,11 +91,9 @@ export default function Login() {
           description: "Welcome to CO-PARENTS.",
         });
 
-        if (result.user.type === 'vendor') {
-          navigate("/vendor/dashboard", { replace: true });
-        } else {
-          navigate(from, { replace: true });
-        }
+       
+          navigate("/verify-otp", { replace: true ,state: { phone: formData.phone }});
+       
       } else {
         toast({
           title: "Registration failed",

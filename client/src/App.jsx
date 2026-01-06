@@ -25,6 +25,7 @@ import AuthUser from "./pages/authUser";
 import CounselingForm from "./pages/counselingForm";
 import AdminQuery from "./pages/admin/counselingQuery"
 import Forget from "./pages/forget"
+import Otp from "./pages/otp"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -38,7 +39,8 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/login" element={ <AuthUser><Login /></AuthUser>}  />
-            <Route path="forgot-password" element={<Forget />} />
+            <Route path="/forgot-password" element={<AuthUser><Forget /></AuthUser>} />
+            <Route path="/verify-otp" element ={<AuthUser><Otp /></AuthUser>} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms" element={<Terms />} />
