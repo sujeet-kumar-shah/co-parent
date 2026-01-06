@@ -121,7 +121,7 @@ const CounselingForm = () => {
                                            e.preventDefault();
                                         }
                                     }} 
-                                    maxLength="10"  name="contact_number" required placeholder="90571 76565" />
+                                    maxLength="10" minLength="10" name="contact_number" required placeholder="90571 76565" />
                                 </div>
                                   <div className="space-y-2">
                                     <Label htmlFor="percentage">Percentage(class 12)</Label>

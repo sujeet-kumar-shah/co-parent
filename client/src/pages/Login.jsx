@@ -184,6 +184,7 @@ export default function Login() {
                       className="pl-10"
                       required
                       maxLength="10"
+                      minLength="10"
                     />
                   </div>
                 </div>
@@ -273,7 +274,7 @@ export default function Login() {
                       maxLength="10"
                       onChange={handleInputChange}
                       className="pl-10"
-                      
+                      minLength="10"
                     />
                   </div>
                 </div>
