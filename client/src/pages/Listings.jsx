@@ -35,6 +35,7 @@ const categories = [
   { value: "all", label: "All Categories" },
   { value: "hostel", label: "Hostels" },
   { value: "pg", label: "PG" },
+  { value: "flat", label: "Flats" },
   { value: "coaching", label: "Coaching" },
   { value: "library", label: "Library" },
   { value: "mess", label: "Mess" },

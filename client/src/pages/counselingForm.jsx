@@ -69,8 +69,9 @@ const CounselingForm = () => {
                                         </div>
                                         <div>
                                             <h3 className="font-medium mb-1">Email Us</h3>
-                                            <p className="text-muted-foreground">support@coparents.com</p>
-                                            <p className="text-muted-foreground">info@coparents.com</p>
+                                            <a href="mailto:coparent.in@gmail.com" className="hover:text-blue-600 transition-colors">
+                                                coparent.in@gmail.com
+                                            </a>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-4">
@@ -79,7 +80,9 @@ const CounselingForm = () => {
                                         </div>
                                         <div>
                                             <h3 className="font-medium mb-1">Call Us</h3>
-                                            <p className="text-muted-foreground">+91 905 717 6565</p>
+                                            <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">
+                                                +91 90571 76565
+                                            </a>
                                             <p className="text-muted-foreground hidden">Mon - Fri, 9am - 6pm</p>
                                         </div>
                                     </div>
