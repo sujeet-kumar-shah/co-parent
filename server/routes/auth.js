@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
     const { name, email, password, phone, type, businessName } = req.body;
 
     try {
-        const userExists = await User.findOne({ email });
+        const userExists = await User.findOne({ phone });
 
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
@@ -57,10 +57,10 @@ router.post('/register', async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { phone, password } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ phone });
 
         if (user && (await user.matchPassword(password)) && user.isActive === true) {
             res.json({
@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
                 token: generateToken(user._id),
             });
         } else {
-            res.status(401).json({ message: 'Invalid email or password' });
+            res.status(401).json({ message: 'Invalid phone or password' });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });

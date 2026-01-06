@@ -8,9 +8,9 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
+        type: String
+        // required: true,
+        // unique: true,
     },
     password: {
         type: String,
@@ -26,7 +26,9 @@ const userSchema = new mongoose.Schema({
         default: true,
     },
     phone: {
-        type: String,
+        type: Number,
+        unique: true,
+        required:true,
     },
     businessName: {
         type: String,
