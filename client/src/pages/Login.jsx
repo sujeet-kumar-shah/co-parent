@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User, Building2, Mail, Lock, Phone, ArrowLeft, Eye, EyeOff, PhoneCall } from "lucide-react";
+import { User, Building2, Mail, Lock, Phone, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -171,11 +171,11 @@ export default function Login() {
                  <div className="space-y-2 ">
                   <Label htmlFor="login-phone">Phone Number</Label>
                   <div className="relative">
-                    <PhoneCall className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="login-phone"
                       name="phone"
-                      type="number"
+                      // type="number"
                       placeholder="Enter your Phone Number"
                       value={formData.phone}
                        onKeyPress={(e) => {
@@ -211,6 +211,14 @@ export default function Login() {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
+                </div>
+                <div className="flex justify-end">
+                  <Link
+                    to="/forgot-password"
+                    className="text-blue-600 text-sm font-medium hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
                 </div>
                 <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Login"}

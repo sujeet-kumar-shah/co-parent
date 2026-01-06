@@ -24,6 +24,7 @@ import Terms from "./pages/Terms";
 import AuthUser from "./pages/authUser";
 import CounselingForm from "./pages/counselingForm";
 import AdminQuery from "./pages/admin/counselingQuery"
+import Forget from "./pages/forget"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -37,6 +38,7 @@ const App = () => (
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
             <Route path="/login" element={ <AuthUser><Login /></AuthUser>}  />
+            <Route path="forgot-password" element={<Forget />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms" element={<Terms />} />
