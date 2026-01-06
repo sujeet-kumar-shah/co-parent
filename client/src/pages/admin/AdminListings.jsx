@@ -13,7 +13,7 @@ import { Check, X, Eye,ArrowLeft,Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {useNavigate} from 'react-router-dom'
+import {useNavigate,Link} from 'react-router-dom'
 
 const AdminListings = () => {
     const [listings, setListings] = useState([]);
@@ -173,10 +173,12 @@ const AdminListings = () => {
                         ) : (
                             listings.map((listing) => (
                                 <TableRow key={listing._id}>
-                                    <TableCell className="font-medium"><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></TableCell>
+                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`}><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></Link></TableCell>
                                     <TableCell className="font-medium">
+                                        <Link to={`/listing/${listing._id}`}>
                                         <div>{listing.title}</div>
                                         <div className="text-xs text-muted-foreground capitalize">{listing.category}</div>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
                                         <div>{listing.vendor?.name}</div>

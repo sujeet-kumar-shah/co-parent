@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Edit, Trash2, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -129,8 +129,8 @@ const VendorListings = () => {
                         ) : (
                             listings.map((listing) => (
                                 <TableRow key={listing._id}>
-                                     <TableCell className="font-medium"><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></TableCell>
-                                    <TableCell className="font-medium">{listing.title}</TableCell>
+                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`} ><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></Link></TableCell>
+                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`}  className='hover:text-blue-600 transition-colors'>{listing.title} </Link></TableCell>
                                     <TableCell className="capitalize">{listing.category}</TableCell>
                                     <TableCell>{listing.city}</TableCell>
                                     <TableCell>₹{listing.price}</TableCell>

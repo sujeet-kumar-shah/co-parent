@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2,ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
 
 const ListingForm = () => {
     const { id } = useParams();
@@ -77,7 +77,7 @@ const ListingForm = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
     const preventNegativeNumber = (e) => {
-         if (['e', 'E', '+', '-'].includes(e.key)) {
+        if (['e', 'E', '+', '-'].includes(e.key)) {
             e.preventDefault();
         }
     }
@@ -97,7 +97,7 @@ const ListingForm = () => {
 
         const status = statusOverride || formData.status;
 
-      const form = new FormData();
+        const form = new FormData();
 
         form.append('title', formData.title);
         form.append('description', formData.description);
@@ -110,14 +110,14 @@ const ListingForm = () => {
 
         // arrays
         form.append('videos', JSON.stringify(
-        formData.videos.split(',').map(v => v.trim()).filter(Boolean)
+            formData.videos.split(',').map(v => v.trim()).filter(Boolean)
         ));
 
         form.append('amenities', JSON.stringify(
-        formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
+            formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
         ));
 
-        form.append('street',formData.street,);
+        form.append('street', formData.street,);
 
         // files
         if (mainImage) form.append('image', mainImage);
@@ -178,13 +178,13 @@ const ListingForm = () => {
             setLoading(false);
         }
     };
-//    const {addreshDropdown,setAddressDropdown } = useState('')
+    //    const {addreshDropdown,setAddressDropdown } = useState('')
     // const handleChangeLocation = (e) =>{
     //     const { name, value } = e.target;
     //     setFormData(prev => ({ ...prev, [name]: value }));
     //     getLocation(e)
     // }
-// 
+    // 
     // const getLocation = (e) =>{
     //   const query = e.target.value;
     //   if (query.length < 2) {
@@ -195,14 +195,14 @@ const ListingForm = () => {
     //     .then(res => res.json())
     //     .then(res => console.log(res))
     //     .catch(err => console.error(err));
-        // }
+    // }
     const handleBack = () => {
-        navigate(-1); 
+        navigate(-1);
     }
     const mainImagePreview = (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
-         setMainImage(file);
+        setMainImage(file);
         // Simple preview using FileReader -> data URL, and store in formData.profileImage
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -229,6 +229,30 @@ const ListingForm = () => {
         }
     };
 
+    const [selected, setSelected] = useState("");
+    const [rows, setRows] = useState([]);
+
+    const handleSelect = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+
+        setSelected(e.target.value);
+        setRows([{ field1: "", field2: "" }]); // add first row
+    };
+
+    const addRow = () => {
+        setRows([...rows, { field1: "", field2: "" }]);
+    };
+
+    const removeRow = (index) => {
+        setRows(rows.filter((_, i) => i !== index));
+    };
+
+      const handleRowChange = (index, name, value) => {
+        const updated = [...rows];
+        updated[index][name] = value;
+        setRows(updated);
+      };
     if (fetching) return <div>Loading...</div>;
 
     return (
@@ -243,7 +267,7 @@ const ListingForm = () => {
                     </Button>
                     <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4" />
-                            Back
+                        Back
                     </button>
                 </div>
             </div>
@@ -271,11 +295,12 @@ const ListingForm = () => {
                                     id="category"
                                     name="category"
                                     value={formData.category}
-                                    onChange={handleChange}
+                                    onChange={handleSelect}
                                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                     <option value="hostel">Hostel</option>
                                     <option value="pg">PG</option>
+                                    <option value="Flat">Flat</option>
                                     {/* <option value="coaching">Coaching</option> */}
                                     <option value="library">Library</option>
                                     <option value="mess">Mess</option>
@@ -297,6 +322,62 @@ const ListingForm = () => {
                             </div>
                         </div>
 
+                        {/* Dynamic inputs */}
+                        {rows.map((row, index) => (
+                            <div className="grid grid-cols-2 gap-4">
+                                <div key={index} className="flex gap-2 items-center">
+                                    <div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="price"> type </Label>
+                                            <Input
+                                                type="text"
+                                                placeholder="type"
+                                                className=""
+                                                value={row.field1}
+                                                onChange={(e) =>
+                                                    handleRowChange(index, "field1", e.target.value)
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="price">Monthly Price (₹)</Label>
+                                            <Input
+                                                type="text"
+                                                placeholder="price"
+                                                className=""
+                                                onKeyDown={preventNegativeNumber}
+                                                value={row.field2}
+                                                onChange={(e) =>
+                                                    handleRowChange(index, "field2", e.target.value)
+                                                }
+
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Add / Remove buttons */}
+                                    {index === rows.length - 1 ? (
+                                        <button
+                                            type="button"
+                                            onClick={addRow}
+                                            className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                                        >
+                                            <Plus size={16} />
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeRow(index)}
+                                            className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="price">Monthly Price (₹)</Label>
@@ -317,7 +398,7 @@ const ListingForm = () => {
                                     <Input name="street" value={formData.street} onChange={handleChange} placeholder="Area / Locality" required />
                                 </div>
                             </div>
-                           
+
                         </div>
 
                         <div className="space-y-2">
@@ -363,7 +444,7 @@ const ListingForm = () => {
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Save as Draft
                             </Button>
-                            <Button variant="outline"  className="w-full " onClick={() => navigate('/vendor/listings')}>
+                            <Button variant="outline" className="w-full " onClick={() => navigate('/vendor/listings')}>
                                 Cancel
                             </Button>
                             <Button
