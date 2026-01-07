@@ -79,9 +79,9 @@ export function AuthProvider({ children }) {
         throw new Error(data.message || "Registration failed");
       }
 
-      setToken(data.token);
-      localStorage.setItem("coparents_token", data.token);
-      setUser(data);
+      // setToken(data.token);
+      // localStorage.setItem("coparents_token", data.token);
+      // setUser(data);
       return { success: true, user: data };
     } catch (error) {
       return { success: false, message: error.message };
@@ -113,7 +113,7 @@ export function AuthProvider({ children }) {
   };
   const otpVerify = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/otp", {
+      const response = await fetch("http://localhost:5000/api/auth/verify-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -122,7 +122,9 @@ export function AuthProvider({ children }) {
       });
 
       const data = await response.json();
-
+      setToken(data.token);
+      localStorage.setItem("coparents_token", data.token);
+      setUser(data);
       if (!response.ok) {
         throw new Error(data.message || "Registration failed");
       }

@@ -36,20 +36,20 @@ formData.phone =  phone
     setIsLoading(true);
    if (formData.otp ) {
       const result = await otpVerify(formData);
-      if (result.success) {
+      if (result) {
         toast({
-            title: " Wrong OTP ",
-            description: "Please enter the OTP sent to your registered phone number.",
+            title: "Registration successful! ",
+            description: "Welcome to CO-PARENTS.",
         });
 
         
-        // if (result.user.type === 'vendor') {
-        //   navigate("/vendor/dashboard", { replace: true });
-        // } else if (result.user.type === 'admin') {
-        //   navigate("/admin/dashboard", { replace: true });
-        // } else if(result.user.type === 'student'){
-        //   navigate('/', { replace: true });
-        // }
+        if (result.user.type === 'vendor') {
+          navigate("/vendor/dashboard", { replace: true });
+        } else if (result.user.type === 'admin') {
+          navigate("/admin/dashboard", { replace: true });
+        } else if(result.user.type === 'student'){
+          navigate('/', { replace: true });
+        }
       } else {
         toast({
           title: "Failed",

@@ -85,14 +85,12 @@ export default function Login() {
         businessName: authType === "vendor" ? formData.businessName : undefined,
       });
 
-      if (result.success) {
+      if (result) {
+        navigate("/verify-otp", { replace: true ,state: { phone: formData.phone }});
         toast({
-          title: "Registration successful!",
+          title: "Otp Send successful!",
           description: "Welcome to CO-PARENTS.",
         });
-
-       
-          navigate("/verify-otp", { replace: true ,state: { phone: formData.phone }});
        
       } else {
         toast({
