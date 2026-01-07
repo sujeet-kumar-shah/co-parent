@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -122,21 +122,38 @@ export function AuthProvider({ children }) {
       });
 
       const data = await response.json();
-      setToken(data.token);
-      localStorage.setItem("coparents_token", data.token);
-      setUser(data);
       if (!response.ok) {
-        throw new Error(data.message || "Registration failed");
+        throw new Error(data.message || "OTP verification failed");
       }
 
-      // setToken(data.token);
-      // localStorage.setItem("coparents_token", data.token);
-      // setUser(data);
-      return { success: true, user: data };
+      // If server returned a token (signup flow), store it and set user
+      if (data.token) {
+        setToken(data.token);
+        localStorage.setItem("coparents_token", data.token);
+        setUser(data.user);
+        return { success: true, user: data.user };
+      }
+
+      // For reset flow (no token), return reset token and info
+      return { success: true, resetToken: data.resetToken, userId: data.userId, message: data.message };
     } catch (error) {
       return { success: false, message: error.message };
     }
   }
+  const resetPassword = async (userData) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Reset failed");
+      return { success: true, message: data.message };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  };
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -152,6 +169,7 @@ export function AuthProvider({ children }) {
     logout,
     otpVerify,
     forgetPassword,
+    resetPassword,
     isAuthenticated: !!user,
   };
 
@@ -162,10 +180,12 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
+function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
+
+export { AuthProvider, useAuth };

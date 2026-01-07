@@ -26,6 +26,7 @@ import CounselingForm from "./pages/counselingForm";
 import AdminQuery from "./pages/admin/counselingQuery"
 import Forget from "./pages/forget"
 import Otp from "./pages/otp"
+import ResetPassword from "./pages/resetPassword"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/login" element={ <AuthUser><Login /></AuthUser>}  />
             <Route path="/forgot-password" element={<AuthUser><Forget /></AuthUser>} />
             <Route path="/verify-otp" element ={<AuthUser><Otp /></AuthUser>} />
+            <Route path="/reset-password" element ={<AuthUser><ResetPassword /></AuthUser>} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms" element={<Terms />} />

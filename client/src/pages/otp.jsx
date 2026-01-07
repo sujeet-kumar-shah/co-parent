@@ -34,37 +34,44 @@ formData.phone =  phone
   const handleForget = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-   if (formData.otp ) {
-      const result = await otpVerify(formData);
-      if (result) {
-        toast({
-            title: "Registration successful! ",
-            description: "Welcome to CO-PARENTS.",
-        });
+    if (!formData.otp) {
+      toast({ title: "Failed", description: "Please enter the OTP.", variant: "destructive" });
+      setIsLoading(false);
+      return;
+    }
 
-        
+    try {
+      const payload = { ...formData, purpose: 'reset' };
+      const result = await otpVerify(payload);
+
+      if (!result || result.success === false) {
+        toast({ title: "Failed", description: result?.message || "Invalid OTP.", variant: "destructive" });
+        return;
+      }
+
+      // If this was a reset flow, server will return a resetToken
+      if (result.resetToken) {
+        toast({ title: "Verified", description: "OTP verified. Please reset your password." });
+        navigate('/reset-password', { replace: true, state: { resetToken: result.resetToken, phone } });
+        return;
+      }
+
+      // Signup/login flow
+      if (result.user) {
+        toast({ title: "Registration successful!", description: "Welcome to CO-PARENTS." });
         if (result.user.type === 'vendor') {
-          navigate("/vendor/dashboard", { replace: true });
+          navigate('/vendor/dashboard', { replace: true });
         } else if (result.user.type === 'admin') {
-          navigate("/admin/dashboard", { replace: true });
-        } else if(result.user.type === 'student'){
+          navigate('/admin/dashboard', { replace: true });
+        } else {
           navigate('/', { replace: true });
         }
-      } else {
-        toast({
-          title: "Failed",
-          description: result.message || "Please enter valid credentials.",
-          variant: "destructive",
-        });
       }
-    } else {
-      toast({
-        title: "Failed",
-        description: "Please enter valid credentials.",
-        variant: "destructive",
-      });
+    } catch (err) {
+      toast({ title: "Error", description: err.message || 'Something went wrong', variant: 'destructive' });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
 
