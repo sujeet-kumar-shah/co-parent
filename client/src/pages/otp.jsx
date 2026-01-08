@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {  Phone, ArrowLeft,Book } from "lucide-react";
+import { Phone, ArrowLeft, Book } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,11 +9,12 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 export default function forget() {
-  
- 
+
+  const [seconds, setSeconds] = useState(5);
+  const [isActive, setIsActive] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    phone:"",
+    phone: "",
     otp: "",
   });
 
@@ -22,7 +23,7 @@ export default function forget() {
   const location = useLocation();
   const { toast } = useToast();
 
-//   const from = location.state?.from || "/";
+  //   const from = location.state?.from || "/";
   const phone = location.state?.phone
   const handleInputChange = (e) => {
     setFormData((prev) => ({
@@ -30,7 +31,7 @@ export default function forget() {
       [e.target.name]: e.target.value,
     }));
   };
-formData.phone =  phone
+  formData.phone = phone
   const handleForget = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -75,6 +76,29 @@ formData.phone =  phone
   };
 
 
+  useEffect(() => {
+    let interval = null;
+    if (isActive && seconds > 0) {
+      interval = setInterval(() => {
+        setSeconds((seconds) => seconds - 1);
+      }, 1000);
+    } else if (seconds === 0 && isActive) {
+      setIsActive(false);
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, seconds]);
+
+  const resendOtp = () => {
+    // Call your backend API here to request a new OTP
+    console.log("Resending OTP...");
+    // Reset timer and activate
+    
+    setSeconds(60);
+    setIsActive(true);
+  };
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-4">
@@ -101,38 +125,49 @@ formData.phone =  phone
         {/* Auth Card */}
         <div className="bg-card rounded-2xl shadow-card p-6">
           <h1 className="font-display text-2xl font-bold mb-2">
-           Verify Otp
+            Verify Otp
           </h1>
           <p className="text-muted-foreground mb-6">
-            Please enter 4 digit code send to your number 
-              +91 ******{phone?.slice(-4)}
+            Please enter 4 digit code send to your number
+            +91 ******{phone?.slice(-4)}
           </p>
-              <form onSubmit={handleForget} className="space-y-4">
-               
-                 <div className="space-y-2 ">
-                  <Label htmlFor="login-phone">Enter otp</Label>
-                  <div className="relative">
-                    <Book className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input
-                      id="login-otp"
-                      name="otp"
-                      placeholder="Enter your otp"
-                       onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                            } }}
-                      onChange={handleInputChange}
-                      className="pl-10"
-                      required
-                      maxLength="4"
-                    />
-                  </div>
-                </div>
-                <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Logging in..." : "Submit"}
-                </Button>
-              </form>
-            
+          <form onSubmit={handleForget} className="space-y-4">
+
+            <div className="space-y-2 ">
+              <Label htmlFor="login-phone">Enter otp</Label>
+              <div className="relative">
+                <Book className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  id="login-otp"
+                  name="otp"
+                  placeholder="Enter your otp"
+                  onKeyPress={(e) => {
+                    if (!/[0-9]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                  onChange={handleInputChange}
+                  className="pl-10"
+                  required
+                  maxLength="4"
+                />
+              </div>
+            </div>
+            <div className="hidden">
+              {seconds > 0 ? (
+                <p>Time Remaining: {seconds < 10 ? `0${seconds}` : seconds}s</p>
+              ) : (
+                <div className="flex" >
+                <p>Didn't receive the code?</p> <Button  onClick={resendOtp}>Resend OTP</Button>
+              </div>
+              )}
+              
+            </div>
+            <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Submit"}
+            </Button>
+          </form>
+
         </div>
       </motion.div>
     </div>
