@@ -20,6 +20,9 @@ const QyerySchema = new mongoose.Schema({
      type:String,
      require:true
     },
+    message:{
+       type:String,
+    },
     contact_number:{
         type:Number,
         required:true,

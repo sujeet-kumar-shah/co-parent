@@ -53,13 +53,13 @@ const AdminQuery = () => {
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/users/${id}/status`, {
-                method: 'PUT',
+            const response = await fetch(`http://localhost:5000/api/query/status/${id}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ isActive: newStatus })
+                body: JSON.stringify({ status: newStatus })
             });
 
             if (response.ok) {
@@ -108,6 +108,7 @@ const AdminQuery = () => {
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>About</TableHead>
+                            <TableHead>message</TableHead>
                             <TableHead>Contact Number</TableHead>
                             <TableHead>percentage</TableHead>
                             <TableHead>Status</TableHead>
@@ -130,6 +131,7 @@ const AdminQuery = () => {
                                 <TableRow key={user._id}>
                                     <TableCell className="font-medium">{user.name}</TableCell>
                                     <TableCell>{user.query_type}</TableCell>
+                                     <TableCell>{user.message}</TableCell>
                                     <TableCell>
                                         
                                             <div className="text-sm text-muted-foreground capitalize">
@@ -147,10 +149,21 @@ const AdminQuery = () => {
                                         <Button
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
+                                            // onClick={() => handleStatusUpdate(user._id, user.isActive)}
+                                        >
+                                            {user.status ? (
+                                                <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
+                                            ) : (
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
+                                            )}
+                                        </Button>
+                                         <Button
+                                            size="sm"
+                                            variant={user.status ? "outline" : "outline"}
                                             onClick={() => handleStatusUpdate(user._id, user.isActive)}
                                         >
                                             {user.status ? (
-                                                <><PhoneCall className="h-4 w-4 mr-1" /> Call </>
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">success</a> </>
                                             ) : (
                                                 <><CheckCircle className="h-4 w-4 mr-1" /> </>
                                             )}
