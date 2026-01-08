@@ -248,11 +248,11 @@ const ListingForm = () => {
         setRows(rows.filter((_, i) => i !== index));
     };
 
-      const handleRowChange = (index, name, value) => {
+    const handleRowChange = (index, name, value) => {
         const updated = [...rows];
         updated[index][name] = value;
         setRows(updated);
-      };
+    };
     if (fetching) return <div>Loading...</div>;
 
     return (
@@ -324,57 +324,54 @@ const ListingForm = () => {
 
                         {/* Dynamic inputs */}
                         {rows.map((row, index) => (
-                            <div className="grid grid-cols-2 gap-4">
-                                <div key={index} className="flex gap-2 items-center">
+                            <div key={index} className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="price"> type </Label>
+                                    <Input
+                                        type="text"
+                                        placeholder="type"
+                                        className=""
+                                        value={row.field1}
+                                        onChange={(e) =>
+                                            handleRowChange(index, "field1", e.target.value)
+                                        }
+                                    />
+                                </div>
+                                <div className="space-y-2  me-5">
                                     <div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="price"> type </Label>
-                                            <Input
-                                                type="text"
-                                                placeholder="type"
-                                                className=""
-                                                value={row.field1}
-                                                onChange={(e) =>
-                                                    handleRowChange(index, "field1", e.target.value)
-                                                }
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="price">Monthly Price (₹)</Label>
-                                            <Input
-                                                type="text"
-                                                placeholder="price"
-                                                className=""
-                                                onKeyDown={preventNegativeNumber}
-                                                value={row.field2}
-                                                onChange={(e) =>
-                                                    handleRowChange(index, "field2", e.target.value)
-                                                }
+                                        <Label htmlFor="price">Monthly Price (₹)</Label>
+                                        <Input
+                                            type="text"
+                                            placeholder="price"
+                                            className=""
+                                            onKeyDown={preventNegativeNumber}
+                                            value={row.field2}
+                                            onChange={(e) =>
+                                                handleRowChange(index, "field2", e.target.value)
+                                            }
 
-                                            />
-                                        </div>
+                                        />
                                     </div>
-
                                     {/* Add / Remove buttons */}
-                                    {index === rows.length - 1 ? (
-                                        <button
-                                            type="button"
-                                            onClick={addRow}
-                                            className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
-                                        >
-                                            <Plus size={16} />
-                                        </button>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            onClick={() => removeRow(index)}
-                                            className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    )}
+                                    <div>
+                                        {index === rows.length - 1 ? (
+                                            <button
+                                                type="button"
+                                                onClick={addRow}
+                                                className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                                            >
+                                                <Plus size={16} />
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeRow(index)}
+                                                className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}

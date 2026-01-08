@@ -236,7 +236,8 @@ export default function Profile() {
                                          maxLength="10"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="pl-9"
+                                        className="pl-9 "
+                                        disabled
                                         placeholder="+91 90571 76565"
                                     />
                                 </div>
