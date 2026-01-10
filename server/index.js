@@ -28,12 +28,13 @@ import authRoutes from './routes/auth.js';
 import listingRoutes from './routes/listings.js';
 import vendorRoutes from './routes/vendor.js';
 import adminRoutes from './routes/admin.routes.js';
-
+import queryRoutes from './routes/queryRoutes.js';
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/vendor', vendorRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/query',queryRoutes)
 
 // Serve uploaded files (images) statically
 import fs from 'fs';

@@ -39,8 +39,8 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    if (formData.email && formData.password) {
-      const result = await login(formData.email, formData.password);
+    if (formData.phone && formData.password) {
+      const result = await login(formData.phone, formData.password);
       if (result.success) {
         toast({
           title: "Login successful!",
@@ -52,7 +52,7 @@ export default function Login() {
         } else if (result.user.type === 'admin') {
           navigate("/admin/dashboard", { replace: true });
         } else if(result.user.type === 'student'){
-          navigate('/listings', { replace: true });
+          navigate('/', { replace: true });
         }
       } else {
         toast({
@@ -75,7 +75,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
 
-    if (formData.email && formData.password && formData.name) {
+    if (formData.phone && formData.password && formData.name) {
       const result = await register({
         name: formData.name,
         email: formData.email,
@@ -85,17 +85,13 @@ export default function Login() {
         businessName: authType === "vendor" ? formData.businessName : undefined,
       });
 
-      if (result.success) {
+      if (result) {
+        navigate("/verify-otp", { replace: true ,state: { phone: formData.phone }});
         toast({
-          title: "Registration successful!",
+          title: "Otp Send successful!",
           description: "Welcome to CO-PARENTS.",
         });
-
-        if (result.user.type === 'vendor') {
-          navigate("/vendor/dashboard", { replace: true });
-        } else {
-          navigate(from, { replace: true });
-        }
+       
       } else {
         toast({
           title: "Registration failed",
@@ -152,7 +148,7 @@ export default function Login() {
 
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
+                {/* <div className="space-y-2 hidden">
                   <Label htmlFor="login-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -164,7 +160,29 @@ export default function Login() {
                       value={formData.email}
                       onChange={handleInputChange}
                       className="pl-10"
+                      
+                    />
+                  </div>
+                </div> */}
+                 <div className="space-y-2 ">
+                  <Label htmlFor="login-phone">Phone Number</Label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      id="login-phone"
+                      name="phone"
+                      // type="number"
+                      placeholder="Enter your Phone Number"
+                      value={formData.phone}
+                       onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            } }}
+                      onChange={handleInputChange}
+                      className="pl-10"
                       required
+                      maxLength="10"
+                      minLength="10"
                     />
                   </div>
                 </div>
@@ -190,6 +208,14 @@ export default function Login() {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
+                </div>
+                <div className="flex justify-end">
+                  <Link
+                    to="/forgot-password"
+                    className="text-blue-600 text-sm font-medium hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
                 </div>
                 <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Login"}
@@ -230,7 +256,28 @@ export default function Login() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="reg-email">Email</Label>
+                  <Label htmlFor="reg-phone">Phone Number</Label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input
+                      id="reg-phone"
+                      name="phone"
+                      // type="tel"
+                      placeholder="Enter your phone"
+                      value={formData.phone}
+                      onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            } }}
+                      maxLength="10"
+                      onChange={handleInputChange}
+                      className="pl-10"
+                      minLength="10"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2 ">
+                  <Label htmlFor="reg-email">Email (Optional)</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
@@ -239,22 +286,6 @@ export default function Login() {
                       type="email"
                       placeholder="Enter your email"
                       value={formData.email}
-                      onChange={handleInputChange}
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="reg-phone">Phone Number</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input
-                      id="reg-phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="Enter your phone"
-                      value={formData.phone}
                       onChange={handleInputChange}
                       className="pl-10"
                     />

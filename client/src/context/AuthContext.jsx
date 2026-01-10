@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -38,14 +38,14 @@ export function AuthProvider({ children }) {
     fetchUser();
   }, [token]);
 
-  const login = async (email, password) => {
+  const login = async (phone, password) => {
     try {
       const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ phone, password }),
       });
 
       const data = await response.json();
@@ -79,15 +79,81 @@ export function AuthProvider({ children }) {
         throw new Error(data.message || "Registration failed");
       }
 
-      setToken(data.token);
-      localStorage.setItem("coparents_token", data.token);
-      setUser(data);
+      // setToken(data.token);
+      // localStorage.setItem("coparents_token", data.token);
+      // setUser(data);
       return { success: true, user: data };
     } catch (error) {
       return { success: false, message: error.message };
     }
   };
+  const forgetPassword = async (userData) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/forget", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
 
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      // setToken(data.token);
+      // localStorage.setItem("coparents_token", data.token);
+      // setUser(data);
+      return { success: true, user: data };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  };
+  const otpVerify = async (userData) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/verify-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "OTP verification failed");
+      }
+
+      // If server returned a token (signup flow), store it and set user
+      if (data.token) {
+        setToken(data.token);
+        localStorage.setItem("coparents_token", data.token);
+        setUser(data.user);
+        return { success: true, user: data.user };
+      }
+
+      // For reset flow (no token), return reset token and info
+      return { success: true, resetToken: data.resetToken, userId: data.userId, message: data.message };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }
+  const resetPassword = async (userData) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Reset failed");
+      return { success: true, message: data.message };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  };
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -101,6 +167,9 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
+    otpVerify,
+    forgetPassword,
+    resetPassword,
     isAuthenticated: !!user,
   };
 
@@ -111,10 +180,12 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
+function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
+
+export { AuthProvider, useAuth };

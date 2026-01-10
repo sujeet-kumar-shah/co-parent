@@ -9,16 +9,16 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Ban, CheckCircle ,ArrowLeft} from 'lucide-react';
+import { Ban, CheckCircle ,ArrowLeft,PhoneCall} from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {useNavigate} from 'react-router-dom'
 
-const AdminUsers = () => {
+const AdminQuery = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState('student');
+    const [filter, setFilter] = useState('pending');
     const { token } = useAuth();
     const { toast } = useToast();
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/users?type=${filter}`, {
+            const response = await fetch(`http://localhost:5000/api/admin/query?type=${filter}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -53,13 +53,13 @@ const AdminUsers = () => {
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/users/${id}/status`, {
-                method: 'PUT',
+            const response = await fetch(`http://localhost:5000/api/query/status/${id}`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ isActive: newStatus })
+                body: JSON.stringify({ status: newStatus })
             });
 
             if (response.ok) {
@@ -86,8 +86,8 @@ const AdminUsers = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Manage Users</h2>
-                    <p className="text-muted-foreground">View and manage student and vendor accounts.</p>
+                    <h2 className="text-3xl font-bold tracking-tight">Users Query</h2>
+                    <p className="text-muted-foreground">View and manage students Counseling Query.</p>
                 </div>
                  <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4" />
@@ -95,10 +95,10 @@ const AdminUsers = () => {
                  </button>
             </div>
 
-            <Tabs defaultValue="student" onValueChange={setFilter} className="w-full">
+            <Tabs defaultValue="pending" onValueChange={setFilter} className="w-full">
                 <TabsList>
-                    <TabsTrigger value="student">Students</TabsTrigger>
-                    <TabsTrigger value="vendor">Vendors</TabsTrigger>
+                    <TabsTrigger value="pending">Pending</TabsTrigger>
+                    <TabsTrigger value="success">Success</TabsTrigger>
                 </TabsList>
             </Tabs>
 
@@ -107,8 +107,10 @@ const AdminUsers = () => {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
+                            <TableHead>About</TableHead>
+                            <TableHead>message</TableHead>
                             <TableHead>Contact Number</TableHead>
+                            <TableHead>percentage</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -128,33 +130,42 @@ const AdminUsers = () => {
                             users.map((user) => (
                                 <TableRow key={user._id}>
                                     <TableCell className="font-medium">{user.name}</TableCell>
-                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>{user.query_type}</TableCell>
+                                     <TableCell>{user.message}</TableCell>
                                     <TableCell>
-                                        {user.type === 'vendor' ? (
+                                        
                                             <div className="text-sm text-muted-foreground capitalize">
-                                                {user.phone}
+                                                {user.contact_number}
                                             </div>
-                                        ) : (
-                                            <div className="text-sm text-muted-foreground">
-                                                {user.phone}
-                                            </div>
-                                        )}
+                                      
                                     </TableCell>
+                                    <TableCell>{user.percent}</TableCell>
                                     <TableCell>
-                                        <Badge variant={user.isActive ? "success" : "destructive"} className={user.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
-                                            {user.isActive ? 'Active' : 'Suspended'}
+                                        <Badge variant={user.status ? "success" : "destructive"} className={user.status ? "bg-red-100 text-red-800":"bg-green-100 text-green-800"}>
+                                            {user.status ? 'Pending' : 'Success'}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <Button
                                             size="sm"
-                                            variant={user.isActive ? "destructive" : "outline"}
+                                            variant={user.status ? "outline" : "outline"}
+                                            // onClick={() => handleStatusUpdate(user._id, user.isActive)}
+                                        >
+                                            {user.status ? (
+                                                <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
+                                            ) : (
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
+                                            )}
+                                        </Button>
+                                         <Button
+                                            size="sm"
+                                            variant={user.status ? "outline" : "outline"}
                                             onClick={() => handleStatusUpdate(user._id, user.isActive)}
                                         >
-                                            {user.isActive ? (
-                                                <><Ban className="h-4 w-4 mr-1" /> Suspend</>
+                                            {user.status ? (
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">success</a> </>
                                             ) : (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> Activate</>
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
                                             )}
                                         </Button>
                                     </TableCell>
@@ -168,4 +179,4 @@ const AdminUsers = () => {
     );
 };
 
-export default AdminUsers;
+export default AdminQuery;

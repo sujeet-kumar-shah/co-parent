@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight } from "lucide-react";
+import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight,Brain } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const categories = [
@@ -23,13 +23,13 @@ const categories = [
     gradient: "from-pg/20 to-pg/5",
   },
   {
-    id: "coaching",
-    name: "Coaching Centers",
-    description: "Top-rated coaching institutes for competitive exams",
-    icon: GraduationCap,
-    count: 1800,
-    color: "coaching",
-    gradient: "from-coaching/20 to-coaching/5",
+    id: "mess",
+    name: "Mess & Tiffin",
+    description: "Hygienic and affordable meal services for students",
+    icon: Utensils,
+    count: 1400,
+    color: "mess",
+    gradient: "from-mess/20 to-mess/5",
   },
   {
     id: "library",
@@ -41,14 +41,42 @@ const categories = [
     gradient: "from-library/20 to-library/5",
   },
   {
-    id: "mess",
-    name: "Mess & Tiffin",
-    description: "Hygienic and affordable meal services for students",
-    icon: Utensils,
-    count: 1400,
-    color: "mess",
-    gradient: "from-mess/20 to-mess/5",
+    id: "coaching ",
+    name: "Coaching and School Admission Support",
+    description: "Top-rated coaching institutes for competitive exams",
+    icon: GraduationCap,
+    count: 1800,
+    color: "coaching",
+    gradient: "from-coaching/20 to-coaching/5",
   },
+  {
+    id: "counseling",
+    name: "counseling",
+    description: "JEE | NEET | PVT. Collages ",
+    icon: Brain,
+    count: 1400,
+    color: "counseling",
+    gradient: "from-counseling/20 to-counseling/5",
+  },
+   {
+    id: "Personal_Support",
+    name: "Personal Support",
+    description: "Student Career caounseling ",
+    icon: Brain,
+    count: 1400,
+    color: "counseling",
+    gradient: "from-counseling/20 to-counseling/5",
+  },
+  //  {
+  //   id: "School Admission",
+  //   name: "School Admission Support",
+  //   description: "student caounseling ",
+  //   icon: Brain,
+  //   count: 1400,
+  //   color: "counseling",
+  //   gradient: "from-counseling/20 to-counseling/5",
+  // },
+
 ];
 
 const containerVariants = {
@@ -69,9 +97,11 @@ export function CategorySection() {
   const { isAuthenticated,user } = useAuth();
 
   const handleCategoryClick = (categoryId) => {
-    if (isAuthenticated &&  user.type === 'student') {
+    if(isAuthenticated && user.type === 'student' && categoryId==="counseling" || categoryId === 'Personal_Support'){
+      navigate(`/counseling`)
+    }else if (isAuthenticated &&  user.type === 'student') {
       navigate(`/listings?category=${categoryId}`);
-    } else if(user.type === 'vendor' ){
+    } else if(isAuthenticated && user.type === 'vendor' ){
       navigate("/", { state: true });
     } else if(isAuthenticated &&  user.type === 'Admin'){
        navigate(`/listings?category=${categoryId}`);

@@ -3,7 +3,7 @@ import User from '../models/User.js';
 import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { admin } from '../middleware/adminMiddleware.js';
-
+import counseling from '../models/Counseling.js'
 const router = express.Router();
 
 // @desc    Get Admin Dashboard Stats
@@ -39,7 +39,7 @@ router.get('/listings', protect, admin, async (req, res) => {
         }
 
         const listings = await Listing.find(query)
-            .populate('vendor', 'name email businessName')
+            .populate('vendor', 'name email businessName phone')
             .sort({ createdAt: -1 });
 
         res.json(listings);
@@ -136,6 +136,24 @@ router.post('/seed', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+});
+router.get('/query', async (req, res) => {
+    try {
+        
+ const { type } = req.query; // student, vendor
+        let query = {};
+        if (type) {
+            query.status = type;
+        } else {
+            query.type = { $ne: 'admin' };
+        }
+
+        const queryData = await counseling.find(query);
+        res.json(queryData);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+    
 });
 
 export default router;

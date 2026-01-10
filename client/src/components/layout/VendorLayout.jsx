@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
     LayoutDashboard,
@@ -22,12 +22,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const VendorLayout = () => {
     const { user, logout, loading, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
-
+    const { toast } = useToast();
     useEffect(() => {
         if (!loading && (!isAuthenticated || user?.type !== 'vendor')) {
             navigate('/login');
@@ -37,6 +38,10 @@ const VendorLayout = () => {
     if (loading) return <div>Loading...</div>;
 
     const handleLogout = () => {
+         toast({
+            title: "Logged out!",
+            description: "You’ve been logged out securely. See you soon!",
+         });
         logout();
         navigate('/login');
     };
@@ -52,7 +57,9 @@ const VendorLayout = () => {
             <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
                     <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
+                    <Link to="/vendor/dashboard">
                     <h1 className="text-xl font-bold font-display text-gray-900">Vendor Panel</h1>
+                    </Link>
                 </div>
             </div>
 
@@ -135,7 +142,7 @@ const VendorLayout = () => {
                                     <div className="flex flex-col space-y-1">
                                         <p className="text-sm font-medium leading-none">{user?.name}</p>
                                         <p className="text-xs leading-none text-muted-foreground">
-                                            {user?.email}
+                                            +91 {user?.phone}
                                         </p>
                                     </div>
                                 </DropdownMenuLabel>
@@ -168,7 +175,7 @@ const VendorLayout = () => {
                     <div className="container py-4">
                     {/* Bottom Bar */}
                         <div className="mt-1 pb-2  border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <p className="  text-black text-sm">
+                            <p className="  text-black text-muted-foreground">
                             © 2026 CO-PARENTS. All rights reserved.
                             </p>
                         </div>

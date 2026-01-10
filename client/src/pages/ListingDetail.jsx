@@ -30,13 +30,14 @@ import { Label } from "@/components/ui/label";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
-
+import { ArrowLeft } from 'lucide-react';
+import axios from 'axios';
 // listingData removed
 
 export default function ListingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { isAuthenticated,user, loading: authLoading } = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liked, setLiked] = useState(false);
   const [listing, setListing] = useState(null);
@@ -74,7 +75,8 @@ export default function ListingDetail() {
         const response = await fetch(`http://localhost:5000/api/listings/${id}`);
         if (response.ok) {
           const data = await response.json();
-          setListing(data);
+          setListing(data.listing);
+          setLiked(data.likedStatus.status)
         } else {
           console.error("Failed to fetch listing");
         }
@@ -106,7 +108,17 @@ export default function ListingDetail() {
       prev === 0 ? (listing.images ? listing.images.length : 1) - 1 : prev - 1
     );
   };
-
+  const handleLike =() =>{ 
+      setLiked(!liked)
+      axios.post('http://localhost:5000/api/listings/like',{
+        propertyId:id,
+        liked:liked,
+        userId:user._id
+      })
+      .then(function(responce){
+        console.log(responce)
+      })
+  }
   if (authLoading) return <div className="min-h-screen pt-20 text-center">Loading...</div>;
   if (!isAuthenticated) return null;
   if (loading) return <div className="min-h-screen pt-20 text-center">Loading listing...</div>;
@@ -154,14 +166,16 @@ export default function ListingDetail() {
   };
   
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
-
+  const handleBack = () => {
+        navigate(-1); 
+  }
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-20">
         {/* Breadcrumb */}
-        <div className="container py-4">
+        <div className="container py-4 flex justify-between items-center">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Link to="/" className="hover:text-primary">Home</Link>
             <span>/</span>
@@ -169,6 +183,10 @@ export default function ListingDetail() {
             <span>/</span>
             <span className="text-foreground">{listing.title}</span>
           </div>
+          <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+              <ArrowLeft className="w-4 h-4" />
+                  Back
+          </button>
         </div>
 
         {/* Image Gallery */}
@@ -178,9 +196,9 @@ export default function ListingDetail() {
               key={currentImageIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              src={images[currentImageIndex]}
+              src={`http://localhost:5000/uploads/${images[currentImageIndex]}`}
               alt={listing.title}
-              className="w-full h-[300px] md:h-[500px] object-cover"
+              className="w-full h-[300px] md:h-[500px] object-fit"
             />
             <button
               onClick={prevImage}
@@ -208,7 +226,7 @@ export default function ListingDetail() {
             </div>
             <div className="absolute top-4 right-4 flex gap-2">
               <button
-                onClick={() => setLiked(!liked)}
+                onClick={handleLike}
                 className="w-10 h-10 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors"
               >
                 <Heart className={`w-5 h-5 ${liked ? "fill-accent text-accent" : ""}`} />
@@ -221,7 +239,7 @@ export default function ListingDetail() {
 
           {/* Thumbnails */}
           <div className="flex gap-4 mt-4 overflow-x-auto pb-2">
-            {images.map((image, index) => (
+            {images.map((images, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
@@ -230,7 +248,7 @@ export default function ListingDetail() {
                   : "border-transparent opacity-60 hover:opacity-100"
                   }`}
               >
-                <img src={image} alt="" className="w-full h-full object-cover" />
+                <img src={`http://localhost:5000/uploads/${images}`} alt="" className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
@@ -252,7 +270,7 @@ export default function ListingDetail() {
                 <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
-                    {listing.location}
+                    {listing.location},{listing.street},{listing.city}
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 fill-accent text-accent" />
@@ -267,7 +285,7 @@ export default function ListingDetail() {
                 <TabsList className="w-full justify-start bg-secondary p-1 rounded-xl">
                   <TabsTrigger value="overview" className="rounded-lg">Overview</TabsTrigger>
                   <TabsTrigger value="amenities" className="rounded-lg">Amenities</TabsTrigger>
-                  <TabsTrigger value="reviews" className="rounded-lg">Reviews</TabsTrigger>
+                  <TabsTrigger value="reviews" className="rounded-lg hidden">Reviews</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
@@ -374,8 +392,8 @@ export default function ListingDetail() {
                     <div className="flex items-center gap-2">
                       <Phone className="w-5 h-5" />
                       <span>Call Now</span>
-                    </div>
                     <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
+                    </div>
                   </Button>
                   <Button
                     variant="accent"
@@ -386,8 +404,8 @@ export default function ListingDetail() {
                     <div className="flex items-center gap-2">
                       <MessageCircle className="w-5 h-5" />
                       <span>WhatsApp</span>
-                    </div>
                     <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
+                    </div>
                   </Button>
                 </div>
 
@@ -401,7 +419,7 @@ export default function ListingDetail() {
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" placeholder="Your phone number" className="mt-1" />
+                      <Input id="phone" placeholder="Your phone number" maxLength="10" className="mt-1" />
                     </div>
                     <div>
                       <Label htmlFor="message">Message</Label>
@@ -420,7 +438,7 @@ export default function ListingDetail() {
                 </div>
 
                 {/* Vendor Info */}
-                <div className="border-t border-border mt-6 pt-6">
+                <div className="border-t border-border mt-6 pt-6  hidden">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                       <span className="font-display font-bold text-primary">SP</span>

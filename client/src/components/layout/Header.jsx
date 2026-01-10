@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User, Building2, LogOut, LayoutDashboard } from "lucide-react";
+import { User, Building2, LogOut, LayoutDashboard } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,18 +11,22 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-
+import { useToast } from "@/hooks/use-toast";
 const navLinks = [];
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
-
+  const { toast } = useToast();
   const handleLogout = () => {
+    toast({
+        title: "Logged out!",
+        description: "You’ve been logged out securely. See you soon!",
+    });
     logout();
-    setMobileMenuOpen(false);
+    // setMobileMenuOpen(false);
     navigate("/");
   };
 
@@ -34,11 +36,13 @@ export function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 mr-8">
           <img src="/logo.jpg" alt="Logo" className="h-8 w-8 rounded-lg object-contain" />
-          <span className="hidden font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
+          {isAuthenticated && (
+            <span className=" font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
+          )}
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium mr-auto">
+        {/* Navigation (same on all viewports) */}
+        <nav className="flex items-center gap-6 text-sm font-medium mr-auto">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -51,8 +55,8 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Desktop Actions */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Actions (same on all viewports) */}
+        <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <>
               {user?.type === 'vendor' ? (
@@ -92,7 +96,7 @@ export function Header() {
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">{user?.name}</p>
-                        <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                        <p className="text-xs leading-none text-muted-foreground"> +91 {user?.phone}</p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
@@ -133,16 +137,16 @@ export function Header() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button
+        {/* <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="md:hidden p-2 rounded-lg hover:bg-secondary"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        </button> */}
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
@@ -225,7 +229,7 @@ export function Header() {
             </nav>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </header>
   );
 }

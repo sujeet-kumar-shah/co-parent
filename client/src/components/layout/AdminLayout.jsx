@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate,Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
     LayoutDashboard,
@@ -8,7 +8,9 @@ import {
     LogOut,
     Home,
     Menu,
-    Shield
+    Shield,
+    Mail,
+    User,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -22,12 +24,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 const AdminLayout = () => {
     const { user, logout, loading, isAuthenticated } = useAuth();
     const navigate = useNavigate();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
-
+    const { toast } = useToast();
     useEffect(() => {
         if (!loading && (!isAuthenticated || user?.type !== 'admin')) {
             navigate('/login');
@@ -37,6 +40,10 @@ const AdminLayout = () => {
     if (loading) return <div>Loading...</div>; // Or a spinner component
 
     const handleLogout = () => {
+        toast({
+            title: "Logged out!",
+            description: "You’ve been logged out securely. See you soon!",
+        });
         logout();
         navigate('/login');
     };
@@ -45,14 +52,17 @@ const AdminLayout = () => {
         { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
         { icon: List, label: 'Manage Listings', path: '/admin/listings' },
         { icon: Users, label: 'Manage Users', path: '/admin/users' },
+        { icon: Mail, label: 'Counseling Query', path: '/admin/query' },
     ];
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full bg-white">
             <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                    <Shield className="w-8 h-8 text-primary" />
+                    <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
+                    <Link to = '/admin/dashboard'>
                     <h1 className="text-xl font-bold font-display text-gray-900">Admin Panel</h1>
+                    </Link>
                 </div>
             </div>
 
@@ -123,6 +133,7 @@ const AdminLayout = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
                                     <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
+                                        <AvatarImage src={user?.profileImage} alt={user?.name} />
                                         <AvatarFallback className="bg-primary/10 text-primary font-bold">
                                             {user?.name?.charAt(0).toUpperCase()}
                                         </AvatarFallback>
@@ -134,10 +145,19 @@ const AdminLayout = () => {
                                     <div className="flex flex-col space-y-1">
                                         <p className="text-sm font-medium leading-none">{user?.name}</p>
                                         <p className="text-xs leading-none text-muted-foreground">
-                                            {user?.email}
+                                           +91 {user?.phone}
                                         </p>
                                     </div>
                                 </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Profile</span>
+                                </DropdownMenuItem>
+                                {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
+                                    <Home className="mr-2 h-4 w-4" />
+                                    <span>Home Website</span>
+                                </DropdownMenuItem> */}
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
                                     <LogOut className="mr-2 h-4 w-4" />
@@ -158,7 +178,7 @@ const AdminLayout = () => {
                     <div className="container py-4">
                     {/* Bottom Bar */}
                         <div className="mt-1 pb-2  border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <p className="  text-black text-sm">
+                            <p className="  text-black text-muted-foreground">
                             © 2026 CO-PARENTS. All rights reserved.
                             </p>
                         </div>

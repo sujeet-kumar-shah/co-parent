@@ -58,7 +58,9 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4" />
-                <span>support@coparents.in</span>
+                 <a href="mailto:coparent.in@gmail.com" className="hover:text-primary-foreground transition-colors">
+                    coparent.in@gmail.com
+                  </a>
               </div>
             </div>
           </div>

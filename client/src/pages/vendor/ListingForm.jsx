@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
 
 const ListingForm = () => {
     const { id } = useParams();
@@ -47,19 +47,19 @@ const ListingForm = () => {
                     if (response.ok) {
                         const data = await response.json();
                         setFormData({
-                            title: data.title,
-                            description: data.description || '',
-                            category: data.category,
-                            gender: data.gender,
-                            price: data.price,
-                            city: data.city,
-                            location: data.location,
-                            street: data.address?.street || '',
-                            image: data.image,
-                            images: data.images ? data.images.join(', ') : '',
-                            videos: data.videos ? data.videos.join(', ') : '',
-                            amenities: data.amenities ? data.amenities.join(', ') : '',
-                            status: data.status
+                            title: data.listing.title,
+                            description: data.listing.description || '',
+                            category: data.listing.category,
+                            gender: data.listing.gender,
+                            price: data.listing.price,
+                            city: data.listing.city,
+                            location: data.listing.location,
+                            street: data.listing.address?.street || '',
+                            // image: data.listing.image,
+                            // images: data.listing.images ? data.listing.images.join(', ') : '',
+                            videos: data.listing.videos ? data.listing.videos.join(', ') : '',
+                            amenities: data.listing.amenities ? data.listing.amenities.join(', ') : '',
+                            status: data.listing.status
                         });
                     }
                 } catch (error) {
@@ -77,7 +77,7 @@ const ListingForm = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
     const preventNegativeNumber = (e) => {
-         if (['e', 'E', '+', '-'].includes(e.key)) {
+        if (['e', 'E', '+', '-'].includes(e.key)) {
             e.preventDefault();
         }
     }
@@ -97,7 +97,7 @@ const ListingForm = () => {
 
         const status = statusOverride || formData.status;
 
-      const form = new FormData();
+        const form = new FormData();
 
         form.append('title', formData.title);
         form.append('description', formData.description);
@@ -110,16 +110,14 @@ const ListingForm = () => {
 
         // arrays
         form.append('videos', JSON.stringify(
-        formData.videos.split(',').map(v => v.trim()).filter(Boolean)
+            formData.videos.split(',').map(v => v.trim()).filter(Boolean)
         ));
 
         form.append('amenities', JSON.stringify(
-        formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
+            formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
         ));
 
-        form.append('address', JSON.stringify({
-        street: formData.street,
-        }));
+        form.append('street', formData.street,);
 
         // files
         if (mainImage) form.append('image', mainImage);
@@ -180,13 +178,13 @@ const ListingForm = () => {
             setLoading(false);
         }
     };
-//    const {addreshDropdown,setAddressDropdown } = useState('')
+    //    const {addreshDropdown,setAddressDropdown } = useState('')
     // const handleChangeLocation = (e) =>{
     //     const { name, value } = e.target;
     //     setFormData(prev => ({ ...prev, [name]: value }));
     //     getLocation(e)
     // }
-// 
+    // 
     // const getLocation = (e) =>{
     //   const query = e.target.value;
     //   if (query.length < 2) {
@@ -197,12 +195,14 @@ const ListingForm = () => {
     //     .then(res => res.json())
     //     .then(res => console.log(res))
     //     .catch(err => console.error(err));
-        // }
- 
+    // }
+    const handleBack = () => {
+        navigate(-1);
+    }
     const mainImagePreview = (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
-         setMainImage(file);
+        setMainImage(file);
         // Simple preview using FileReader -> data URL, and store in formData.profileImage
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -229,6 +229,30 @@ const ListingForm = () => {
         }
     };
 
+    const [selected, setSelected] = useState("");
+    const [rows, setRows] = useState([]);
+
+    const handleSelect = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+
+        setSelected(e.target.value);
+        setRows([{ field1: "", field2: "" }]); // add first row
+    };
+
+    const addRow = () => {
+        setRows([...rows, { field1: "", field2: "" }]);
+    };
+
+    const removeRow = (index) => {
+        setRows(rows.filter((_, i) => i !== index));
+    };
+
+    const handleRowChange = (index, name, value) => {
+        const updated = [...rows];
+        updated[index][name] = value;
+        setRows(updated);
+    };
     if (fetching) return <div>Loading...</div>;
 
     return (
@@ -237,10 +261,14 @@ const ListingForm = () => {
                 <h2 className="text-3xl font-bold tracking-tight">
                     {isEditMode ? 'Edit Listing' : 'Add New Listing'}
                 </h2>
-                <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => navigate('/vendor/listings')}>
+                <div className="flex gap-2 ">
+                    <Button variant="outline" className="hidden" onClick={() => navigate('/vendor/listings')}>
                         Cancel
                     </Button>
+                    <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                        <ArrowLeft className="w-4 h-4" />
+                        Back
+                    </button>
                 </div>
             </div>
 
@@ -267,12 +295,13 @@ const ListingForm = () => {
                                     id="category"
                                     name="category"
                                     value={formData.category}
-                                    onChange={handleChange}
+                                    onChange={handleSelect}
                                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
                                     <option value="hostel">Hostel</option>
                                     <option value="pg">PG</option>
-                                    <option value="coaching">Coaching</option>
+                                    <option value="Flat">Flat</option>
+                                    {/* <option value="coaching">Coaching</option> */}
                                     <option value="library">Library</option>
                                     <option value="mess">Mess</option>
                                 </select>
@@ -293,6 +322,59 @@ const ListingForm = () => {
                             </div>
                         </div>
 
+                        {/* Dynamic inputs */}
+                        {rows.map((row, index) => (
+                            <div key={index} className="grid grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="price"> type </Label>
+                                    <Input
+                                        type="text"
+                                        placeholder="type"
+                                        className=""
+                                        value={row.field1}
+                                        onChange={(e) =>
+                                            handleRowChange(index, "field1", e.target.value)
+                                        }
+                                    />
+                                </div>
+                                <div className="space-y-2  me-5">
+                                    <div>
+                                        <Label htmlFor="price">Monthly Price (₹)</Label>
+                                        <Input
+                                            type="text"
+                                            placeholder="price"
+                                            className=""
+                                            onKeyDown={preventNegativeNumber}
+                                            value={row.field2}
+                                            onChange={(e) =>
+                                                handleRowChange(index, "field2", e.target.value)
+                                            }
+
+                                        />
+                                    </div>
+                                    {/* Add / Remove buttons */}
+                                    <div>
+                                        {index === rows.length - 1 ? (
+                                            <button
+                                                type="button"
+                                                onClick={addRow}
+                                                className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                                            >
+                                                <Plus size={16} />
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeRow(index)}
+                                                className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="price">Monthly Price (₹)</Label>
@@ -302,12 +384,18 @@ const ListingForm = () => {
 
                         <div className="space-y-2">
                             <Label>Location</Label>
-                            <Input name="street" value={formData.street} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
+                            <Input name="location" value={formData.location} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
                             <div className="grid grid-cols-2 gap-4">
-                                <Input name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
-                                <Input name="location" value={formData.location} onChange={handleChange} placeholder="Area / Locality" required />
+                                <div>
+                                    <label htmlFor="city">City</label>
+                                    <Input name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
+                                </div>
+                                <div>
+                                    <label htmlFor="street">Area / Locality</label>
+                                    <Input name="street" value={formData.street} onChange={handleChange} placeholder="Area / Locality" required />
+                                </div>
                             </div>
-                           
+
                         </div>
 
                         <div className="space-y-2">
@@ -316,7 +404,7 @@ const ListingForm = () => {
                             <div className="mt-2">
                                 {mainPreview ? (
                                     // eslint-disable-next-line @next/next/no-img-element
-                                    <img src={mainPreview} alt="Main preview" className="w-48 h-32 object-cover rounded-md" id="previewImage" />
+                                    <img src={mainPreview} alt="Main preview" className="w-48 h-32 object-fit rounded-md" id="previewImage" />
                                 ) : null}
                             </div>
                         </div>
@@ -327,7 +415,7 @@ const ListingForm = () => {
                             <div className="mt-2 flex flex-wrap gap-2">
                                 {otherPreviews.map((p, idx) => (
                                     // eslint-disable-next-line @next/next/no-img-element
-                                    <img key={idx} src={p} alt={`preview-${idx}`} className="w-28 h-20 object-cover rounded-md" />
+                                    <img key={idx} src={p} alt={`preview-${idx}`} className="w-28 h-20 object-fit rounded-md" />
                                 ))}
                             </div>
                         </div>
@@ -346,12 +434,15 @@ const ListingForm = () => {
                             <Button
                                 type="button"
                                 variant="secondary"
-                                className="w-full"
+                                className="w-full hidden"
                                 disabled={loading}
                                 onClick={(e) => handleSubmit(e, 'draft')}
                             >
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Save as Draft
+                            </Button>
+                            <Button variant="outline" className="w-full " onClick={() => navigate('/vendor/listings')}>
+                                Cancel
                             </Button>
                             <Button
                                 type="submit"

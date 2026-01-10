@@ -8,9 +8,9 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true,
+        type: String
+        // required: true,
+        // unique: true,
     },
     password: {
         type: String,
@@ -23,10 +23,12 @@ const userSchema = new mongoose.Schema({
     },
     isActive: {
         type: Boolean,
-        default: true,
+        default: false,
     },
     phone: {
-        type: String,
+        type: Number,
+        unique: true,
+        required:true,
     },
     businessName: {
         type: String,
@@ -42,10 +44,10 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        next();
-    }
+// Use async/promise-style pre hook: return early if password not modified
+userSchema.pre('save', async function () {
+    if (!this.isModified('password')) return;
+
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
 });

@@ -35,6 +35,7 @@ const categories = [
   { value: "all", label: "All Categories" },
   { value: "hostel", label: "Hostels" },
   { value: "pg", label: "PG" },
+  { value: "flat", label: "Flats" },
   { value: "coaching", label: "Coaching" },
   { value: "library", label: "Library" },
   { value: "mess", label: "Mess" },
@@ -323,9 +324,9 @@ export default function Listings() {
                       >
                         <div className={`relative overflow-hidden ${viewMode === "list" ? "w-48 flex-shrink-0" : "h-48"}`}>
                           <img
-                            src={listing.image}
+                            src={`http://localhost:5000/uploads/${listing.image}`} 
                             alt={listing.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-fit group-hover:scale-110 transition-transform duration-500"
                           />
                           <div className="absolute top-3 left-3">
                             <Badge variant="secondary" className="bg-card/90 backdrop-blur-sm capitalize">
