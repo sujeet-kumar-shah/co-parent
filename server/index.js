@@ -14,8 +14,18 @@ const PORT = process.env.PORT || 5000;
 // Allow larger JSON bodies to support base64 image uploads from client
 app.use(express.json({ limit: '5mb' }));
 app.use(cookieParser());
+// CORS Configuration - Updated for production deployment
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:8080'], // Allow Vite default and 8080
+    origin: [
+        // Production URLs
+        'http://68.183.85.8:3000',           // Frontend on port 3000
+        'http://68.183.85.8',                 // Direct IP access
+        process.env.FRONTEND_URL,             // From environment variable
+        // Development URLs
+        'http://localhost:5173',              // Vite default
+        'http://localhost:8080',              // Alternative port
+        'http://localhost:3000'               // Frontend build preview
+    ].filter(Boolean), // Remove undefined/null values
     credentials: true
 }));
 
@@ -34,7 +44,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/listings', listingRoutes);
 app.use('/api/vendor', vendorRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/query',queryRoutes)
+app.use('/api/query', queryRoutes)
 
 // Serve uploaded files (images) statically
 import fs from 'fs';
