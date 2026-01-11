@@ -9,31 +9,33 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { getApiUrl } from '@/config/api';
+
 const CounselingForm = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
-    const {user} = useAuth();
+    const { user } = useAuth();
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
         console.log(user);
         const data = e.currentTarget
         const formData = new FormData(data);
-        formData.append ('userId',user._id);
+        formData.append('userId', user._id);
         const payloadObject = Object.fromEntries(formData.entries())
-        const url = "http://localhost:5000/api/query/counselingForm"
-       try {
-         axios.post(url,payloadObject)
-         .then(function(responce){
-            console.log(responce)
-         })
-        .catch(function (error) {
-            console.log(error);
-        });
+        const url = getApiUrl("/api/query/counselingForm")
+        try {
+            axios.post(url, payloadObject)
+                .then(function (responce) {
+                    console.log(responce)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
-       } catch (error) {
-         console.log(error)
-       }
+        } catch (error) {
+            console.log(error)
+        }
         // Simulate API call
         setTimeout(() => {
             setLoading(false);
@@ -108,7 +110,7 @@ const CounselingForm = () => {
                                 <div className="grid sm:grid-cols-1 gap-4">
                                     <div className="space-y-2">
                                         <Label htmlFor="firstName">Name</Label>
-                                        <Input id="name" name="name" required placeholder="John"  />
+                                        <Input id="name" name="name" required placeholder="John" />
                                     </div>
                                     {/* <div className="space-y-2">
                                         <Label htmlFor="lastName">Last Name</Label>
@@ -117,16 +119,16 @@ const CounselingForm = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="contact_number">Contact number</Label>
-                                    <Input 
-                                    id="contact_number"
-                                    onKeyPress={(e) => {
-                                        if (!/[0-9]/.test(e.key)) {
-                                           e.preventDefault();
-                                        }
-                                    }} 
-                                    maxLength="10" minLength="10" name="contact_number" required placeholder="90571 76565" />
+                                    <Input
+                                        id="contact_number"
+                                        onKeyPress={(e) => {
+                                            if (!/[0-9]/.test(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                        maxLength="10" minLength="10" name="contact_number" required placeholder="90571 76565" />
                                 </div>
-                                  <div className="space-y-2">
+                                <div className="space-y-2">
                                     <Label htmlFor="percentage">Percentage(class 12)</Label>
                                     <Input id="percentage" type="number" name="percentage" required placeholder="" />
                                 </div>

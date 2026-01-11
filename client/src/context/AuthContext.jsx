@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { getApiUrl } from "@/config/api";
 
 const AuthContext = createContext(null);
 
@@ -12,7 +13,7 @@ function AuthProvider({ children }) {
     const fetchUser = async () => {
       if (token) {
         try {
-          const response = await fetch("http://localhost:5000/api/auth/profile", {
+          const response = await fetch(getApiUrl("/api/auth/profile"), {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -40,7 +41,7 @@ function AuthProvider({ children }) {
 
   const login = async (phone, password) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch(getApiUrl("/api/auth/login"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ function AuthProvider({ children }) {
 
   const register = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(getApiUrl("/api/auth/register"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +90,7 @@ function AuthProvider({ children }) {
   };
   const forgetPassword = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/forget", {
+      const response = await fetch(getApiUrl("/api/auth/forget"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +114,7 @@ function AuthProvider({ children }) {
   };
   const otpVerify = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/verify-otp", {
+      const response = await fetch(getApiUrl("/api/auth/verify-otp"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +143,7 @@ function AuthProvider({ children }) {
   }
   const resetPassword = async (userData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/reset-password", {
+      const response = await fetch(getApiUrl("/api/auth/reset-password"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

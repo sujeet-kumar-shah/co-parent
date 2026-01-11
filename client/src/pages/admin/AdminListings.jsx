@@ -9,11 +9,12 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Check, X, Eye,ArrowLeft,Trash2 } from 'lucide-react';
+import { Check, X, Eye, ArrowLeft, Trash2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {useNavigate,Link} from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import { getApiUrl, getUploadUrl } from '@/config/api';
 
 const AdminListings = () => {
     const [listings, setListings] = useState([]);
@@ -31,8 +32,8 @@ const AdminListings = () => {
         setLoading(true);
         try {
             const url = filter === 'all'
-                ? 'http://localhost:5000/api/admin/listings'
-                : `http://localhost:5000/api/admin/listings?status=${filter}`;
+                ? getApiUrl('/api/admin/listings')
+                : getApiUrl(`/api/admin/listings?status=${filter}`);
 
             const response = await fetch(url, {
                 headers: {
@@ -52,7 +53,7 @@ const AdminListings = () => {
 
     const handleStatusUpdate = async (id, status) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/listings/${id}/status`, {
+            const response = await fetch(getApiUrl(`/api/admin/listings/${id}/status`), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ const AdminListings = () => {
         if (!window.confirm("Are you sure you want to delete this listing?")) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/vendor/listings/${id}`, {
+            const response = await fetch(getApiUrl(`/api/vendor/listings/${id}`), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -120,7 +121,7 @@ const AdminListings = () => {
     };
 
     const handleBack = () => {
-        navigate(-1); 
+        navigate(-1);
     }
 
     return (
@@ -132,7 +133,7 @@ const AdminListings = () => {
                 </div>
                 <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                        Back
+                    Back
                 </button>
             </div>
 
@@ -173,11 +174,11 @@ const AdminListings = () => {
                         ) : (
                             listings.map((listing) => (
                                 <TableRow key={listing._id}>
-                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`}><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></Link></TableCell>
+                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`}><img src={getUploadUrl(listing.image)} alt="" width="100px" /></Link></TableCell>
                                     <TableCell className="font-medium">
                                         <Link to={`/listing/${listing._id}`}>
-                                        <div>{listing.title}</div>
-                                        <div className="text-xs text-muted-foreground capitalize">{listing.category}</div>
+                                            <div>{listing.title}</div>
+                                            <div className="text-xs text-muted-foreground capitalize">{listing.category}</div>
                                         </Link>
                                     </TableCell>
                                     <TableCell>
@@ -210,26 +211,26 @@ const AdminListings = () => {
                                                 </>
                                             )}
                                         </div>
-                                        {listing.status === 'approved' && (    
-                                        <div className="text-right">
-                                            <div className="flex justify-end gap-1">
-                                                {/* <Button
+                                        {listing.status === 'approved' && (
+                                            <div className="text-right">
+                                                <div className="flex justify-end gap-1">
+                                                    {/* <Button
                                                     variant="ghost"
                                                     size="icon"
                                                     onClick={() => navigate(`/vendor/listings/edit/${listing._id}`)}
                                                 >
                                                     <Edit className="h-4 w-4 text-blue-600" />
                                                 </Button> */}
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => handleDelete(listing._id)}
-                                                >
-                                                    <Trash2 className="h-4 w-4 text-red-600" />
-                                                </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => handleDelete(listing._id)}
+                                                    >
+                                                        <Trash2 className="h-4 w-4 text-red-600" />
+                                                    </Button>
+                                                </div>
                                             </div>
-                                        </div>
-                                        ) } 
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             ))

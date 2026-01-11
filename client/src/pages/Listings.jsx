@@ -27,6 +27,7 @@ import { Slider } from "@/components/ui/slider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
+import { getApiUrl, getUploadUrl } from "@/config/api";
 
 // removing hardcoded listings
 const allListings = [];
@@ -66,7 +67,7 @@ export default function Listings() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/listings");
+        const response = await fetch(getApiUrl("/api/listings"));
         const data = await response.json();
         setListings(data);
       } catch (error) {
@@ -218,7 +219,7 @@ export default function Listings() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div> 
+                </div>
 
                 {/* Price Range */}
                 <div className="space-y-4">
@@ -324,7 +325,7 @@ export default function Listings() {
                       >
                         <div className={`relative overflow-hidden ${viewMode === "list" ? "w-48 flex-shrink-0" : "h-48"}`}>
                           <img
-                            src={`http://localhost:5000/uploads/${listing.image}`} 
+                            src={getUploadUrl(listing.image)}
                             alt={listing.title}
                             className="w-full h-full object-fit group-hover:scale-110 transition-transform duration-500"
                           />

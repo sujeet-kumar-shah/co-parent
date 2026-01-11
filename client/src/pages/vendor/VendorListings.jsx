@@ -13,6 +13,7 @@ import { Edit, Trash2, Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
+import { getApiUrl, getUploadUrl } from '@/config/api';
 
 const VendorListings = () => {
     const [listings, setListings] = useState([]);
@@ -27,7 +28,7 @@ const VendorListings = () => {
 
     const fetchListings = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/vendor/listings', {
+            const response = await fetch(getApiUrl('/api/vendor/listings'), {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -52,7 +53,7 @@ const VendorListings = () => {
         if (!window.confirm("Are you sure you want to delete this listing?")) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/vendor/listings/${id}`, {
+            const response = await fetch(getApiUrl(`/api/vendor/listings/${id}`), {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -129,8 +130,8 @@ const VendorListings = () => {
                         ) : (
                             listings.map((listing) => (
                                 <TableRow key={listing._id}>
-                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`} ><img src={`http://localhost:5000/uploads/${listing.image}`} alt="" width= "100px" /></Link></TableCell>
-                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`}  className='hover:text-blue-600 transition-colors'>{listing.title} </Link></TableCell>
+                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`} ><img src={getUploadUrl(listing.image)} alt="" width="100px" /></Link></TableCell>
+                                    <TableCell className="font-medium"><Link to={`/listing/${listing._id}`} className='hover:text-blue-600 transition-colors'>{listing.title} </Link></TableCell>
                                     <TableCell className="capitalize">{listing.category}</TableCell>
                                     <TableCell>{listing.city}</TableCell>
                                     <TableCell>₹{listing.price}</TableCell>

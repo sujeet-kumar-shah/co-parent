@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { Users, Eye, TrendingUp, Home } from 'lucide-react';
+import { getApiUrl } from '@/config/api';
 
 const VendorDashboard = () => {
     const { token } = useAuth();
@@ -17,7 +18,7 @@ const VendorDashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/vendor/stats', {
+                const response = await fetch(getApiUrl('/api/vendor/stats'), {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
