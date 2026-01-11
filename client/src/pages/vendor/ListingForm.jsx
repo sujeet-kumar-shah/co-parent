@@ -127,8 +127,8 @@ const ListingForm = () => {
 
         try {
             const url = isEditMode
-                ? `http://localhost:5000/api/vendor/listings/${id}`
-                : `http://localhost:5000/api/listings`; // NOTE: POST was in original listings.js, need to make sure auth matches headers
+                ? getApiUrl(`/api/vendor/listings/${id}`)
+                : getApiUrl('/api/listings'); // NOTE: POST was in original listings.js, need to make sure auth matches headers
 
             // Note: Currently POST /api/listings is protected but uses req.body directly. 
             // We might want to use the vendor specific PUT for updates. 
@@ -145,7 +145,7 @@ const ListingForm = () => {
             // I will use /api/listings for create, but I MUST update it to accept new fields (description, etc.)
 
             const method = isEditMode ? 'PUT' : 'POST';
-            const finalUrl = isEditMode ? url : 'http://localhost:5000/api/vendor/listings';
+            const finalUrl = isEditMode ? url : getApiUrl('/api/vendor/listings');
             // WAIT - I need to add POST to vendor routes if I want to use it there.
             // I'll stick to updating existing POST /api/listings to keep things simple as it's already there.
 
