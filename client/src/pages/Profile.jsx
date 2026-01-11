@@ -8,6 +8,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { User, Building2, MapPin, Phone, Mail, Save, Loader2, ArrowLeft, Edit, Eye, EyeOff } from "lucide-react";
+import { getApiUrl } from "@/config/api";
 
 export default function Profile() {
     const { user, isAuthenticated, token, loading: authLoading } = useAuth();
@@ -90,7 +91,7 @@ export default function Profile() {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/api/auth/profile", {
+            const response = await fetch(getApiUrl("/api/auth/profile"), {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -233,7 +234,7 @@ export default function Profile() {
                                     <Input
                                         id="phone"
                                         name="phone"
-                                         maxLength="10"
+                                        maxLength="10"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         className="pl-9 "

@@ -32,12 +32,13 @@ import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
+import { getApiUrl, getUploadUrl } from '@/config/api';
 // listingData removed
 
 export default function ListingDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated,user, loading: authLoading } = useAuth();
+  const { isAuthenticated, user, loading: authLoading } = useAuth();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [liked, setLiked] = useState(false);
   const [listing, setListing] = useState(null);
@@ -72,7 +73,7 @@ export default function ListingDetail() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/listings/${id}`);
+        const response = await fetch(getApiUrl(`/api/listings/${id}`));
         if (response.ok) {
           const data = await response.json();
           setListing(data.listing);
@@ -108,14 +109,14 @@ export default function ListingDetail() {
       prev === 0 ? (listing.images ? listing.images.length : 1) - 1 : prev - 1
     );
   };
-  const handleLike =() =>{ 
-      setLiked(!liked)
-      axios.post('http://localhost:5000/api/listings/like',{
-        propertyId:id,
-        liked:liked,
-        userId:user._id
-      })
-      .then(function(responce){
+  const handleLike = () => {
+    setLiked(!liked)
+    axios.post(getApiUrl('/api/listings/like'), {
+      propertyId: id,
+      liked: liked,
+      userId: user._id
+    })
+      .then(function (responce) {
         console.log(responce)
       })
   }
@@ -164,10 +165,10 @@ export default function ListingDetail() {
       console.log("Sharing not supported on this browser");
     }
   };
-  
+
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
   const handleBack = () => {
-        navigate(-1); 
+    navigate(-1);
   }
   return (
     <div className="min-h-screen bg-background">
@@ -184,8 +185,8 @@ export default function ListingDetail() {
             <span className="text-foreground">{listing.title}</span>
           </div>
           <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
-              <ArrowLeft className="w-4 h-4" />
-                  Back
+            <ArrowLeft className="w-4 h-4" />
+            Back
           </button>
         </div>
 
@@ -196,7 +197,7 @@ export default function ListingDetail() {
               key={currentImageIndex}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              src={`http://localhost:5000/uploads/${images[currentImageIndex]}`}
+              src={getUploadUrl(images[currentImageIndex])}
               alt={listing.title}
               className="w-full h-[300px] md:h-[500px] object-fit"
             />
@@ -248,7 +249,7 @@ export default function ListingDetail() {
                   : "border-transparent opacity-60 hover:opacity-100"
                   }`}
               >
-                <img src={`http://localhost:5000/uploads/${images}`} alt="" className="w-full h-full object-cover" />
+                <img src={getUploadUrl(images)} alt="" className="w-full h-full object-cover" />
               </button>
             ))}
           </div>
@@ -392,7 +393,7 @@ export default function ListingDetail() {
                     <div className="flex items-center gap-2">
                       <Phone className="w-5 h-5" />
                       <span>Call Now</span>
-                    <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
+                      <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
                     </div>
                   </Button>
                   <Button
@@ -404,7 +405,7 @@ export default function ListingDetail() {
                     <div className="flex items-center gap-2">
                       <MessageCircle className="w-5 h-5" />
                       <span>WhatsApp</span>
-                    <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
+                      <span className="text-sm mt-1 opacity-90">+91 90571 76565</span>
                     </div>
                   </Button>
                 </div>

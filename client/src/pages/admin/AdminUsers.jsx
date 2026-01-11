@@ -9,11 +9,12 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Ban, CheckCircle ,ArrowLeft} from 'lucide-react';
+import { Ban, CheckCircle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { getApiUrl } from '@/config/api';
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
@@ -32,7 +33,7 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/users?type=${filter}`, {
+            const response = await fetch(getApiUrl(`/api/admin/users?type=${filter}`), {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -53,7 +54,7 @@ const AdminUsers = () => {
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/users/${id}/status`, {
+            const response = await fetch(getApiUrl(`/api/admin/users/${id}/status`), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ const AdminUsers = () => {
         }
     };
     const handleBack = () => {
-        navigate(-1); 
+        navigate(-1);
     }
     return (
         <div className="space-y-6">
@@ -89,10 +90,10 @@ const AdminUsers = () => {
                     <h2 className="text-3xl font-bold tracking-tight">Manage Users</h2>
                     <p className="text-muted-foreground">View and manage student and vendor accounts.</p>
                 </div>
-                 <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
-                        <ArrowLeft className="w-4 h-4" />
-                            Back
-                 </button>
+                <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                    <ArrowLeft className="w-4 h-4" />
+                    Back
+                </button>
             </div>
 
             <Tabs defaultValue="student" onValueChange={setFilter} className="w-full">

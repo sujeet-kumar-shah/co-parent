@@ -9,11 +9,12 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Ban, CheckCircle ,ArrowLeft,PhoneCall} from 'lucide-react';
+import { Ban, CheckCircle, ArrowLeft, PhoneCall } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { getApiUrl } from '@/config/api';
 
 const AdminQuery = () => {
     const [users, setUsers] = useState([]);
@@ -32,7 +33,7 @@ const AdminQuery = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/admin/query?type=${filter}`, {
+            const response = await fetch(getApiUrl(`/api/admin/query?type=${filter}`), {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -53,7 +54,7 @@ const AdminQuery = () => {
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/query/status/${id}`, {
+            const response = await fetch(getApiUrl(`/api/query/status/${id}`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ const AdminQuery = () => {
         }
     };
     const handleBack = () => {
-        navigate(-1); 
+        navigate(-1);
     }
     return (
         <div className="space-y-6">
@@ -89,10 +90,10 @@ const AdminQuery = () => {
                     <h2 className="text-3xl font-bold tracking-tight">Users Query</h2>
                     <p className="text-muted-foreground">View and manage students Counseling Query.</p>
                 </div>
-                 <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
-                        <ArrowLeft className="w-4 h-4" />
-                            Back
-                 </button>
+                <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                    <ArrowLeft className="w-4 h-4" />
+                    Back
+                </button>
             </div>
 
             <Tabs defaultValue="pending" onValueChange={setFilter} className="w-full">
@@ -131,17 +132,17 @@ const AdminQuery = () => {
                                 <TableRow key={user._id}>
                                     <TableCell className="font-medium">{user.name}</TableCell>
                                     <TableCell>{user.query_type}</TableCell>
-                                     <TableCell>{user.message}</TableCell>
+                                    <TableCell>{user.message}</TableCell>
                                     <TableCell>
-                                        
-                                            <div className="text-sm text-muted-foreground capitalize">
-                                                {user.contact_number}
-                                            </div>
-                                      
+
+                                        <div className="text-sm text-muted-foreground capitalize">
+                                            {user.contact_number}
+                                        </div>
+
                                     </TableCell>
                                     <TableCell>{user.percent}</TableCell>
                                     <TableCell>
-                                        <Badge variant={user.status ? "success" : "destructive"} className={user.status ? "bg-red-100 text-red-800":"bg-green-100 text-green-800"}>
+                                        <Badge variant={user.status ? "success" : "destructive"} className={user.status ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
                                             {user.status ? 'Pending' : 'Success'}
                                         </Badge>
                                     </TableCell>
@@ -149,7 +150,7 @@ const AdminQuery = () => {
                                         <Button
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
-                                            // onClick={() => handleStatusUpdate(user._id, user.isActive)}
+                                        // onClick={() => handleStatusUpdate(user._id, user.isActive)}
                                         >
                                             {user.status ? (
                                                 <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
@@ -157,7 +158,7 @@ const AdminQuery = () => {
                                                 <><CheckCircle className="h-4 w-4 mr-1" /> </>
                                             )}
                                         </Button>
-                                         <Button
+                                        <Button
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
                                             onClick={() => handleStatusUpdate(user._id, user.isActive)}

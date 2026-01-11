@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { getApiUrl } from '@/config/api';
 
 const ListingForm = () => {
     const { id } = useParams();
@@ -43,7 +44,7 @@ const ListingForm = () => {
                 try {
                     // We can reuse the public get single listing or needed a vendor specific one
                     // Public one works for reading data.
-                    const response = await fetch(`http://localhost:5000/api/listings/${id}`);
+                    const response = await fetch(getApiUrl(`/api/listings/${id}`));
                     if (response.ok) {
                         const data = await response.json();
                         setFormData({
@@ -148,7 +149,7 @@ const ListingForm = () => {
             // WAIT - I need to add POST to vendor routes if I want to use it there.
             // I'll stick to updating existing POST /api/listings to keep things simple as it's already there.
 
-            const reqUrl = isEditMode ? `http://localhost:5000/api/vendor/listings/${id}` : `http://localhost:5000/api/listings`;
+            const reqUrl = isEditMode ? getApiUrl(`/api/vendor/listings/${id}`) : getApiUrl('/api/listings');
 
             const response = await fetch(reqUrl, {
                 method: method,
