@@ -33,7 +33,7 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="bg-foreground text-primary-foreground">
-      <div className="container py-6">
+      <div className="container py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
@@ -58,9 +58,9 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4" />
-                 <a href="mailto:coparent.in@gmail.com" className="hover:text-primary-foreground transition-colors">
-                    coparent.in@gmail.com
-                  </a>
+                <a href="mailto:coparent.in@gmail.com" className="hover:text-primary-foreground transition-colors">
+                  coparent.in@gmail.com
+                </a>
               </div>
             </div>
           </div>
