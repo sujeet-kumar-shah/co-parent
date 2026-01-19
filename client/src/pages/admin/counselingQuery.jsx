@@ -50,7 +50,7 @@ const AdminQuery = () => {
     };
 
     const handleStatusUpdate = async (id, currentStatus) => {
-        const newStatus = !currentStatus;
+        const newStatus = currentStatus == "success" ? "pending" : "success";
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
@@ -142,31 +142,28 @@ const AdminQuery = () => {
                                     </TableCell>
                                     <TableCell>{user.percent}</TableCell>
                                     <TableCell>
-                                        <Badge variant={user.status ? "success" : "destructive"} className={user.status ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
-                                            {user.status ? 'Pending' : 'Success'}
+                                        <Badge variant={user.status == 'success' ? 'Success' : 'Pending'} className={user.status == "pending" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
+                                            {user.status == 'success' ? 'Success' : 'Pending'}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="text-right gap-x-2">
                                         <Button
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
                                         // onClick={() => handleStatusUpdate(user._id, user.isActive)}
                                         >
-                                            {user.status ? (
-                                                <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
-                                            ) : (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
-                                            )}
+                                            <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
                                         </Button>
                                         <Button
+                                            className="ml-2"
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
-                                            onClick={() => handleStatusUpdate(user._id, user.isActive)}
+                                            onClick={() => handleStatusUpdate(user._id, user.status)}
                                         >
-                                            {user.status ? (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">success</a> </>
+                                            {user.status == "success" ? (
+                                                <><CheckCircle className="h-4 w-4 mr-1" />Mark As Pending</>
                                             ) : (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> Mark as Success</>
                                             )}
                                         </Button>
                                     </TableCell>
