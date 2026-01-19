@@ -63,11 +63,39 @@ export default function ListingDetail() {
       "Discussion Room": Users,
       "Expert Faculty": Users,
       "Study Material": Check,
-      "Mock Tests": Check
+      "Mock Tests": Check,
+      "test": Check,
+      "cooler": Wind
     };
-    // Fuzzy match or exact match
-    const key = Object.keys(map).find(k => feature.includes(k));
+    // Fuzzy match or exact match (case-insensitive)
+    const featureLower = feature.toLowerCase();
+    const key = Object.keys(map).find(k => featureLower.includes(k.toLowerCase()));
     return key ? map[key] : Check;
+  };
+
+  // Helper to safely parse amenities (handles stringified JSON arrays)
+  const parseAmenities = (amenitiesData) => {
+    if (!amenitiesData) return [];
+    if (Array.isArray(amenitiesData)) {
+      // If it's an array with a single stringified JSON string, parse it
+      if (amenitiesData.length === 1 && typeof amenitiesData[0] === 'string') {
+        try {
+          return JSON.parse(amenitiesData[0]);
+        } catch (e) {
+          return amenitiesData;
+        }
+      }
+      return amenitiesData;
+    }
+    // If it's a string, try to parse it
+    if (typeof amenitiesData === 'string') {
+      try {
+        return JSON.parse(amenitiesData);
+      } catch (e) {
+        return [amenitiesData];
+      }
+    }
+    return [];
   };
 
   useEffect(() => {
@@ -132,11 +160,20 @@ export default function ListingDetail() {
   // Wait, I should have defined `images: [String]` in model for multiple images.
   // For now I'll treat the single image as an array of one, or use placeholder images.
 
-  const images = listing.image ? [listing.image] : ["https://via.placeholder.com/800x600"];
-  // If I want more images, I'd need to update the model or mock them for now.
-  // I'll stick to single image for now to be safe.
+  // Combine single image and images array for carousel
+  const allImages = [];
+  if (listing.image) allImages.push(listing.image);
+  if (listing.images && Array.isArray(listing.images)) {
+    allImages.push(...listing.images);
+  }
+  const images = allImages.length > 0 ? allImages : ["https://via.placeholder.com/800x600"];
 
-  const amenities = listing.features.map(f => ({ icon: getIconForFeature(f), name: f }));
+  // Parse amenities (handles stringified JSON arrays from API)
+  const parsedAmenitiesData = listing.amenities ? parseAmenities(listing.amenities) : (listing.features || []);
+  const amenities = parsedAmenitiesData.map(f => ({ 
+    icon: getIconForFeature(f), 
+    name: typeof f === 'string' ? f.charAt(0).toUpperCase() + f.slice(1) : f 
+  }));
 
   // Mock data for missing fields in API
   const mockReviews = [
