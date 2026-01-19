@@ -52,7 +52,7 @@ const CounselingForm = () => {
             <Header />
             <main className="flex-1 pt-16 md:pt-20 py-12">
                 <div className="container px-4 mx-auto">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-16 mt-5">
                         <h1 className="text-4xl font-bold font-display mb-4">Get in Touch</h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto">
                             Need help with admissions, exams, or career planning? Send us your query and our experts will connect with you soon.
