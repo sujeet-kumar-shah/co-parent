@@ -86,7 +86,7 @@ export default function forget() {
 
         {/* Logo */}
         <div className="flex items-center gap-2 mb-8">
-          <img src="/logo.jpg" alt="CO-PARENTS" className="w-16 h-16 rounded-xl object-contain" />
+          <img src="/logo.png" alt="CO-PARENTS" className="w-16 h-16 rounded-xl object-contain" />
           <span className="font-display font-bold text-2xl">CO-PARENTS</span>
         </div>
 

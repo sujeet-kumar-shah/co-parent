@@ -165,6 +165,10 @@ export default function ListingDetail() {
       console.log("Sharing not supported on this browser");
     }
   };
+ const handleQuerySubmit =async () =>{
+
+ }
+
 
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
   const handleBack = () => {
@@ -411,9 +415,9 @@ export default function ListingDetail() {
                 </div>
 
                 {/* Inquiry Form */}
-                <div className="border-t border-border pt-6">
+                <div className="border-t border-border pt-6 hidden">
                   <h3 className="font-semibold mb-4">Send Inquiry</h3>
-                  <form className="space-y-4">
+                  <form className="space-y-4" onclCick={handleQuerySubmit}>
                     <div>
                       <Label htmlFor="name">Name</Label>
                       <Input id="name" placeholder="Your name" className="mt-1" />
