@@ -29,16 +29,21 @@ const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/coparentsofficial", label: "Instagram" },
   { icon: Youtube, href: "https://youtube.com/@coparents_official?si=zaRKXH8Y4DUYDZUw", label: "Youtube" },
 ];
-
+const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
 export function Footer() {
   return (
     <footer className="bg-foreground text-primary-foreground">
-      <div className="container py-16 md:py-24">
+      <div className="container py-8 md:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <img src="/logo.jpg" alt="CO-PARENTS Not Found" className="w-10 h-10 rounded-xl object-contain" />
+              <img src="/logo.png" alt="CO-PARENTS Not Found" className="w-10 h-10 rounded-xl object-contain" />
               <span className="font-display font-bold text-xl">CO-PARENTS</span>
             </Link>
             <p className="text-primary-foreground/70 mb-6 max-w-sm">
@@ -90,7 +95,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors" onClick={scrollToTop}
                   >
                     {link.label}
                   </Link>
@@ -107,7 +112,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"   
                   >
                     {link.label}
                   </Link>
@@ -129,6 +134,7 @@ export function Footer() {
                 href={social.href}
                 aria-label={social.label}
                 className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
+                onClick={scrollToTop}
               >
                 <social.icon className="w-5 h-5" />
               </a>

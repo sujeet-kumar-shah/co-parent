@@ -53,13 +53,14 @@ const AdminLayout = () => {
         { icon: List, label: 'Manage Listings', path: '/admin/listings' },
         { icon: Users, label: 'Manage Users', path: '/admin/users' },
         { icon: Mail, label: 'Counseling Query', path: '/admin/query' },
+        // { icon: Mail, label: 'Proeprty Query', path: '/admin/listing-query' },
     ];
 
     const SidebarContent = () => (
         <div className="flex flex-col h-full bg-white">
             <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                    <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
+                    <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-lg object-contain" />
                     <Link to = '/admin/dashboard'>
                     <h1 className="text-xl font-bold font-display text-gray-900">Admin Panel</h1>
                     </Link>

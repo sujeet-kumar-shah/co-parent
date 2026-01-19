@@ -64,6 +64,11 @@ export default function Listings() {
   const [sortBy, setSortBy] = useState("rating");
   const [listings, setListings] = useState([]);
 
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     const fetchListings = async () => {
       try {

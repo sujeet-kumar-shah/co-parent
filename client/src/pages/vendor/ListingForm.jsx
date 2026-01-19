@@ -325,7 +325,7 @@ const ListingForm = () => {
 
                         {/* Dynamic inputs */}
                         {rows.map((row, index) => (
-                            <div key={index} className="grid grid-cols-2 gap-4">
+                            <div key={index} className="grid grid-cols-2 gap-4 hidden">
                                 <div className="space-y-2">
                                     <Label htmlFor="price"> type </Label>
                                     <Input

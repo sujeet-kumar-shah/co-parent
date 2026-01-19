@@ -156,4 +156,23 @@ router.get('/query', async (req, res) => {
     
 });
 
+router.get('/listing-query',async(req,res)=>{
+   try {
+        
+ const { type } = req.query; // student, vendor
+        let query = {};
+        if (type) {
+            query.status = type;
+        } else {
+            query.type = { $ne: 'admin' };
+        }
+
+        const queryData = await counseling.find(query);
+        res.json(queryData);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+    
+})
+
 export default router;

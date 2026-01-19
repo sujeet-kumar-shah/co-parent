@@ -16,7 +16,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom'
 import { getApiUrl } from '@/config/api';
 
-const AdminQuery = () => {
+const AdminListingQuery = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('pending');
@@ -33,7 +33,7 @@ const AdminQuery = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch(getApiUrl(`/api/admin/query?type=${filter}`), {
+            const response = await fetch(getApiUrl(`/api/admin/listing-query?type=${filter}`), {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -50,7 +50,7 @@ const AdminQuery = () => {
     };
 
     const handleStatusUpdate = async (id, currentStatus) => {
-        const newStatus = currentStatus == "success" ? "pending" : "success";
+        const newStatus = !currentStatus;
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
@@ -87,8 +87,8 @@ const AdminQuery = () => {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Users Query</h2>
-                    <p className="text-muted-foreground">View and manage students Counseling Query.</p>
+                    <h2 className="text-3xl font-bold tracking-tight">Listing Query</h2>
+                    <p className="text-muted-foreground">View and manage students Room related Query.</p>
                 </div>
                 <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
@@ -108,10 +108,9 @@ const AdminQuery = () => {
                     <TableHeader>
                         <TableRow>
                             <TableHead>Name</TableHead>
-                            <TableHead>About</TableHead>
+                            <TableHead>Property Name</TableHead>
                             <TableHead>message</TableHead>
                             <TableHead>Contact Number</TableHead>
-                            <TableHead>percentage</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -131,7 +130,7 @@ const AdminQuery = () => {
                             users.map((user) => (
                                 <TableRow key={user._id}>
                                     <TableCell className="font-medium">{user.name}</TableCell>
-                                    <TableCell>{user.query_type}</TableCell>
+                                    <TableCell>{user.property}</TableCell>
                                     <TableCell>{user.message}</TableCell>
                                     <TableCell>
 
@@ -140,30 +139,33 @@ const AdminQuery = () => {
                                         </div>
 
                                     </TableCell>
-                                    <TableCell>{user.percent}</TableCell>
+                                    
                                     <TableCell>
-                                        <Badge variant={user.status == 'success' ? 'Success' : 'Pending'} className={user.status == "pending" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
-                                            {user.status == 'success' ? 'Success' : 'Pending'}
+                                        <Badge variant={user.status ? "success" : "destructive"} className={user.status ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
+                                            {user.status ? 'Pending' : 'Success'}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-right gap-x-2">
+                                    <TableCell className="text-right">
                                         <Button
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
                                         // onClick={() => handleStatusUpdate(user._id, user.isActive)}
                                         >
-                                            <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
+                                            {user.status ? (
+                                                <><PhoneCall className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">Call</a> </>
+                                            ) : (
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
+                                            )}
                                         </Button>
                                         <Button
-                                            className="ml-2"
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
-                                            onClick={() => handleStatusUpdate(user._id, user.status)}
+                                            onClick={() => handleStatusUpdate(user._id, user.isActive)}
                                         >
-                                            {user.status == "success" ? (
-                                                <><CheckCircle className="h-4 w-4 mr-1" />Mark As Pending</>
+                                            {user.status ? (
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">success</a> </>
                                             ) : (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> Mark as Success</>
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
                                             )}
                                         </Button>
                                     </TableCell>
@@ -177,4 +179,4 @@ const AdminQuery = () => {
     );
 };
 
-export default AdminQuery;
+export default AdminListingQuery;

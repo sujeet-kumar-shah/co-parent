@@ -31,7 +31,7 @@ const Contact = () => {
             <Header />
             <main className="flex-1 pt-16 md:pt-20 py-12">
                 <div className="container px-4 mx-auto">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-16 mt-5">
                         <h1 className="text-4xl font-bold font-display mb-4">Get in Touch</h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto">
                             Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.

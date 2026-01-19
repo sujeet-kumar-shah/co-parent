@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,12 @@ const CounselingForm = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
     const { user } = useAuth();
+
+    // Scroll to top on mount
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
@@ -52,7 +58,7 @@ const CounselingForm = () => {
             <Header />
             <main className="flex-1 pt-16 md:pt-20 py-12">
                 <div className="container px-4 mx-auto">
-                    <div className="text-center mb-16">
+                    <div className="text-center mb-16 mt-5">
                         <h1 className="text-4xl font-bold font-display mb-4">Get in Touch</h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto">
                             Need help with admissions, exams, or career planning? Send us your query and our experts will connect with you soon.

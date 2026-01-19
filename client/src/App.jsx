@@ -23,10 +23,11 @@ import Contact from "./pages/Contact";
 import Terms from "./pages/Terms";
 import AuthUser from "./pages/authUser";
 import CounselingForm from "./pages/counselingForm";
-import AdminQuery from "./pages/admin/counselingQuery"
-import Forget from "./pages/forget"
-import Otp from "./pages/otp"
-import ResetPassword from "./pages/resetPassword"
+import AdminQuery from "./pages/admin/counselingQuery";
+import Forget from "./pages/forget";
+import Otp from "./pages/otp";
+import ResetPassword from "./pages/resetPassword";
+import AdminListingQuery from "./pages/admin/ListingQuery";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -58,6 +59,7 @@ const App = () => (
               <Route path="listings" element={<AdminListings />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="query" element={<AdminQuery />} />
+              <Route path="listing-query" element={<AdminListingQuery />} />
             </Route>
 
             {/* Vendor Routes */}
