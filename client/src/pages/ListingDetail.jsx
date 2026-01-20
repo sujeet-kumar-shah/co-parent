@@ -43,7 +43,16 @@ export default function ListingDetail() {
   const [liked, setLiked] = useState(false);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [queryForm ,setQueryForm] =useState({
 
+    name:'',
+    phone:'',
+    message:'',
+  })
+   const handleChange = (e) => {
+        const { name, value } = e.target;
+        setQueryForm(prev => ({ ...prev, [name]: value }));
+    };
   // Helper to map features to icons (fallback to Check icon)
   const getIconForFeature = (feature) => {
     const map = {
@@ -153,13 +162,6 @@ export default function ListingDetail() {
   if (loading) return <div className="min-h-screen pt-20 text-center">Loading listing...</div>;
   if (!listing) return <div className="min-h-screen pt-20 text-center">Listing not found</div>;
 
-  // Adapt API data to UI structure if needed
-  // API has `features` array of strings, UI expects `amenities` with icons
-  // API returns single image as string (in my model), but UI expects array of images.
-  // My model definition: `image: { type: String, required: true }`.
-  // Wait, I should have defined `images: [String]` in model for multiple images.
-  // For now I'll treat the single image as an array of one, or use placeholder images.
-
   // Combine single image and images array for carousel
   const allImages = [];
   if (listing.image) allImages.push(listing.image);
@@ -202,7 +204,8 @@ export default function ListingDetail() {
       console.log("Sharing not supported on this browser");
     }
   };
- const handleQuerySubmit =async () =>{
+ const handleQuerySubmit =async (e) =>{
+console.log(queryForm);
 
  }
 
@@ -457,11 +460,11 @@ export default function ListingDetail() {
                   <form className="space-y-4" onclCick={handleQuerySubmit}>
                     <div>
                       <Label htmlFor="name">Name</Label>
-                      <Input id="name" placeholder="Your name" className="mt-1" />
+                      <Input id="name" placeholder="Your name" className="mt-1" onClick={handleChange} />
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" placeholder="Your phone number" maxLength="10" className="mt-1" />
+                      <Input id="phone" placeholder="Your phone number" maxLength="10" className="mt-1"  onClick={handleChange} />
                     </div>
                     <div>
                       <Label htmlFor="message">Message</Label>
@@ -470,6 +473,7 @@ export default function ListingDetail() {
                         placeholder="I'm interested in this listing..."
                         className="mt-1"
                         rows={3}
+                        onClick={handleChange}
                       />
                     </div>
                     <Button type="submit" className="w-full">

@@ -106,13 +106,13 @@ const AdminLocation = () => {
                     <p className="text-muted-foreground">Manage service areas and locations</p>
                 </div>
                 <div className="flex gap-4">
-                    <Button variant="outline" onClick={handleBack} className="flex items-center gap-2">
-                        <ArrowLeft className="w-4 h-4" />
-                        Back
-                    </Button>
                     <Button onClick={() => setShowModal(true)} className="flex items-center gap-2">
                         <Plus className="w-4 h-4" />
                         Add Location
+                    </Button>
+                    <Button variant="outline" onClick={handleBack} className="flex items-center gap-2">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back
                     </Button>
                 </div>
             </div>
