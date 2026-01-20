@@ -43,7 +43,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <img src="/logo.png" alt="CO-PARENTS Not Found" className="w-10 h-10 rounded-xl object-contain" />
+              <img src="/logo.png" alt="CO-PARENTS" className="w-18 h-16 rounded-xl object-contain" />
               <span className="font-display font-bold text-xl">CO-PARENTS</span>
             </Link>
             <p className="text-primary-foreground/70 mb-6 max-w-sm">
