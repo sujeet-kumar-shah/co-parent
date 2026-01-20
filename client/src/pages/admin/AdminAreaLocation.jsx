@@ -170,7 +170,7 @@ const AdminLocation = () => {
             )}
 
             {/* Table */}
-            <div className="rounded-lg border bg-card shadow-sm overflow-hidden">
+            <div className="rounded-lg border bg-card shadow-sm overflow-hidden bg-white">
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-secondary/50">
