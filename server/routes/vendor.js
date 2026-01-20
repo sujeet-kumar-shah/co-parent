@@ -52,7 +52,7 @@ router.get('/listings', protect, async (req, res) => {
             return res.status(403).json({ message: 'Not authorized as vendor' });
         }
 
-        const listings = await Listing.find({ vendor: req.user._id }).sort({ createdAt: -1 });
+        const listings = await Listing.find({ vendor: req.user._id }).populate('location', 'name').sort({ createdAt: -1 });
         res.json(listings);
     } catch (error) {
         res.status(500).json({ message: error.message });

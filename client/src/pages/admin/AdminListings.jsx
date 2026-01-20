@@ -186,7 +186,7 @@ const AdminListings = () => {
                                         <div className="text-xs text-muted-foreground">{listing.vendor?.businessName}</div>
                                     </TableCell>
                                     <TableCell>{listing.vendor?.phone}</TableCell>
-                                    <TableCell>{listing.city}</TableCell>
+                                    <TableCell>{listing.location.name}</TableCell>
                                     <TableCell>₹{listing.price}</TableCell>
                                     <TableCell>{getStatusBadge(listing.status)}</TableCell>
                                     <TableCell className="text-right">

@@ -11,6 +11,7 @@ import {
     Shield,
     Mail,
     User,
+    Locate,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -53,6 +54,7 @@ const AdminLayout = () => {
         { icon: List, label: 'Manage Listings', path: '/admin/listings' },
         { icon: Users, label: 'Manage Users', path: '/admin/users' },
         { icon: Mail, label: 'Counseling Query', path: '/admin/query' },
+        { icon: Locate, label: 'Area Location', path: '/admin/location' },
         // { icon: Mail, label: 'Proeprty Query', path: '/admin/listing-query' },
     ];
 

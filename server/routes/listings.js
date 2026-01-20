@@ -71,7 +71,8 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.get('/:id', async (req, res) => {
     try {
-        const listing = await Listing.findById(req.params.id).populate('vendor', 'name email');
+        const listing = await Listing.findById(req.params.id).populate('vendor', 'name email').populate('location', 'name');
+        
         const likedStatus = await Liked.findOne({listingId:req.params.id})
         if (listing) {
             console.log(likedStatus);

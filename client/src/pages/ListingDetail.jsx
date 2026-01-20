@@ -312,7 +312,7 @@ export default function ListingDetail() {
                 <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
-                    {listing.location},{listing.street},{listing.city}
+                    {listing.location.name}
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 fill-accent text-accent" />
@@ -452,7 +452,7 @@ export default function ListingDetail() {
                 </div>
 
                 {/* Inquiry Form */}
-                <div className="border-t border-border pt-6 hidden">
+                <div className="border-t border-border pt-6 ">
                   <h3 className="font-semibold mb-4">Send Inquiry</h3>
                   <form className="space-y-4" onclCick={handleQuerySubmit}>
                     <div>
