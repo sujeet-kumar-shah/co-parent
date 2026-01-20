@@ -173,7 +173,7 @@ const AdminLocation = () => {
             <div className="rounded-lg border bg-card shadow-sm overflow-hidden bg-white">
                 <Table>
                     <TableHeader>
-                        <TableRow className="bg-secondary/50">
+                        <TableRow className="bg-white">
                         <TableHead className="font-semibold">Number</TableHead>
                             <TableHead className="font-semibold">Location Name</TableHead>
                             <TableHead className="text-right font-semibold">Actions</TableHead>

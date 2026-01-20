@@ -111,7 +111,7 @@ export function CategorySection() {
   };
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-2 bg-background">
       <div className="container">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
