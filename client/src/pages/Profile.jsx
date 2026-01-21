@@ -169,10 +169,10 @@ export default function Profile() {
             <main className="pt-24 pb-16 container max-w-2xl">
                 <div className="container py-4 flex justify-between items-centers">
                     <div></div>
-                    <button className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                    <Button variant="outline" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4" />
-                        Back
-                    </button>
+                            Back
+                    </Button>
                 </div>
                 <div className="bg-card rounded-2xl shadow-card p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">

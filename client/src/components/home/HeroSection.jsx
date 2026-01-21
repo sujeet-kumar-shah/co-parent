@@ -9,12 +9,12 @@ const stats = [
   { value: "500+", label: "Trusted Vendors" },
 ];
 
-const features = [
-  { icon: Zap, title: "Quick & Easy Bookings", desc: "Time is money. Save both when you book with us." },
-  { icon: Tag, title: "Price-Match Guarantee", desc: "Find a lower price and we'll match it." },
-  { icon: Headphones, title: "24x7 Assistance", desc: "If you have a doubt or a query, we're always a call away." },
-  { icon: Shield, title: "100% Verified Listings", desc: "We promise to deliver what you see on the website." },
-];
+// const features = [
+//   { icon: Zap, title: "Quick & Easy Bookings", desc: "Time is money. Save both when you book with us." },
+//   { icon: Tag, title: "Price-Match Guarantee", desc: "Find a lower price and we'll match it." },
+//   { icon: Headphones, title: "24x7 Assistance", desc: "If you have a doubt or a query, we're always a call away." },
+//   { icon: Shield, title: "100% Verified Listings", desc: "We promise to deliver what you see on the website." },
+// ];
 
 export function HeroSection() {
   return (
@@ -84,7 +84,7 @@ export function HeroSection() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section
       <section className="py-2 bg-gradient-to-b from-background to-secondary/30">
         <div className="container">
           <motion.div
@@ -124,7 +124,7 @@ export function HeroSection() {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

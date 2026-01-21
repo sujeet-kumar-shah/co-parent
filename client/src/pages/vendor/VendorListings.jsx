@@ -9,7 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Edit, Trash2, Plus } from 'lucide-react';
+import { Edit, Trash2, Plus ,ArrowLeft} from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -21,7 +21,7 @@ const VendorListings = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
     const { toast } = useToast();
-
+    const handleBack = () => navigate(-1);
     useEffect(() => {
         fetchListings();
     }, [token]);
@@ -101,9 +101,15 @@ const VendorListings = () => {
                     <h2 className="text-3xl font-bold tracking-tight">My Listings</h2>
                     <p className="text-muted-foreground">Manage your properties and check their status.</p>
                 </div>
-                <Button onClick={() => navigate('/vendor/listings/add')}>
-                    <Plus className="mr-2 h-4 w-4" /> Add New Listing
-                </Button>
+                <div className='flex gap-4'>
+                    <Button onClick={() => navigate('/vendor/listings/add')}>
+                        <Plus className="mr-2 h-4 w-4" /> Add New Listing
+                    </Button>
+                    <Button variant="outline" onClick={handleBack} className="flex items-center gap-2">
+                        <ArrowLeft className="w-4 h-4" />
+                        Back
+                    </Button>
+                </div>
             </div>
 
             <div className="rounded-md border bg-white">

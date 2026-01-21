@@ -1,9 +1,36 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight,Brain } from "lucide-react";
+import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight, Brain, Users, BookOpen } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const categories = [
+   {
+    id: "mentorship",
+    name: "Mentorship",
+    description: "Get guidance from IIT, NEET toppers & experienced mentors",
+    icon: Users,
+    count: 2500,
+    color: "hostel",
+    gradient: "from-hostel/20 to-hostel/5",
+  },
+  {
+    id: "coaching",
+    name: "Coaching",
+    description: "Top-rated coaching institutes for competitive exams & school",
+    icon: GraduationCap,
+    count: 1800,
+    color: "coaching",
+    gradient: "from-coaching/20 to-coaching/5",
+  },
+   {
+    id: "school-admission",
+    name: "School Admission Support",
+    description: "Professional assistance for school admissions & entrance exams",
+    icon: BookOpen,
+    count: 980,
+    color: "coaching",
+    gradient: "from-coaching/20 to-coaching/5",
+  },
   {
     id: "hostel",
     name: "Hostels",
@@ -41,42 +68,14 @@ const categories = [
     gradient: "from-library/20 to-library/5",
   },
   {
-    id: "coaching ",
-    name: "Coaching and School Admission Support",
-    description: "Top-rated coaching institutes for competitive exams",
-    icon: GraduationCap,
-    count: 1800,
-    color: "coaching",
-    gradient: "from-coaching/20 to-coaching/5",
-  },
-  {
     id: "counseling",
-    name: "counseling",
-    description: "JEE | NEET | PVT. Collages ",
+    name: "Career Counseling",
+    description: "Expert guidance for JEE, NEET, college admission & career planning",
     icon: Brain,
     count: 1400,
     color: "counseling",
     gradient: "from-counseling/20 to-counseling/5",
   },
-   {
-    id: "Personal_Support",
-    name: "Personal Support",
-    description: "Student Career caounseling ",
-    icon: Brain,
-    count: 1400,
-    color: "counseling",
-    gradient: "from-counseling/20 to-counseling/5",
-  },
-  //  {
-  //   id: "School Admission",
-  //   name: "School Admission Support",
-  //   description: "student caounseling ",
-  //   icon: Brain,
-  //   count: 1400,
-  //   color: "counseling",
-  //   gradient: "from-counseling/20 to-counseling/5",
-  // },
-
 ];
 
 const containerVariants = {
@@ -94,18 +93,18 @@ const itemVariants = {
 
 export function CategorySection() {
   const navigate = useNavigate();
-  const { isAuthenticated,user } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const handleCategoryClick = (categoryId) => {
-    if(isAuthenticated && user.type === 'student' && categoryId==="counseling" || categoryId === 'Personal_Support'){
-      navigate(`/counseling`)
-    }else if (isAuthenticated &&  user.type === 'student') {
+    if (isAuthenticated && user.type === 'student' && (categoryId === 'counseling' || categoryId === 'mentorship')) {
+      navigate(`/counseling`);
+    } else if (isAuthenticated && user.type === 'student') {
       navigate(`/listings?category=${categoryId}`);
-    } else if(isAuthenticated && user.type === 'vendor' ){
+    } else if (isAuthenticated && user.type === 'vendor') {
       navigate("/", { state: true });
-    } else if(isAuthenticated &&  user.type === 'Admin'){
-       navigate(`/listings?category=${categoryId}`);
-    }else{
+    } else if (isAuthenticated && user.type === 'Admin') {
+      navigate(`/listings?category=${categoryId}`);
+    } else {
       navigate("/login", { state: { from: `/listings?category=${categoryId}` } });
     }
   };

@@ -67,8 +67,10 @@ export default function ResetPassword() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         {/* Back Button */}
         <Link to="/login" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
-          <ArrowLeft className="w-4 h-4" />
-          Back to Login
+          <button variant="outline">
+            <ArrowLeft className="w-4 h-4" />
+              Back to Login
+          </button>
         </Link>
 
         {/* Logo */}

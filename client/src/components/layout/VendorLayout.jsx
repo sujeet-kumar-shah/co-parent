@@ -56,9 +56,12 @@ const VendorLayout = () => {
         <div className="flex flex-col h-full bg-white">
             <div className="p-1 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                    <img src="/logo.png" alt="Logo" className="w-18 h-14 rounded-lg object-contain" />
                     <Link to="/vendor/dashboard">
-                    <h1 className="text-xl font-bold font-display text-gray-900">Vendor Panel</h1>
+                        <img src="/logo.png" alt="Logo" className="w-18 h-14 rounded-lg object-contain" />
+                    </Link>
+                    <Link to="/vendor/dashboard">
+                        <h1 className="text-xl font-bold font-display text-gray-900">CO-PARENTS</h1>
+                        <small className="text-sm  font-display text-muted-foreground">Vendor Panel</small>
                     </Link>
                 </div>
             </div>
