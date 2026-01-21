@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
-
+import { Zap, Tag, Headphones, Shield, Clock } from "lucide-react";
 const testimonials = [
   {
     id: 1,
@@ -27,62 +27,112 @@ const testimonials = [
     text: "Relocating to a new city was stressful until I found CO-PARENTS. Got my hostel, mess, and even a study library sorted before even arriving!",
   },
 ];
+const features = [
+  { icon: Zap, title: "Quick & Easy Bookings", desc: "Time is money. Save both when you book with us." },
+  { icon: Tag, title: "Price-Match Guarantee", desc: "Find a lower price and we'll match it." },
+  { icon: Headphones, title: "24x7 Assistance", desc: "If you have a doubt or a query, we're always a call away." },
+  { icon: Shield, title: "100% Verified Listings", desc: "We promise to deliver what you see on the website." },
+];
 
 export function TestimonialsSection() {
   return (
-    <section className="py-2 bg-background">
-      <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <span className="text-primary font-medium text-sm tracking-wider uppercase">
-            Student Stories
-          </span>
-          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-4">
-            Loved by Students
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of students who found their perfect services through CO-PARENTS.
-          </p>
-        </motion.div>
+    <>
+      <section className="py-2 bg-background">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span className="text-primary font-medium text-sm tracking-wider uppercase">
+              Student Stories
+            </span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-4">
+              Loved by Students
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Join thousands of students who found their perfect services through CO-PARENTS.
+            </p>
+          </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="relative bg-card rounded-2xl p-6 shadow-card"
-            >
-              <Quote className="absolute top-6 right-6 w-10 h-10 text-primary/10" />
-              <div className="flex gap-1 mb-4">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-accent text-accent" />
-                ))}
-              </div>
-              <p className="text-foreground/80 mb-6 leading-relaxed">
-                "{testimonial.text}"
-              </p>
-              <div className="flex items-center gap-3">
-                <img
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <h4 className="font-semibold">{testimonial.name}</h4>
-                  <p className="text-muted-foreground text-sm">{testimonial.role}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="relative bg-card rounded-2xl p-6 shadow-card"
+              >
+                <Quote className="absolute top-6 right-6 w-10 h-10 text-primary/10" />
+                <div className="flex gap-1 mb-4">
+                  {Array.from({ length: testimonial.rating }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-accent text-accent" />
+                  ))}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <p className="text-foreground/80 mb-6 leading-relaxed">
+                  "{testimonial.text}"
+                </p>
+                <div className="flex items-center gap-3">
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <h4 className="font-semibold">{testimonial.name}</h4>
+                    <p className="text-muted-foreground text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-2 bg-gradient-to-b from-background to-secondary/30">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+              Why Choose CO-PARENTS?
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Book Your Perfect Accommodation – Take the hassle out of securing your student home for the best years of your life
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group p-6 bg-card rounded-2xl shadow-card hover:shadow-lg transition-all duration-300 hover:-translate-y-2"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-display text-lg font-bold mb-2">{feature.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
