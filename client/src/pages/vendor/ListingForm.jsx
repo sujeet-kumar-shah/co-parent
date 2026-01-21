@@ -22,15 +22,16 @@ const ListingForm = () => {
     const [otherImages, setOtherImages] = useState([]);
     const [mainPreview, setMainPreview] = useState('');
     const [otherPreviews, setOtherPreviews] = useState([]);
+    const [areas, setAreas] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         category: 'hostel',
         gender: 'unisex',
         price: '0',
-        city: '',
+        city: 'new',
         location: '', // General area
-        street: '', // Address street
+        street: 'new', // Address street
         image: '', // Main image URL
         images: '', // Comma separated for now
         videos: '', // Comma separated
@@ -130,25 +131,8 @@ const ListingForm = () => {
                 ? getApiUrl(`/api/vendor/listings/${id}`)
                 : getApiUrl('/api/listings'); // NOTE: POST was in original listings.js, need to make sure auth matches headers
 
-            // Note: Currently POST /api/listings is protected but uses req.body directly. 
-            // We might want to use the vendor specific PUT for updates. 
-            // For CREATE, we can use the existing POST endpoint, but I need to make sure it supports all new fields.
-            // Wait, existing POST endpoint in listings.js only supported limited fields.
-            // I should have updated Create Listing in listings.js or added POST to vendor.js.
-            // I'll assume for now I should use a new POST in vendor.js or update listings.js. 
-            // Actually, I'll update the POST in listings.js via separate tool call if needed, OR just add POST to vendor.js now (cleaner).
-            // Retrospective: I didn't add POST to vendor.js. I'll add it now or use PUT for create if I make ID optional? No.
-            // Let's use the existing POST /api/listings and I will update it in a moment to support all fields.
-
-            // Actually, best to use /api/vendor/listings for create as well to keep it consistent.
-            // But I didn't implement POST in vendor.js.
-            // I will use /api/listings for create, but I MUST update it to accept new fields (description, etc.)
-
             const method = isEditMode ? 'PUT' : 'POST';
             const finalUrl = isEditMode ? url : getApiUrl('/api/vendor/listings');
-            // WAIT - I need to add POST to vendor routes if I want to use it there.
-            // I'll stick to updating existing POST /api/listings to keep things simple as it's already there.
-
             const reqUrl = isEditMode ? getApiUrl(`/api/vendor/listings/${id}`) : getApiUrl('/api/listings');
 
             const response = await fetch(reqUrl, {
@@ -254,6 +238,28 @@ const ListingForm = () => {
         updated[index][name] = value;
         setRows(updated);
     };
+
+
+    useEffect(() => {
+        fetchAreas();
+    }, []);
+
+    const fetchAreas = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(getApiUrl('/api/areas'));
+            if (response.ok) {
+                const data = await response.json();
+                setAreas(data);
+            }
+        } catch (error) {
+            console.error('Error fetching areas:', error);
+            toast({ title: 'Error', description: response.error, variant: 'destructive' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
     if (fetching) return <div>Loading...</div>;
 
     return (
@@ -381,23 +387,42 @@ const ListingForm = () => {
                                 <Label htmlFor="price">Monthly Price (₹)</Label>
                                 <Input id="price" name="price" min="0" type="number" value={formData.price} onChange={handleChange} onKeyDown={preventNegativeNumber} required />
                             </div>
+                            <div className='space-y-2'>
+                                <label htmlFor="street">Area / Locality</label>
+                                <select name="location" id="location" onChange={handleChange}  className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'>
+                                    {areas.map((area) => (
+                                        <option key={area._id} value={area._id}>
+                                            {area.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label>Location</Label>
-                            <Input name="location" value={formData.location} onChange={handleChange} placeholder="Full Street Address" className="mt-2" />
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
+                        {/* <div className=""> */}
+                        {/* <Label>Location</Label> */}
+                        {/* <Input name="location" value={formData.location} onChange={handleChange} placeholder="Full Street Address" className="mt-2" /> */}
+                        {/* <div className="grid grid-cols-2 gap-4"> */}
+                        {/* <div>
                                     <label htmlFor="city">City</label>
                                     <Input name="city" value={formData.city} onChange={handleChange} placeholder="City" required />
-                                </div>
-                                <div>
-                                    <label htmlFor="street">Area / Locality</label>
-                                    <Input name="street" value={formData.street} onChange={handleChange} placeholder="Area / Locality" required />
-                                </div>
-                            </div>
+                                </div> */}
+                        {/* <div> */}
+                        {/* <label htmlFor="street">Area / Locality</label> */}
+                        {/* <Input name="street" value={formData.street} onChange={handleChange} placeholder="Area / Locality" required /> */}
+                        {/* <select name="location" id="location" className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'>
+                                {areas.map((area) => (
+                                    <option key={area._id} value={area._id}>
+                                        {area.name}
+                                    </option>
+                                ))}
+                            </select> */}
 
-                        </div>
+
+                        {/* </div> */}
+                        {/* </div> */}
+
+                        {/* </div> */}
 
                         <div className="space-y-2">
                             <Label htmlFor="image">Main Image</Label>

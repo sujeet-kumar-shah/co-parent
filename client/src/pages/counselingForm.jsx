@@ -134,10 +134,10 @@ const CounselingForm = () => {
                                         }}
                                         maxLength="10" minLength="10" name="contact_number" required placeholder="90571 76565" />
                                 </div>
-                                <div className="space-y-2">
+                                {/* <div className="space-y-2">
                                     <Label htmlFor="percentage">Percentage(class 12)</Label>
                                     <Input id="percentage" type="number" name="percentage" required placeholder="" />
-                                </div>
+                                </div> */}
                                 <div className="space-y-2">
                                     <Label htmlFor="query_type">Counseling For</Label>
                                     <select

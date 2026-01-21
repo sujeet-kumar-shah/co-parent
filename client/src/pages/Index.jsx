@@ -5,15 +5,17 @@ import { CategorySection } from "@/components/home/CategorySection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { VendorCTASection } from "@/components/home/VendorCTASection";
 import { CarouselCustomNavigation } from "../components/home/CarouselSection";
+import { LaunchCountdown } from "@/components/home/LaunchCountdown";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      {/* <Header /> */}
       <main className="space-y-20 md:space-y-32 pb-20">
-        <HeroSection />
+        <LaunchCountdown />
+        {/* <HeroSection /> */}
         {/* Offers Section */}
-        <section className="space-y-8">
+        {/* <section className="space-y-8">
           <div className="container text-center">
             <h2 className="font-display text-3xl md:text-4xl font-bold">
               Student Specials ⚡
@@ -21,16 +23,16 @@ const Index = () => {
             <p className="text-muted-foreground text-lg">
               Grab the best discounts on Hostels, Coaching, and more.
             </p>
-          </div>
-          <CarouselCustomNavigation />
-        </section>
-        <CategorySection />
-        <TestimonialsSection />
+          </div> */}
+          {/* <CarouselCustomNavigation /> */}
+        {/* </section> */}
+        {/* <CategorySection />
+        <TestimonialsSection /> */}
 
         {/* <VendorCTASection /> */}
 
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

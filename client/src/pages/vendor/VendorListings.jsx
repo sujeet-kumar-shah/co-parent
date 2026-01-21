@@ -116,7 +116,7 @@ const VendorListings = () => {
                             <TableHead>Location</TableHead>
                             <TableHead>Price</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead>Views</TableHead>
+                            {/* <TableHead>Views</TableHead> */}
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -133,10 +133,10 @@ const VendorListings = () => {
                                     <TableCell className="font-medium"><Link to={`/listing/${listing._id}`} ><img src={getUploadUrl(listing.image)} alt="" width="100px" /></Link></TableCell>
                                     <TableCell className="font-medium"><Link to={`/listing/${listing._id}`} className='hover:text-blue-600 transition-colors'>{listing.title} </Link></TableCell>
                                     <TableCell className="capitalize">{listing.category}</TableCell>
-                                    <TableCell>{listing.city}</TableCell>
+                                    <TableCell>{listing.location.name}</TableCell>
                                     <TableCell>₹{listing.price}</TableCell>
                                     <TableCell>{getStatusBadge(listing.status)}</TableCell>
-                                    <TableCell>{listing.views}</TableCell>
+                                    {/* <TableCell>{listing.views}</TableCell> */}
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-1">
                                             <Button

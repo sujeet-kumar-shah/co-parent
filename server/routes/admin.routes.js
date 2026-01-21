@@ -38,7 +38,7 @@ router.get('/listings', protect, admin, async (req, res) => {
             query.status = status;
         }
 
-        const listings = await Listing.find(query)
+        const listings = await Listing.find(query).populate('location', 'name')
             .populate('vendor', 'name email businessName phone')
             .sort({ createdAt: -1 });
 

@@ -346,7 +346,7 @@ export default function Listings() {
                         <div className="p-5 flex-1">
                           <div className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
                             <MapPin className="w-4 h-4" />
-                            {listing.location}
+                            {listing.location.name}
                           </div>
                           <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                             {listing.title}

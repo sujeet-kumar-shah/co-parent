@@ -29,7 +29,8 @@ const QyerySchema = new mongoose.Schema({
     },
     percent:{
         type:Number,
-        required:true,
+        required:false,
+        default:"0"
     },
     created_at:{
         type: Date,

@@ -35,7 +35,7 @@ export function Header() {
       <div className="container flex items-center justify-between h-16 md:h-20 px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 mr-8">
-          <img src="/logo.png" alt="Logo"  className="h-11 w-11 rounded-lg object-contain" />
+          <img src="/logo.png" alt="Logo"  className="h-14 w-18 rounded-lg object-contain" />
           {isAuthenticated && (
             <span className=" font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
           )}

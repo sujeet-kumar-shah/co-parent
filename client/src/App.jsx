@@ -28,6 +28,7 @@ import Forget from "./pages/forget";
 import Otp from "./pages/otp";
 import ResetPassword from "./pages/resetPassword";
 import AdminListingQuery from "./pages/admin/ListingQuery";
+import AdminLocation from "./pages/admin/AdminAreaLocation";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -60,6 +61,7 @@ const App = () => (
               <Route path="users" element={<AdminUsers />} />
               <Route path="query" element={<AdminQuery />} />
               <Route path="listing-query" element={<AdminListingQuery />} />
+              <Route path="location" element={<AdminLocation />} />
             </Route>
 
             {/* Vendor Routes */}

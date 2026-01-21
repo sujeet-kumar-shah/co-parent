@@ -85,7 +85,7 @@ export function HeroSection() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-background to-secondary/30">
+      <section className="py-2 bg-gradient-to-b from-background to-secondary/30">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -21,7 +21,8 @@ const listingSchema = new mongoose.Schema({
         enum: ['hostel', 'pg', 'coaching', 'library', 'mess'],
     },
     location: {
-        type: String, // General location area
+        type: mongoose.Schema.Types.ObjectId,
+         ref: 'Area',
         required: true,
     },
     city: {

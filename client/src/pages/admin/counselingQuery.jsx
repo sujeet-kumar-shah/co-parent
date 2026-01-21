@@ -111,7 +111,7 @@ const AdminQuery = () => {
                             <TableHead>About</TableHead>
                             <TableHead>message</TableHead>
                             <TableHead>Contact Number</TableHead>
-                            <TableHead>percentage</TableHead>
+                            {/* <TableHead>percentage</TableHead> */}
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -124,7 +124,7 @@ const AdminQuery = () => {
                         ) : users.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                                    No users found.
+                                    No data found.
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -140,7 +140,7 @@ const AdminQuery = () => {
                                         </div>
 
                                     </TableCell>
-                                    <TableCell>{user.percent}</TableCell>
+                                    {/* <TableCell>{user.percent}</TableCell> */}
                                     <TableCell>
                                         <Badge variant={user.status == 'success' ? 'Success' : 'Pending'} className={user.status == "pending" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
                                             {user.status == 'success' ? 'Success' : 'Pending'}
