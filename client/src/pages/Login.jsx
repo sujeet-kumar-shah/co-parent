@@ -121,8 +121,10 @@ export default function Login() {
           to="/"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
         >
+          <Button variant="outline">
           <ArrowLeft className="w-4 h-4" />
-          Back to Home
+            Back to Home
+          </Button>
         </Link>
 
         {/* Logo */}

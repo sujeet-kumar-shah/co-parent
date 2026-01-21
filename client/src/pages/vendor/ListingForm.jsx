@@ -272,10 +272,10 @@ const ListingForm = () => {
                     <Button variant="outline" className="hidden" onClick={() => navigate('/vendor/listings')}>
                         Cancel
                     </Button>
-                    <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                    <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4" />
-                        Back
-                    </button>
+                            Back
+                    </Button>
                 </div>
             </div>
 

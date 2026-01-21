@@ -228,10 +228,10 @@ console.log(queryForm);
             <span>/</span>
             <span className="text-foreground">{listing.title}</span>
           </div>
-          <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </button>
+          <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+              <ArrowLeft className="w-4 h-4" />
+                Back
+          </Button>
         </div>
 
         {/* Image Gallery */}

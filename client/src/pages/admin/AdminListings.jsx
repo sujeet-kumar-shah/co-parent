@@ -131,10 +131,10 @@ const AdminListings = () => {
                     <h2 className="text-3xl font-bold tracking-tight">Manage Listings</h2>
                     <p className="text-muted-foreground">Approve or reject vendor listings.</p>
                 </div>
-                <button className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
+                <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                    Back
-                </button>
+                        Back
+                </Button>
             </div>
 
             <Tabs defaultValue="submitted" onValueChange={setFilter} className="w-full">
