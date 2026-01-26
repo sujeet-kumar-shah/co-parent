@@ -12,7 +12,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="space-y-20 md:space-y-32 pb-20">
-        {/* <LaunchCountdown /> */}
+        <LaunchCountdown />
         <HeroSection />
         {/* Offers Section */}
         <section className="space-y-8">
