@@ -99,6 +99,17 @@ const ListingForm = () => {
 
         const status = statusOverride || formData.status;
 
+        // Validation
+        if (!formData.location) {
+            toast({
+                title: "Validation Error",
+                description: "Please select an Area / Locality",
+                variant: "destructive"
+            });
+            setLoading(false);
+            return;
+        }
+
         const form = new FormData();
 
         form.append('title', formData.title);
@@ -274,7 +285,7 @@ const ListingForm = () => {
                     </Button>
                     <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4" />
-                            Back
+                        Back
                     </Button>
                 </div>
             </div>
@@ -388,13 +399,25 @@ const ListingForm = () => {
                                 <Input id="price" name="price" min="0" type="number" value={formData.price} onChange={handleChange} onKeyDown={preventNegativeNumber} required />
                             </div>
                             <div className='space-y-2'>
-                                <label htmlFor="street">Area / Locality</label>
-                                <select name="location" id="location" onChange={handleChange}  className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'>
-                                    {areas.map((area) => (
-                                        <option key={area._id} value={area._id}>
-                                            {area.name}
-                                        </option>
-                                    ))}
+                                <label htmlFor="location">Area / Locality</label>
+                                <select
+                                    name="location"
+                                    id="location"
+                                    aria-required="true"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    className='flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                                >
+                                    <option value="">Select Area</option>
+                                    {
+                                        areas && areas.length > 0 ? (
+                                            areas.map((area) => (
+                                                <option key={area._id} value={area._id}>
+                                                    {area.name}
+                                                </option>
+                                            ))) : (
+                                            <option value="">No areas found</option>
+                                        )}
                                 </select>
                             </div>
                         </div>
