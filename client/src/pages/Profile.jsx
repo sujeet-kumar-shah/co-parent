@@ -171,7 +171,7 @@ export default function Profile() {
                     <div></div>
                     <Button variant="outline" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                         <ArrowLeft className="w-4 h-4" />
-                            Back
+                        Back
                     </Button>
                 </div>
                 <div className="bg-card rounded-2xl shadow-card p-8">
@@ -312,11 +312,11 @@ export default function Profile() {
                             </div>
                         </div>
 
-                        <div className="flex justify-end pt-4">
-                            <Button type="button" size="lg" className="me-2" onClick={resetForm}>
+                        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4">
+                            <Button type="button" size="lg" className="w-full sm:w-auto" onClick={resetForm}>
                                 Cancel
                             </Button>
-                            <Button type="submit" size="lg" disabled={loading}>
+                            <Button type="submit" size="lg" disabled={loading} className="w-full sm:w-auto">
                                 {loading ? (
                                     <>
                                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
