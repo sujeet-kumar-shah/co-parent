@@ -22,8 +22,8 @@ export function Header() {
   const { toast } = useToast();
   const handleLogout = () => {
     toast({
-        title: "Logged out!",
-        description: "You’ve been logged out securely. See you soon!",
+      title: "Logged out!",
+      description: "You’ve been logged out securely. See you soon!",
     });
     logout();
     // setMobileMenuOpen(false);
@@ -35,7 +35,7 @@ export function Header() {
       <div className="container flex items-center justify-between h-16 md:h-20 px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 mr-8">
-          <img src="/logo.png" alt="Logo"  className="h-14 w-18 rounded-lg object-contain" />
+          <img src="/logo.png" alt="Logo" className="h-14 w-18 rounded-lg object-contain" />
           {isAuthenticated && (
             <span className=" font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
           )}
@@ -59,27 +59,14 @@ export function Header() {
         <div className="flex items-center gap-3">
           {isAuthenticated ? (
             <>
-              {user?.type === 'vendor' ? (
-                <Link to="/vendor/dashboard">
-                  <Button variant="ghost" className="gap-2">
-                    <LayoutDashboard className="w-4 h-4" />
-                    Dashboard
-                  </Button>
-                </Link>
-              ) : user?.type === 'admin' ? (
-                <Link to="/admin/dashboard">
-                  <Button variant="ghost" className="gap-2">
-                    <LayoutDashboard className="w-4 h-4" />
-                    Admin Panel
-                  </Button>
-                </Link>
-              ) : (
+
+
 
               <div className="flex items-center gap-4">
-                  <div className="hidden sm:flex flex-col items-end mr-2">
-                      <span className="text-sm font-semibold text-gray-900">{user?.name}</span>
-                      {/* <span className="text-xs text-muted-foreground">{user?.businessName || "Vendor"}</span> */}
-                  </div>
+                <div className="hidden sm:flex flex-col items-end mr-2">
+                  <span className="text-sm font-semibold text-gray-900">{user?.name}</span>
+                  {/* <span className="text-xs text-muted-foreground">{user?.businessName || "Vendor"}</span> */}
+                </div>
                 {/* // For students show avatar + dropdown similar to vendor */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -104,10 +91,28 @@ export function Header() {
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
-                    {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer"> */}
-                      {/* <LayoutDashboard className="mr-2 h-4 w-4" />
-                      <span>Home Website</span> */}
-                    {/* </DropdownMenuItem> */}
+                    <DropdownMenuItem
+                      className="cursor-pointer gap-2"
+                      onClick={() => {
+                        if (user?.type === 'vendor') {
+                          navigate('/vendor/dashboard');
+                        } else if (user?.type === 'admin') {
+                          navigate('/admin/dashboard');
+                        } else {
+                          navigate('/');
+                        }
+                      }}
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      <span>
+                        {user?.type === 'vendor'
+                          ? 'Dashboard'
+                          : user?.type === 'admin'
+                            ? 'Dashboard'
+                            : 'Home'}
+                      </span>
+                    </DropdownMenuItem>
+
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
                       <LogOut className="mr-2 h-4 w-4" />
@@ -116,7 +121,7 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              )}
+
               {/* <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
