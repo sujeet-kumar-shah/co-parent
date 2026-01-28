@@ -24,7 +24,8 @@ export const getApiUrl = (endpoint) => {
  */
 export const getUploadUrl = (filename) => {
     if (!filename) return '';
-    return `${API_BASE_URL}/uploads/${filename}`;
+    // Encode the filename to handle spaces and special characters
+    return `${API_BASE_URL}/uploads/${encodeURIComponent(filename)}`;
 };
 
 // Export environment info for debugging
