@@ -318,7 +318,7 @@ const ListingForm = () => {
                                 >
                                     <option value="hostel">Hostel</option>
                                     <option value="pg">PG</option>
-                                    <option value="Flat">Flat</option>
+                                    <option value="flat">Flat</option>
                                     {/* <option value="coaching">Coaching</option> */}
                                     <option value="library">Library</option>
                                     <option value="mess">Mess</option>

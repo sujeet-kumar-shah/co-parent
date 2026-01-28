@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config();
 
@@ -50,11 +52,14 @@ app.use('/api/query', queryRoutes);
 app.use('/api/areas', areasRoutes);
 
 // Serve uploaded files (images) statically
-import fs from 'fs';
-const uploadsDir = './uploads';
+const __dirname = path.resolve();
+
+const uploadsDir = path.join(__dirname, 'uploads');
+
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
+
 app.use('/uploads', express.static(uploadsDir));
 
 app.get('/api/health', (req, res) => {
