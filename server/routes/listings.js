@@ -1,8 +1,9 @@
 
 import express from 'express';
+import path from 'path';
 import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
-import  multer from 'multer';
+import multer from 'multer';
 import Liked from '../models/liked.js';
 
 const router = express.Router();
@@ -11,17 +12,19 @@ const router = express.Router();
 // @route   GET /api/listings
 // @access  Public
 
-    const storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-            // Ensure the 'uploads' directory exists
-            cb(null, './uploads/'); 
-        },
-        filename: function (req, file, cb) {
-            // Generate a unique filename (e.g., timestamp-originalName)
-            cb(null, Date.now() + '-' + file.originalname);
-        }   
-    })
-    const upload = multer({ storage: storage });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        // Ensure the 'uploads' directory exists
+        const __dirname = path.resolve();
+        const uploadPath = path.join(__dirname, 'uploads');
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        // Generate a unique filename (e.g., timestamp-originalName)
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+})
+const upload = multer({ storage: storage });
 router.get('/', async (req, res) => {
     try {
         const { category, city, search, minPrice, maxPrice, sort } = req.query;
@@ -72,11 +75,11 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id).populate('vendor', 'name email').populate('location', 'name');
-        
-        const likedStatus = await Liked.findOne({listingId:req.params.id})
+
+        const likedStatus = await Liked.findOne({ listingId: req.params.id })
         if (listing) {
             console.log(likedStatus);
-            res.json({listing,likedStatus});
+            res.json({ listing, likedStatus });
         } else {
             res.status(404).json({ message: 'Listing not found' });
         }
@@ -89,7 +92,7 @@ router.get('/:id', async (req, res) => {
 // @desc    Create a listing
 // @route   POST /api/listings
 // @access  Private (Vendor only)
-router.post('/', protect,upload.fields([{ name: 'image', maxCount: 1 },{ name: 'images', maxCount: 5 }]), async (req, res) => {
+router.post('/', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 5 }]), async (req, res) => {
     try {
         if (req.user.type !== 'vendor') {
             return res.status(403).json({ message: 'Only vendors can create listings' });
@@ -109,28 +112,28 @@ router.post('/', protect,upload.fields([{ name: 'image', maxCount: 1 },{ name: '
             gender,
             status
         } = req.body;
-    //   // parse possible JSON-encoded arrays from multipart/form-data
-    //   const parseArrayField = (val) => {
-    //       if (!val) return [];
-    //       if (Array.isArray(val)) return val;
-    //       if (typeof val === 'string') {
-    //           try {
-    //               const parsed = JSON.parse(val);
-    //               if (Array.isArray(parsed)) return parsed;
-    //           } catch (e) {
-    //               // fallback to comma-separated
-    //               return val.split(',').map(s => s.trim()).filter(Boolean);
-    //           }
-    //       }
-    //       return [];
-    //   };
+        //   // parse possible JSON-encoded arrays from multipart/form-data
+        //   const parseArrayField = (val) => {
+        //       if (!val) return [];
+        //       if (Array.isArray(val)) return val;
+        //       if (typeof val === 'string') {
+        //           try {
+        //               const parsed = JSON.parse(val);
+        //               if (Array.isArray(parsed)) return parsed;
+        //           } catch (e) {
+        //               // fallback to comma-separated
+        //               return val.split(',').map(s => s.trim()).filter(Boolean);
+        //           }
+        //       }
+        //       return [];
+        //   };
 
-    //   const parsedVideos = parseArrayField(videos);
-    //   const parsedAmenities = parseArrayField(amenities);
+        //   const parsedVideos = parseArrayField(videos);
+        //   const parsedAmenities = parseArrayField(amenities);
 
-      const image = req.files?.image?.[0]?.filename || null;
-      const images = req.files?.images?.map(f => f.filename) || [];
-        
+        const image = req.files?.image?.[0]?.filename || null;
+        const images = req.files?.images?.map(f => f.filename) || [];
+
         const listing = new Listing({
             vendor: req.user._id,
             title,
