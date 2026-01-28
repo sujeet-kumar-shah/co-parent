@@ -5,7 +5,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
-import path from 'path';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -52,7 +56,7 @@ app.use('/api/query', queryRoutes);
 app.use('/api/areas', areasRoutes);
 
 // Serve uploaded files (images) statically
-const __dirname = path.resolve();
+// const __dirname = path.resolve(); // Removed in favor of top-level declaration
 
 const uploadsDir = path.join(__dirname, 'uploads');
 

@@ -5,6 +5,11 @@ import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
 import multer from 'multer';
 import Liked from '../models/liked.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const router = express.Router();
 
@@ -15,8 +20,7 @@ const router = express.Router();
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Ensure the 'uploads' directory exists
-        const __dirname = path.resolve();
-        const uploadPath = path.join(__dirname, 'uploads');
+        const uploadPath = path.join(__dirname, '..', 'uploads');
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
