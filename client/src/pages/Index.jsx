@@ -5,6 +5,8 @@ import { CategorySection } from "@/components/home/CategorySection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { VendorCTASection } from "@/components/home/VendorCTASection";
 import { CarouselCustomNavigation } from "../components/home/CarouselSection";
+import { VideoCarouselSection } from "@/components/home/VideoCarouselSection";
+import { PartnersSection } from "@/components/home/PartnersSection";
 import { LaunchCountdown } from "@/components/home/LaunchCountdown";
 
 const Index = () => {
@@ -28,6 +30,8 @@ const Index = () => {
         </section>
         <CategorySection />
         <TestimonialsSection />
+        <VideoCarouselSection />
+        <PartnersSection />
 
         {/* <VendorCTASection /> */}
 
