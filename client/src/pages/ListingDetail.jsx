@@ -205,8 +205,23 @@ export default function ListingDetail() {
     }
   };
  const handleQuerySubmit =async (e) =>{
-console.log(queryForm);
-
+    e.preventDefault();
+    try {
+      const response = await axios.post(getApiUrl('/api/query/lisitng'), {
+        listingId: id,
+        name: queryForm.name,
+        phone: queryForm.phone,
+        message: queryForm.message,
+        userId: user._id
+      });
+      if (response.status === 201) {
+        setQueryForm({ name: '', phone: '', message: '' });
+      } else {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error('Error sending inquiry:', error);
+    }
  }
 
 
@@ -457,23 +472,24 @@ console.log(queryForm);
                 {/* Inquiry Form */}
                 <div className="border-t border-border pt-6 ">
                   <h3 className="font-semibold mb-4">Send Inquiry</h3>
-                  <form className="space-y-4" onclCick={handleQuerySubmit}>
+                  <form className="space-y-4" onSubmit={handleQuerySubmit}>
                     <div>
                       <Label htmlFor="name">Name</Label>
-                      <Input id="name" placeholder="Your name" className="mt-1" onClick={handleChange} />
+                      <Input id="name" name="name" placeholder="Your name" className="mt-1" onChange={handleChange} />
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" placeholder="Your phone number" maxLength="10" className="mt-1"  onClick={handleChange} />
+                      <Input id="phone" name="phone" placeholder="Your phone number" maxLength="10" className="mt-1"  onChange={handleChange} />
                     </div>
                     <div>
                       <Label htmlFor="message">Message</Label>
                       <Textarea
                         id="message"
+                        name="message"
                         placeholder="I'm interested in this listing..."
                         className="mt-1"
                         rows={3}
-                        onClick={handleChange}
+                        onChange={handleChange}
                       />
                     </div>
                     <Button type="submit" className="w-full">

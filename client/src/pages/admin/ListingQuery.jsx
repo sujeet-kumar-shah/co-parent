@@ -13,7 +13,7 @@ import { Ban, CheckCircle, ArrowLeft, PhoneCall } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { getApiUrl } from '@/config/api';
 
 const AdminListingQuery = () => {
@@ -54,7 +54,7 @@ const AdminListingQuery = () => {
         if (!window.confirm(`Are you sure you want to ${newStatus ? 'activate' : 'suspend'} this user?`)) return;
 
         try {
-            const response = await fetch(getApiUrl(`/api/query/status/${id}`), {
+            const response = await fetch(getApiUrl(`/api/query/listing-status/${id}`), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,6 +80,7 @@ const AdminListingQuery = () => {
             });
         }
     };
+    
     const handleBack = () => {
         navigate(-1);
     }
@@ -92,7 +93,7 @@ const AdminListingQuery = () => {
                 </div>
                 <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                        Back
+                    Back
                 </Button>
             </div>
 
@@ -130,16 +131,16 @@ const AdminListingQuery = () => {
                             users.map((user) => (
                                 <TableRow key={user._id}>
                                     <TableCell className="font-medium">{user.name}</TableCell>
-                                    <TableCell>{user.property}</TableCell>
+                                    <TableCell> <Link to={`/listing/${user.listingId._id}`}>{user.listingId.title}</Link></TableCell>
                                     <TableCell>{user.message}</TableCell>
                                     <TableCell>
 
                                         <div className="text-sm text-muted-foreground capitalize">
-                                            {user.contact_number}
+                                            {user.phone}
                                         </div>
 
                                     </TableCell>
-                                    
+
                                     <TableCell>
                                         <Badge variant={user.status ? "success" : "destructive"} className={user.status ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
                                             {user.status ? 'Pending' : 'Success'}
@@ -158,14 +159,15 @@ const AdminListingQuery = () => {
                                             )}
                                         </Button>
                                         <Button
+                                            className="ml-2"
                                             size="sm"
                                             variant={user.status ? "outline" : "outline"}
-                                            onClick={() => handleStatusUpdate(user._id, user.isActive)}
+                                            onClick={() => handleStatusUpdate(user._id, user.status)}
                                         >
-                                            {user.status ? (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> <a href="tel:+919057176565" className="hover:text-blue-600 transition-colors">success</a> </>
+                                            {user.status == "success" ? (
+                                                <><CheckCircle className="h-4 w-4 mr-1" />Mark As Pending</>
                                             ) : (
-                                                <><CheckCircle className="h-4 w-4 mr-1" /> </>
+                                                <><CheckCircle className="h-4 w-4 mr-1" /> Mark as Success</>
                                             )}
                                         </Button>
                                     </TableCell>

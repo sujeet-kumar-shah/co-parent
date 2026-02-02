@@ -1,6 +1,6 @@
 import express from 'express';
 import Counseling from '../models/Counseling.js';
-
+import ListingQuery from '../models/ListingQuery.js';
 const router = express.Router();
 
 router.post('/counselingForm',async(req,res)=>{
@@ -23,6 +23,37 @@ router.post('/status/:id',async(req,res)=>{
    let  queryData ;
 
       queryData = await Counseling.findOneAndUpdate(
+         { _id: req.params.id },
+         { status: status },
+         { new: true }   // returns updated document
+     );
+
+
+res.status(200).json({
+    success: true,
+    data: queryData
+});
+})
+
+router.post('/lisitng',async(req,res)=>{
+    const {listingId,name,phone,message,userId} = req.body
+   const queryData = new ListingQuery({
+      userId:userId,
+      name :name,
+      phone:phone,
+      message:message,
+      listingId:listingId,
+ });
+
+ const listingQuery = await queryData.save();
+        res.status(201).json(listingQuery);
+
+})
+router.post('/listing-status/:id',async(req,res)=>{
+ const {status} = req.body
+   let  queryData ;
+
+      queryData = await ListingQuery.findOneAndUpdate(
          { _id: req.params.id },
          { status: status },
          { new: true }   // returns updated document
