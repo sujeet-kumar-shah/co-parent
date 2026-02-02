@@ -28,7 +28,12 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname);
     }
 })
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 10 MB in bytes
+    }
+});
 router.get('/', async (req, res) => {
     try {
         const { category, city, search, minPrice, maxPrice, sort } = req.query;
