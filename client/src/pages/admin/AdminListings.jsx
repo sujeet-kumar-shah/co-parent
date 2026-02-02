@@ -176,7 +176,7 @@ const AdminListings = () => {
                                 <TableRow key={listing._id}>
                                     <TableCell className="font-medium"><Link to={`/listing/${listing._id}`}><img src={getUploadUrl(listing.image)} alt="" width="100px" /></Link></TableCell>
                                     <TableCell className="font-medium">
-                                        <Link to={`/listing/${listing._id}`}>
+                                        <Link to={`/listing/${listing._id}`} className="hover:text-blue-600 transition-colors" >
                                             <div>{listing.title}</div>
                                             <div className="text-xs text-muted-foreground capitalize">{listing.category}</div>
                                         </Link>
