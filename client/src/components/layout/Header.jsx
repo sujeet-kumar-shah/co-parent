@@ -22,8 +22,8 @@ export function Header() {
   const { toast } = useToast();
   const handleLogout = () => {
     toast({
-        title: "Logged out!",
-        description: "You’ve been logged out securely. See you soon!",
+      title: "Logged out!",
+      description: "You’ve been logged out securely. See you soon!",
     });
     logout();
     // setMobileMenuOpen(false);
@@ -35,10 +35,10 @@ export function Header() {
       <div className="container flex items-center justify-between h-16 md:h-20 px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 mr-8">
-          <img src="/logo.png" alt="Logo"  className="h-14 w-18 rounded-lg object-contain" />
-          {isAuthenticated && (
-            <span className=" font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
-          )}
+          <img src="/logo.png" alt="Logo" className="h-14 w-18 rounded-lg object-contain" />
+          {/* {isAuthenticated && ( */}
+          <span className="hidden font-display font-bold sm:inline-block text-xl">CO-PARENTS</span>
+          {/* )} */}
         </Link>
 
         {/* Navigation (same on all viewports) */}
@@ -75,47 +75,47 @@ export function Header() {
                 </Link>
               ) : (
 
-              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
                   <div className="hidden sm:flex flex-col items-end mr-2">
-                      <span className="text-sm font-semibold text-gray-900">{user?.name}</span>
-                      {/* <span className="text-xs text-muted-foreground">{user?.businessName || "Vendor"}</span> */}
+                    <span className="text-sm font-semibold text-gray-900">{user?.name}</span>
+                    {/* <span className="text-xs text-muted-foreground">{user?.businessName || "Vendor"}</span> */}
                   </div>
-                {/* // For students show avatar + dropdown similar to vendor */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
-                      <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
-                        <AvatarImage src={user?.profileImage} alt={user?.name} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold">
-                          {user?.name?.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{user?.name}</p>
-                        <p className="text-xs leading-none text-muted-foreground"> +91 {user?.phone}</p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
-                    </DropdownMenuItem>
-                    {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer"> */}
+                  {/* // For students show avatar + dropdown similar to vendor */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-transparent">
+                        <Avatar className="h-10 w-10 border border-gray-200 shadow-sm">
+                          <AvatarImage src={user?.profileImage} alt={user?.name} />
+                          <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                            {user?.name?.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                      <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-medium leading-none">{user?.name}</p>
+                          <p className="text-xs leading-none text-muted-foreground"> +91 {user?.phone}</p>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Profile</span>
+                      </DropdownMenuItem>
+                      {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer"> */}
                       {/* <LayoutDashboard className="mr-2 h-4 w-4" />
                       <span>Home Website</span> */}
-                    {/* </DropdownMenuItem> */}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Log out</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                      {/* </DropdownMenuItem> */}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               )}
               {/* <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
