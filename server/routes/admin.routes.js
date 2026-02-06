@@ -4,6 +4,7 @@ import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { admin } from '../middleware/adminMiddleware.js';
 import counseling from '../models/Counseling.js'
+import ListingQuery from '../models/ListingQuery.js';
 const router = express.Router();
 
 // @desc    Get Admin Dashboard Stats
@@ -167,7 +168,7 @@ router.get('/listing-query',async(req,res)=>{
             query.type = { $ne: 'admin' };
         }
 
-        const queryData = await counseling.find(query);
+        const queryData = await ListingQuery.find(query).populate('listingId', 'title');;
         res.json(queryData);
     } catch (error) {
         res.status(500).json({ message: error.message });

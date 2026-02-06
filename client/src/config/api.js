@@ -3,8 +3,8 @@
  * Central place to manage API URLs for different environments
  */
 
-// Get API base URL from environment variable, fallback to localhost
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Get API base URL from environment variable, fallback to localhost or current origin
+export const API_BASE_URL = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000' : window.location.origin);
 
 /**
  * Helper function to construct full API endpoint URLs
@@ -24,7 +24,8 @@ export const getApiUrl = (endpoint) => {
  */
 export const getUploadUrl = (filename) => {
     if (!filename) return '';
-    return `${API_BASE_URL}/uploads/${filename}`;
+    // Encode the filename to handle spaces and special characters
+    return `${API_BASE_URL}/uploads/${encodeURIComponent(filename)}`;
 };
 
 // Export environment info for debugging

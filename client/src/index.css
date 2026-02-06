@@ -196,4 +196,18 @@
     background: hsl(var(--mess) / 0.1);
     border-color: hsl(var(--mess) / 0.3);
   }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
 }

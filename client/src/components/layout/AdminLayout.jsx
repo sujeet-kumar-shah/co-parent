@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Outlet, useNavigate,Link } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import {
     LayoutDashboard,
@@ -66,7 +66,7 @@ const AdminLayout = () => {
                     <Link to="/vendor/dashboard">
                         <img src="/logo.png" alt="Logo" className="w-18 h-14 rounded-lg object-contain" />
                     </Link>
-                    <Link to = '/admin/dashboard'>
+                    <Link to='/admin/dashboard'>
                         <h1 className="text-xl font-bold font-display text-gray-900">CO-PARENTS</h1>
                         <small className="text-sm  font-display text-muted-foreground">Admin pannel</small>
                     </Link>
@@ -152,7 +152,7 @@ const AdminLayout = () => {
                                     <div className="flex flex-col space-y-1">
                                         <p className="text-sm font-medium leading-none">{user?.name}</p>
                                         <p className="text-xs leading-none text-muted-foreground">
-                                           +91 {user?.phone}
+                                            +91 {user?.phone}
                                         </p>
                                     </div>
                                 </DropdownMenuLabel>
@@ -160,6 +160,12 @@ const AdminLayout = () => {
                                 <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
                                     <User className="mr-2 h-4 w-4" />
                                     <span>Profile</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link to="/admin/dashboard" className="cursor-pointer w-full flex items-center">
+                                        <LayoutDashboard className="mr-2 w-4 h-4" />
+                                        <span>Dashboard</span>
+                                    </Link>
                                 </DropdownMenuItem>
                                 {/* <DropdownMenuItem onClick={() => navigate('/')} className="cursor-pointer">
                                     <Home className="mr-2 h-4 w-4" />
@@ -181,12 +187,12 @@ const AdminLayout = () => {
                         <Outlet />
                     </div>
                 </main>
-               <footer className="bg-white ">
+                <footer className="bg-white ">
                     <div className="container py-4">
-                    {/* Bottom Bar */}
+                        {/* Bottom Bar */}
                         <div className="mt-1 pb-2  border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
                             <p className="  text-black text-muted-foreground">
-                            © 2026 CO-PARENTS. All rights reserved.
+                                © 2026 CO-PARENTS. All rights reserved.
                             </p>
                         </div>
                     </div>

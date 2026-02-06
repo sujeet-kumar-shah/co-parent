@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { Users, Building2, CheckCircle, Clock } from 'lucide-react';
 import { getApiUrl } from '@/config/api';
-
+import {Link} from 'react-router-dom'
 const AdminDashboard = () => {
     const { token } = useAuth();
     const [stats, setStats] = useState({
@@ -41,25 +41,29 @@ const AdminDashboard = () => {
             title: 'Total Students',
             value: stats.totalStudents,
             icon: Users,
-            color: 'text-blue-600'
+            color: 'text-blue-600',
+            link:'/admin/users'
         },
         {
             title: 'Total Vendors',
             value: stats.totalVendors,
             icon: Building2,
-            color: 'text-purple-600'
+            color: 'text-purple-600',
+            link:'/admin/users'
         },
         {
             title: 'Active Listings',
             value: stats.activeListings,
             icon: CheckCircle,
-            color: 'text-green-600'
+            color: 'text-green-600',
+            link:'/admin/listings'
         },
         {
             title: 'Pending Approvals',
             value: stats.pendingApprovals,
             icon: Clock,
-            color: 'text-orange-600'
+            color: 'text-orange-600',
+            link:'/admin/listings'
         }
     ];
 
@@ -77,6 +81,7 @@ const AdminDashboard = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {statCards.map((stat, index) => (
                     <Card key={index}>
+                        <Link to={stat.link}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
                                 {stat.title}
@@ -86,6 +91,7 @@ const AdminDashboard = () => {
                         <CardContent>
                             <div className="text-2xl font-bold">{stat.value}</div>
                         </CardContent>
+                        </Link>
                     </Card>
                 ))}
             </div>
