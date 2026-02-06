@@ -3,66 +3,66 @@ import Counseling from '../models/Counseling.js';
 import ListingQuery from '../models/ListingQuery.js';
 const router = express.Router();
 
-router.post('/counselingForm',async(req,res)=>{
- const {name,contact_number,message,percentage,query_type,userId} = req.body
- const queryData = new Counseling({
-      userId:userId,
-      name :name,
-      query_type:query_type,
-      message:message,
-      contact_number:contact_number,
-      percent:percentage,
- });
+router.post('/counselingForm', async (req, res) => {
+    const { name, contact_number, message, percentage, query_type, userId } = req.body
+    const queryData = new Counseling({
+        userId: userId,
+        name: name,
+        query_type: query_type,
+        message: message,
+        contact_number: contact_number,
+        percent: percentage,
+    });
 
- const counselingQuery = await queryData.save();
-        res.status(201).json(counselingQuery);
-
-})
-router.post('/status/:id',async(req,res)=>{
- const {status} = req.body
-   let  queryData ;
-
-      queryData = await Counseling.findOneAndUpdate(
-         { _id: req.params.id },
-         { status: status },
-         { new: true }   // returns updated document
-     );
-
-
-res.status(200).json({
-    success: true,
-    data: queryData
-});
-})
-
-router.post('/lisitng',async(req,res)=>{
-    const {listingId,name,phone,message,userId} = req.body
-   const queryData = new ListingQuery({
-      userId:userId,
-      name :name,
-      phone:phone,
-      message:message,
-      listingId:listingId,
- });
-
- const listingQuery = await queryData.save();
-        res.status(201).json(listingQuery);
+    const counselingQuery = await queryData.save();
+    res.status(201).json(counselingQuery);
 
 })
-router.post('/listing-status/:id',async(req,res)=>{
- const {status} = req.body
-   let  queryData ;
+router.post('/status/:id', async (req, res) => {
+    const { status } = req.body
+    let queryData;
 
-      queryData = await ListingQuery.findOneAndUpdate(
-         { _id: req.params.id },
-         { status: status },
-         { new: true }   // returns updated document
-     );
+    queryData = await Counseling.findOneAndUpdate(
+        { _id: req.params.id },
+        { status: status },
+        { new: true }   // returns updated document
+    );
 
 
-res.status(200).json({
-    success: true,
-    data: queryData
-});
+    res.status(200).json({
+        success: true,
+        data: queryData
+    });
+})
+
+router.post('/listing', async (req, res) => {
+    const { listingId, name, phone, message, userId } = req.body
+    const queryData = new ListingQuery({
+        userId: userId,
+        name: name,
+        phone: phone,
+        message: message,
+        listingId: listingId,
+    });
+
+    const listingQuery = await queryData.save();
+    res.status(201).json(listingQuery);
+
+})
+router.post('/listing-status/:id', async (req, res) => {
+    const { status } = req.body
+    let queryData;
+
+    queryData = await ListingQuery.findOneAndUpdate(
+        { _id: req.params.id },
+        { status: status },
+        { new: true }   // returns updated document
+    );
+
+
+    res.status(200).json({
+        success: true,
+        data: queryData
+    });
 })
 export default router;

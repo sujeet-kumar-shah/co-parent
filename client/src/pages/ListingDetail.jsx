@@ -32,6 +32,7 @@ import { Footer } from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { ArrowLeft } from 'lucide-react';
 import axios from 'axios';
+import { useToast } from "@/hooks/use-toast";
 import { getApiUrl, getUploadUrl } from '@/config/api';
 // listingData removed
 
@@ -43,16 +44,16 @@ export default function ListingDetail() {
   const [liked, setLiked] = useState(false);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [queryForm ,setQueryForm] =useState({
+  const [queryForm, setQueryForm] = useState({
 
-    name:'',
-    phone:'',
-    message:'',
+    name: '',
+    phone: '',
+    message: '',
   })
-   const handleChange = (e) => {
-        const { name, value } = e.target;
-        setQueryForm(prev => ({ ...prev, [name]: value }));
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setQueryForm(prev => ({ ...prev, [name]: value }));
+  };
   // Helper to map features to icons (fallback to Check icon)
   const getIconForFeature = (feature) => {
     const map = {
@@ -172,9 +173,9 @@ export default function ListingDetail() {
 
   // Parse amenities (handles stringified JSON arrays from API)
   const parsedAmenitiesData = listing.amenities ? parseAmenities(listing.amenities) : (listing.features || []);
-  const amenities = parsedAmenitiesData.map(f => ({ 
-    icon: getIconForFeature(f), 
-    name: typeof f === 'string' ? f.charAt(0).toUpperCase() + f.slice(1) : f 
+  const amenities = parsedAmenitiesData.map(f => ({
+    icon: getIconForFeature(f),
+    name: typeof f === 'string' ? f.charAt(0).toUpperCase() + f.slice(1) : f
   }));
 
   // Mock data for missing fields in API
@@ -204,25 +205,51 @@ export default function ListingDetail() {
       console.log("Sharing not supported on this browser");
     }
   };
- const handleQuerySubmit =async (e) =>{
+  // New state for button loading
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  const handleQuerySubmit = async (e) => {
     e.preventDefault();
+
+    if (!queryForm.name || !queryForm.phone || !queryForm.message) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all fields before sending.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
     try {
-      const response = await axios.post(getApiUrl('/api/query/lisitng'), {
+      // Fixed API endpoint typo here
+      const response = await axios.post(getApiUrl('/api/query/listing'), {
         listingId: id,
         name: queryForm.name,
         phone: queryForm.phone,
         message: queryForm.message,
         userId: user._id
       });
+
       if (response.status === 201) {
         setQueryForm({ name: '', phone: '', message: '' });
-      } else {
-        console.log(response);
+        toast({
+          title: "Inquiry Sent!",
+          description: "Your inquiry has been sent successfully. The vendor will contact you soon.",
+        });
       }
     } catch (error) {
       console.error('Error sending inquiry:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send inquiry. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
     }
- }
+  }
 
 
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
@@ -244,8 +271,8 @@ export default function ListingDetail() {
             <span className="text-foreground">{listing.title}</span>
           </div>
           <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
-              <ArrowLeft className="w-4 h-4" />
-                Back
+            <ArrowLeft className="w-4 h-4" />
+            Back
           </Button>
         </div>
 
@@ -479,7 +506,7 @@ export default function ListingDetail() {
                     </div>
                     <div>
                       <Label htmlFor="phone">Phone</Label>
-                      <Input id="phone" name="phone" placeholder="Your phone number" maxLength="10" className="mt-1"  onChange={handleChange} />
+                      <Input id="phone" name="phone" placeholder="Your phone number" maxLength="10" className="mt-1" onChange={handleChange} />
                     </div>
                     <div>
                       <Label htmlFor="message">Message</Label>
@@ -492,9 +519,9 @@ export default function ListingDetail() {
                         onChange={handleChange}
                       />
                     </div>
-                    <Button type="submit" className="w-full">
+                    <Button type="submit" className="w-full" disabled={submitting}>
                       <Mail className="w-4 h-4" />
-                      Send Inquiry
+                      {submitting ? "Sending..." : "Send Inquiry"}
                     </Button>
                   </form>
                 </div>
