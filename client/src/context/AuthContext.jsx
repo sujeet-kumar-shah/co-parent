@@ -80,10 +80,14 @@ function AuthProvider({ children }) {
         throw new Error(data.message || "Registration failed");
       }
 
-      // setToken(data.token);
-      // localStorage.setItem("coparents_token", data.token);
-      // setUser(data);
-      return { success: true, user: data };
+      // Auto-login if token is present
+      if (data.token) {
+        setToken(data.token);
+        localStorage.setItem("coparents_token", data.token);
+        setUser(data.user);
+      }
+
+      return { success: true, user: data.user };
     } catch (error) {
       return { success: false, message: error.message };
     }

@@ -44,11 +44,17 @@ export function VendorCTASection() {
               List Your Service & Grow Your Business
             </h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-lg">
-              Join 500+ vendors who are already reaching thousands of students through 
+              Join 500+ vendors who are already reaching thousands of students through
               CO-PARENTS. Simple listing process, powerful dashboard, real results.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="accent" size="xl">
+              <Button variant="accent" size="xl" onClick={() => window.location.href = "/login?tab=register&type=vendor"}>
+                {/* using window.location for simplicity as I can't easily add hook here without refactoring whole component to use router which might not be available if this is used outside router context, but usually it is. better to use Link or useNavigate if possible. Let's check imports. */}
+                {/* Wait, I can just use Link from react-router-dom or standard navigate if the component is inside Router. 
+                   The previous file viewer showed this component. It doesn't have useNavigate imported.
+                   Let's use Link component or standard anchor for safety if I don't want to add hooks, 
+                   but standard in this project seems to be useNavigate. 
+                   Let's add useNavigate. */}
                 Start Listing Now
                 <ArrowRight className="w-5 h-5" />
               </Button>
