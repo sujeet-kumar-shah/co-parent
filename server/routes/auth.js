@@ -126,19 +126,20 @@ router.put('/profile', protect, async (req, res) => {
 });
 
 // @route POST /api/auth/forget
-// @desc  Create password reset OTP and send via SMS (non-fatal)
+// @desc  Create password reset OTP and send via SMS (non-fatal) - OTP BYPASSED
 router.post('/forget', async (req, res) => {
     const { phone } = req.body;
     try {
         const user = await User.findOne({ phone });
         if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
-        const otp = generateOtp();
-        await Otp.create({ userId: user._id, phone: user.phone, otp, purpose: 'reset_password', expiresAt: new Date(Date.now() + 5 * 60 * 1000) });
+        // OTP logic commented out to bypass OTP verification
+        // const otp = generateOtp();
+        // await Otp.create({ userId: user._id, phone: user.phone, otp, purpose: 'reset_password', expiresAt: new Date(Date.now() + 5 * 60 * 1000) });
 
-        const toPhone = user.phone.toString().startsWith('+') ? user.phone : `+91${user.phone}`;
-        const smsSent = await sendOtpSms(toPhone, otp);
-        if (!smsSent) console.warn('OTP created but SMS failed for', toPhone);
+        // const toPhone = user.phone.toString().startsWith('+') ? user.phone : `+91${user.phone}`;
+        // const smsSent = await sendOtpSms(toPhone, otp);
+        // if (!smsSent) console.warn('OTP created but SMS failed for', toPhone);
 
         return res.json({ success: true, message: 'OTP sent for password reset' });
     } catch (error) {
@@ -180,16 +181,17 @@ router.post('/verify-otp', async (req, res) => {
 });
 
 // @route POST /api/auth/reset-password
-// @desc  Reset password using resetToken from verify-otp
+// @desc  Reset password using phone (OTP bypassed)
 router.post('/reset-password', async (req, res) => {
-    const { resetToken, newPassword } = req.body;
-    if (!resetToken || !newPassword) return res.status(400).json({ success: false, message: 'Missing token or new password' });
+    const { phone, newPassword } = req.body;
+    if (!phone || !newPassword) return res.status(400).json({ success: false, message: 'Missing phone or new password' });
 
     try {
-        const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
-        if (!decoded || decoded.purpose !== 'reset') return res.status(400).json({ success: false, message: 'Invalid reset token' });
+        // OTP token verification commented out - using phone directly
+        // const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+        // if (!decoded || decoded.purpose !== 'reset') return res.status(400).json({ success: false, message: 'Invalid reset token' });
 
-        const user = await User.findById(decoded.id);
+        const user = await User.findOne({ phone });
         if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
         user.password = newPassword;
@@ -197,7 +199,7 @@ router.post('/reset-password', async (req, res) => {
         return res.json({ success: true, message: 'Password changed successfully' });
     } catch (error) {
         console.error('Reset password error:', error);
-        return res.status(400).json({ success: false, message: 'Invalid or expired token' });
+        return res.status(400).json({ success: false, message: 'Could not reset password' });
     }
 });
 

@@ -19,7 +19,8 @@ export default function ResetPassword() {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const resetToken = location.state?.resetToken;
+  // OTP flow bypassed - using phone directly instead of resetToken
+  // const resetToken = location.state?.resetToken;
   const phone = location.state?.phone;
 
   const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
@@ -27,13 +28,18 @@ export default function ResetPassword() {
   const maskPhone = (p) => {
     if (!p) return '';
     const s = p.toString();
-    return s.startsWith('+') ? `${s.slice(0, s.length-4).replace(/.(?=...)/g,'*')}${s.slice(-4)}` : `+91 ******${s.slice(-4)}`;
+    return s.startsWith('+') ? `${s.slice(0, s.length - 4).replace(/.(?=...)/g, '*')}${s.slice(-4)}` : `+91 ******${s.slice(-4)}`;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!resetToken) {
-      toast({ title: "Missing token", description: "Please retry the OTP flow", variant: "destructive" });
+    // OTP token check commented out to bypass OTP flow
+    // if (!resetToken) {
+    //   toast({ title: "Missing token", description: "Please retry the OTP flow", variant: "destructive" });
+    //   return;
+    // }
+    if (!phone) {
+      toast({ title: "Missing phone", description: "Please retry from forgot password", variant: "destructive" });
       return;
     }
     if (form.newPassword.length < 6) {
@@ -47,7 +53,8 @@ export default function ResetPassword() {
 
     setIsLoading(true);
     try {
-      const payload = { resetToken, newPassword: form.newPassword }
+      // Using phone instead of resetToken to bypass OTP
+      const payload = { phone, newPassword: form.newPassword }
       const res = await resetPassword(payload);
       if (res.success) {
         toast({ title: "Success", description: "Password updated. Please login." });
@@ -67,10 +74,10 @@ export default function ResetPassword() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         {/* Back Button */}
         <Link to="/login" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
-          <button variant="outline">
+          <Button variant="outline">
             <ArrowLeft className="w-4 h-4" />
-              Back to Login
-          </button>
+            Back to Login
+          </Button>
         </Link>
 
         {/* Logo */}
@@ -119,9 +126,9 @@ export default function ResetPassword() {
             <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>{isLoading ? 'Saving...' : 'Save Password'}</Button>
           </form>
 
-          <div className="mt-4 text-sm text-muted-foreground">
+          {/* <div className="mt-4 text-sm text-muted-foreground">
             <Link to="/login" className="underline">Back to Login</Link>
-          </div>
+          </div> */}
         </div>
       </motion.div>
     </div>
