@@ -133,7 +133,7 @@ export function Header() {
                 <User className="w-4 h-4 mr-2" />
                 Login
               </Button>
-              <Button variant="default" size="sm" onClick={() => navigate("/login")}>
+              <Button variant="default" size="sm" onClick={() => navigate("/login", { state: { startTab: 'register', authType: 'vendor' } })}>
                 <Building2 className="w-4 h-4 mr-2" />
                 List Your Service
               </Button>

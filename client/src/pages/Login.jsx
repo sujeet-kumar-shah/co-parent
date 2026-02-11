@@ -10,7 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
-  const [authType, setAuthType] = useState("student");
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -22,11 +22,20 @@ export default function Login() {
   });
 
   const { login, register } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   const from = location.state?.from || "/";
+
+  // Parse query params
+  const searchParams = new URLSearchParams(location.search);
+  const queryTab = searchParams.get('tab');
+  const queryType = searchParams.get('type');
+
+  const [authType, setAuthType] = useState(location.state?.authType || queryType || "student");
+  // Ensure we default to register if requested via state or query
+  const defaultTab = location.state?.startTab || queryTab || "login";
 
   const handleInputChange = (e) => {
     setFormData((prev) => ({
@@ -51,7 +60,7 @@ export default function Login() {
           navigate("/vendor/dashboard", { replace: true });
         } else if (result.user.type === 'admin') {
           navigate("/admin/dashboard", { replace: true });
-        } else if(result.user.type === 'student'){
+        } else if (result.user.type === 'student') {
           navigate('/', { replace: true });
         }
       } else {
@@ -85,13 +94,20 @@ export default function Login() {
         businessName: authType === "vendor" ? formData.businessName : undefined,
       });
 
-      if (result) {
-        navigate("/verify-otp", { replace: true ,state: { phone: formData.phone }});
+      if (result.success) {
         toast({
-          title: "Otp Send successful!",
+          title: "Registration successful!",
           description: "Welcome to CO-PARENTS.",
         });
-       
+
+        // Redirect based on user type
+        if (result.user.type === 'vendor') {
+          navigate("/vendor/dashboard", { replace: true });
+        } else if (result.user.type === 'admin') {
+          navigate("/admin/dashboard", { replace: true });
+        } else {
+          navigate('/', { replace: true });
+        }
       } else {
         toast({
           title: "Registration failed",
@@ -122,7 +138,7 @@ export default function Login() {
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
         >
           <Button variant="outline">
-          <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Button>
         </Link>
@@ -142,7 +158,7 @@ export default function Login() {
             Login to access your account
           </p>
 
-          <Tabs defaultValue="login">
+          <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="register">Register</TabsTrigger>
@@ -166,7 +182,7 @@ export default function Login() {
                     />
                   </div>
                 </div> */}
-                 <div className="space-y-2 ">
+                <div className="space-y-2 ">
                   <Label htmlFor="login-phone">Phone Number</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -176,10 +192,11 @@ export default function Login() {
                       // type="number"
                       placeholder="Enter your Phone Number"
                       value={formData.phone}
-                       onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                            } }}
+                      onKeyPress={(e) => {
+                        if (!/[0-9]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
                       onChange={handleInputChange}
                       className="pl-10"
                       required
@@ -242,7 +259,7 @@ export default function Login() {
                     className={`cursor-pointer border rounded-lg p-3 text-center transition-all ${authType === 'vendor' ? 'bg-primary/10 border-primary text-primary' : 'hover:bg-gray-50'}`}
                   >
                     <Building2 className="w-5 h-5 mx-auto mb-1" />
-                    <div className="text-sm font-medium">Vendor</div>
+                    <div className="text-sm font-medium">Service Provider</div>
                   </div>
                 </div>
 
@@ -268,9 +285,10 @@ export default function Login() {
                       placeholder="Enter your phone"
                       value={formData.phone}
                       onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                            } }}
+                        if (!/[0-9]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
                       maxLength="10"
                       onChange={handleInputChange}
                       className="pl-10"

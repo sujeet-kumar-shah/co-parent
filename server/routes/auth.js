@@ -46,7 +46,7 @@ function generateOtp() {
 }
 
 // @route POST /api/auth/register
-// @desc  Register a new user and send signup OTP
+// @desc  Register a new user (Auto-activate, no OTP for now)
 router.post('/register', async (req, res) => {
     const { name, email, password, phone, type, businessName } = req.body;
 
@@ -54,17 +54,26 @@ router.post('/register', async (req, res) => {
         const existing = await User.findOne({ phone });
         if (existing) return res.status(400).json({ success: false, message: 'Phone already registered' });
 
-        const user = await User.create({ name, email, password, phone, type, businessName, isActive: false });
+        // Auto-activate user (isActive: true)
+        const user = await User.create({ name, email, password, phone, type, businessName, isActive: true });
 
-        // create OTP for signup
-        const otp = generateOtp();
-        await Otp.create({ userId: user._id, phone: user.phone, otp, purpose: 'signup', expiresAt: new Date(Date.now() + 5 * 60 * 1000) });
+        // Generate token immediately
+        const token = generateToken(user._id);
 
-        const toPhone = user.phone.toString().startsWith('+') ? user.phone : `+91${user.phone}`;
-        const smsSent = await sendOtpSms(toPhone, otp);
-        if (!smsSent) console.warn('OTP created but SMS failed for', toPhone);
-
-        return res.status(201).json({ success: true, message: 'User created, OTP sent (if SMS configured)', data: { userId: user._id, phone: user.phone }, otpRequired: true });
+        return res.status(201).json({
+            success: true,
+            message: 'User created successfully',
+            token,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                type: user.type,
+                businessName: user.businessName,
+                profileImage: user.profileImage
+            }
+        });
     } catch (error) {
         console.error('Register error:', error);
         return res.status(500).json({ success: false, message: error.message });
