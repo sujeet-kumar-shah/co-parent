@@ -119,7 +119,9 @@ router.post('/', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name:
             features,
             amenities,
             gender,
-            status
+            status,
+            nearbyCoaching,
+            coachingDistance
         } = req.body;
         //   // parse possible JSON-encoded arrays from multipart/form-data
         //   const parseArrayField = (val) => {
@@ -158,7 +160,9 @@ router.post('/', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name:
             features,
             amenities,
             gender,
-            status: status || 'draft'
+            status: status || 'draft',
+            nearbyCoaching,
+            coachingDistance
         });
 
         const createdListing = await listing.save();

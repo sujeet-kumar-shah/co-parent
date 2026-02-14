@@ -36,7 +36,9 @@ const ListingForm = () => {
         images: '', // Comma separated for now
         videos: '', // Comma separated
         amenities: '', // Comma separated
-        status: 'draft'
+        status: 'draft',
+        nearbyCoaching: '',
+        coachingDistance: ''
     });
 
     useEffect(() => {
@@ -61,7 +63,9 @@ const ListingForm = () => {
                             // images: data.listing.images ? data.listing.images.join(', ') : '',
                             videos: data.listing.videos ? data.listing.videos.join(', ') : '',
                             amenities: data.listing.amenities ? data.listing.amenities.join(', ') : '',
-                            status: data.listing.status
+                            status: data.listing.status,
+                            nearbyCoaching: data.listing.nearbyCoaching || '',
+                            coachingDistance: data.listing.coachingDistance || ''
                         });
                     }
                 } catch (error) {
@@ -131,6 +135,8 @@ const ListingForm = () => {
         ));
 
         form.append('street', formData.street,);
+        form.append('nearbyCoaching', formData.nearbyCoaching);
+        form.append('coachingDistance', formData.coachingDistance);
 
         // files
         if (mainImage) form.append('image', mainImage);
@@ -419,6 +425,17 @@ const ListingForm = () => {
                                             <option value="">No areas found</option>
                                         )}
                                 </select>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="nearbyCoaching">Nearby Coaching</Label>
+                                <Input id="nearbyCoaching" name="nearbyCoaching" value={formData.nearbyCoaching} onChange={handleChange} placeholder="e.g. Allen, Aakash" />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="coachingDistance">Distance from Coaching</Label>
+                                <Input id="coachingDistance" name="coachingDistance" value={formData.coachingDistance} onChange={handleChange} placeholder="e.g. 500m, 1km" />
                             </div>
                         </div>
 

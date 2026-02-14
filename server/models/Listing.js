@@ -18,11 +18,11 @@ const listingSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['hostel', 'pg', 'coaching', 'library', 'mess','flat'],
+        enum: ['hostel', 'pg', 'coaching', 'library', 'mess', 'flat'],
     },
     location: {
         type: mongoose.Schema.Types.ObjectId,
-         ref: 'Area',
+        ref: 'Area',
         required: true,
     },
     city: {
@@ -30,8 +30,16 @@ const listingSchema = new mongoose.Schema({
         required: true,
     },
     street: {
-        type:String,
-        required:true
+        type: String,
+        required: true
+    },
+    nearbyCoaching: {
+        type: String,
+        default: ''
+    },
+    coachingDistance: {
+        type: String,
+        default: ''
     },
     price: {
         type: Number,
