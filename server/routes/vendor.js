@@ -89,7 +89,9 @@ router.put('/listings/:id', protect, async (req, res) => {
             features,
             amenities,
             gender,
-            status
+            status,
+            nearbyCoaching,
+            coachingDistance
         } = req.body;
 
         listing.title = title || listing.title;
@@ -106,6 +108,8 @@ router.put('/listings/:id', protect, async (req, res) => {
         listing.amenities = amenities || listing.amenities;
         listing.gender = gender || listing.gender;
         listing.status = status || listing.status;
+        listing.nearbyCoaching = nearbyCoaching || listing.nearbyCoaching;
+        listing.coachingDistance = coachingDistance || listing.coachingDistance;
 
         const updatedListing = await listing.save();
         res.json(updatedListing);
