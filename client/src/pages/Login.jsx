@@ -296,7 +296,7 @@ export default function Login() {
                     />
                   </div>
                 </div>
-                <div className="space-y-2 ">
+                <div className="space-y-2  hidden">
                   <Label htmlFor="reg-email">Email (Optional)</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -335,7 +335,7 @@ export default function Login() {
                   </div>
                 </div>
                 {authType === "vendor" && (
-                  <div className="space-y-2">
+                  <div className="space-y-2 hidden">
                     <Label htmlFor="reg-business">Business Name</Label>
                     <Input
                       id="reg-business"

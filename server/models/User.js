@@ -28,11 +28,13 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: Number,
         unique: true,
-        required:true,
+        required: true,
     },
     businessName: {
         type: String,
         // Only required if type is vendor, but we'll handle validation logically or in controller
+        required: false,
+        default: ""
     },
     profileImage: {
         type: String,
