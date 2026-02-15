@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, ArrowLeft, Plus, Trash2 } from 'lucide-react';
-import { getApiUrl } from '@/config/api';
+import { getApiUrl, getUploadUrl } from '@/config/api';
 
 const ListingForm = () => {
     const { id } = useParams();
@@ -57,8 +57,8 @@ const ListingForm = () => {
                             gender: data.listing.gender,
                             price: data.listing.price,
                             city: data.listing.city,
-                            location: data.listing.location,
-                            street: data.listing.address?.street || '',
+                            location: data.listing.location?._id || data.listing.location || '',
+                            street: data.listing.street || '',
                             // image: data.listing.image,
                             // images: data.listing.images ? data.listing.images.join(', ') : '',
                             videos: data.listing.videos ? data.listing.videos.join(', ') : '',
@@ -67,6 +67,14 @@ const ListingForm = () => {
                             nearbyCoaching: data.listing.nearbyCoaching || '',
                             coachingDistance: data.listing.coachingDistance || ''
                         });
+
+                        // Set previews
+                        if (data.listing.image) {
+                            setMainPreview(getUploadUrl(data.listing.image));
+                        }
+                        if (data.listing.images && data.listing.images.length > 0) {
+                            setOtherPreviews(data.listing.images.map(img => getUploadUrl(img)));
+                        }
                     }
                 } catch (error) {
                     console.error("Failed to fetch listing", error);
