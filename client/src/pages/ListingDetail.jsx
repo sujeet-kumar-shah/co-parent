@@ -115,7 +115,7 @@ export default function ListingDetail() {
         if (response.ok) {
           const data = await response.json();
           setListing(data.listing);
-          setLiked(data.likedStatus.status)
+          setLiked(data.likedStatus?.status || false);
         } else {
           console.error("Failed to fetch listing");
         }
@@ -133,6 +133,10 @@ export default function ListingDetail() {
       navigate("/login", { state: { from: `/listing/${id}` } });
     }
   }, [isAuthenticated, authLoading, navigate, id]);
+
+  // Moved hooks to the top
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const nextImage = () => {
     if (!listing) return;
@@ -158,6 +162,49 @@ export default function ListingDetail() {
         console.log(responce)
       })
   }
+
+  const handleQuerySubmit = async (e) => {
+    e.preventDefault();
+
+    if (!queryForm.name || !queryForm.phone || !queryForm.message) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in all fields before sending.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      // Fixed API endpoint typo here
+      const response = await axios.post(getApiUrl('/api/query/listing'), {
+        listingId: id,
+        name: queryForm.name,
+        phone: queryForm.phone,
+        message: queryForm.message,
+        userId: user._id
+      });
+
+      if (response.status === 201) {
+        setQueryForm({ name: '', phone: '', message: '' });
+        toast({
+          title: "Inquiry Sent!",
+          description: "Your inquiry has been sent successfully. The vendor will contact you soon.",
+        });
+      }
+    } catch (error) {
+      console.error('Error sending inquiry:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send inquiry. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   if (authLoading) return <div className="min-h-screen pt-20 text-center">Loading...</div>;
   if (!isAuthenticated) return null;
   if (loading) return <div className="min-h-screen pt-20 text-center">Loading listing...</div>;
@@ -205,51 +252,6 @@ export default function ListingDetail() {
       console.log("Sharing not supported on this browser");
     }
   };
-  // New state for button loading
-  const [submitting, setSubmitting] = useState(false);
-  const { toast } = useToast();
-
-  const handleQuerySubmit = async (e) => {
-    e.preventDefault();
-
-    if (!queryForm.name || !queryForm.phone || !queryForm.message) {
-      toast({
-        title: "Missing fields",
-        description: "Please fill in all fields before sending.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      // Fixed API endpoint typo here
-      const response = await axios.post(getApiUrl('/api/query/listing'), {
-        listingId: id,
-        name: queryForm.name,
-        phone: queryForm.phone,
-        message: queryForm.message,
-        userId: user._id
-      });
-
-      if (response.status === 201) {
-        setQueryForm({ name: '', phone: '', message: '' });
-        toast({
-          title: "Inquiry Sent!",
-          description: "Your inquiry has been sent successfully. The vendor will contact you soon.",
-        });
-      }
-    } catch (error) {
-      console.error('Error sending inquiry:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send inquiry. Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
-      setSubmitting(false);
-    }
-  }
 
 
   const vendorInfo = listing.vendor || { name: "Unknown Vendor", phone: "N/A", verified: false };
