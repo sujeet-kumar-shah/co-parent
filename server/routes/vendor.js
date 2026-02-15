@@ -2,8 +2,34 @@ import express from 'express';
 import Listing from '../models/Listing.js';
 import Lead from '../models/Lead.js';
 import { protect } from '../middleware/authMiddleware.js';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        // Ensure the 'uploads' directory exists
+        const uploadPath = path.join(__dirname, '..', 'uploads');
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        // Generate a unique filename (e.g., timestamp-originalName)
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+})
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 10 MB in bytes
+    }
+});
+
 
 // @desc    Get vendor dashboard stats
 // @route   GET /api/vendor/stats
@@ -62,7 +88,7 @@ router.get('/listings', protect, async (req, res) => {
 // @desc    Update a listing
 // @route   PUT /api/vendor/listings/:id
 // @access  Private (Vendor only)
-router.put('/listings/:id', protect, async (req, res) => {
+router.put('/listings/:id', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 5 }]), async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id);
 
@@ -81,10 +107,8 @@ router.put('/listings/:id', protect, async (req, res) => {
             category,
             location,
             city,
-            address,
+            street,
             price,
-            image,
-            images,
             videos,
             features,
             amenities,
@@ -94,18 +118,47 @@ router.put('/listings/:id', protect, async (req, res) => {
             coachingDistance
         } = req.body;
 
+        const image = req.files?.image?.[0]?.filename || null;
+        let images = req.files?.images?.map(f => f.filename) || [];
+
+        // Helper to parse array fields
+        const parseArrayField = (val) => {
+            if (!val) return [];
+            if (Array.isArray(val)) return val;
+            if (typeof val === 'string') {
+                try {
+                    const parsed = JSON.parse(val);
+                    if (Array.isArray(parsed)) return parsed;
+                } catch (e) {
+                    // fallback to comma-separated
+                    return val.split(',').map(s => s.trim()).filter(Boolean);
+                }
+            }
+            return [];
+        };
+
+        // Append new images to existing ones if handled that way, or replace. 
+        // For now, let's say if new images are uploaded, they append. 
+
+        if (image) listing.image = image;
+        if (images.length > 0) {
+            // If we want to replace: 
+            listing.images = images;
+        }
+
+
         listing.title = title || listing.title;
         listing.description = description || listing.description;
         listing.category = category || listing.category;
         listing.location = location || listing.location;
         listing.city = city || listing.city;
-        listing.address = address || listing.address;
+        listing.street = street || listing.street;
         listing.price = price || listing.price;
-        listing.image = image || listing.image;
-        listing.images = images || listing.images;
-        listing.videos = videos || listing.videos;
+        // listing.image = image || listing.image; // Handled above
+        // listing.images = images || listing.images; // Handled above
+        listing.videos = parseArrayField(videos) || listing.videos;
         listing.features = features || listing.features;
-        listing.amenities = amenities || listing.amenities;
+        listing.amenities = parseArrayField(amenities) || listing.amenities;
         listing.gender = gender || listing.gender;
         listing.status = status || listing.status;
         listing.nearbyCoaching = nearbyCoaching || listing.nearbyCoaching;
