@@ -336,6 +336,7 @@ const ListingForm = () => {
                                     {/* <option value="coaching">Coaching</option> */}
                                     <option value="library">Library</option>
                                     <option value="mess">Mess</option>
+                                    <option value="hostel+pg">Hostel + PG</option>
                                 </select>
                             </div>
                             <div className="space-y-2">

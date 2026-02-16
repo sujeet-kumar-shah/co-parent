@@ -40,6 +40,7 @@ const categories = [
   { value: "coaching", label: "Coaching" },
   { value: "library", label: "Library" },
   { value: "mess", label: "Mess" },
+  { value: "hostel+pg", label: "Hostel + PG" },
 ];
 
 const cities = ["All Cities", "Pune", "Bangalore", "Delhi", "Chennai", "Jaipur"];

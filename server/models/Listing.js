@@ -18,7 +18,7 @@ const listingSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['hostel', 'pg', 'coaching', 'library', 'mess', 'flat'],
+        enum: ['hostel', 'pg', 'coaching', 'library', 'mess', 'flat', 'hostel+pg'],
     },
     location: {
         type: mongoose.Schema.Types.ObjectId,
