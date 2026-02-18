@@ -1,130 +1,122 @@
 import { motion } from "framer-motion";
-import { Zap, Tag, Headphones, Shield, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-students.jpg";
 
-const stats = [
-  { value: "10,000+", label: "Verified Listings" },
-  // { value: "50+", label: "Cities" },
-  { value: "25,000+", label: "Happy Students" },
-  { value: "500+", label: "Trusted Vendors" },
-];
-
-// const features = [
-//   { icon: Zap, title: "Quick & Easy Bookings", desc: "Time is money. Save both when you book with us." },
-//   { icon: Tag, title: "Price-Match Guarantee", desc: "Find a lower price and we'll match it." },
-//   { icon: Headphones, title: "24x7 Assistance", desc: "If you have a doubt or a query, we're always a call away." },
-//   { icon: Shield, title: "100% Verified Listings", desc: "We promise to deliver what you see on the website." },
-// ];
-
 export function HeroSection() {
+  const navigate = useNavigate();
+
   return (
-    <>
-      <section className="relative min-h-screen flex items-center pt-20">
-        {/* Background */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroImage}
-            alt="Students studying together"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/70 to-foreground/40" />
-        </div>
+    <section className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #f0eeff 0%, #e8f4ff 50%, #f5f3ff 100%)" }}>
+      {/* Decorative blobs */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[#5A4BDA]/8 rounded-full blur-[80px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-400/8 rounded-full blur-[60px] pointer-events-none" />
 
-        {/* Content */}
-        <div className="container relative z-10 py-20">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="inline-block px-4 py-2 rounded-full bg-accent/20 text-accent font-medium text-sm mb-6">
-                🎓 Your Student Guardian Ecosystem
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6"
-            >
-              Find Your Perfect
-              <br />
-              <span className="text-accent">Student Services</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-primary-foreground/80 text-lg md:text-xl mb-12 max-w-xl"
-            >
-              Discover hostels, PGs, coaching centers, libraries, and mess services
-              . Trusted by thousands of students across India.
-            </motion.p>
-
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6"
-            >
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center md:text-left">
-                  <div className="font-display text-2xl md:text-3xl font-bold text-primary-foreground">
-                    {stat.value}
-                  </div>
-                  <div className="text-primary-foreground/60 text-sm">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
+      <div className="max-w-6xl mx-auto relative z-10 flex items-center sm:py-[60px] py-[30px] justify-between flex-col xl:flex-row px-4 md:px-6 pt-28 xl:pt-[60px]">
+        {/* Left: Text content */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center xl:text-left xl:w-[42%] w-full"
+        >
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-[#5A4BDA]/10 border border-[#5A4BDA]/20 rounded-full px-4 py-1.5 mb-4">
+            <span className="w-2 h-2 bg-[#5A4BDA] rounded-full animate-pulse" />
+            <span className="text-[#5A4BDA] text-sm font-semibold">India's #1 Student Services Platform</span>
           </div>
-        </div>
-      </section>
 
-      {/* Features Section
-      <section className="py-2 bg-gradient-to-b from-background to-secondary/30">
-        <div className="container">
+          <h1 className="font-bold text-2xl px-[50px] md:px-0 text-[#1B2124] xl:text-[40px] md:text-[32px] md:leading-[48px] xl:leading-[50px] mb-[6px]">
+            India's{" "}
+            <span className="text-[#5A4BDA]">Trusted &amp; Affordable</span>{" "}
+            Student Guardian Ecosystem
+          </h1>
+
+          <div className="text-sm md:text-[16px] px-4 md:px-0 text-center xl:text-start text-[#3D3D3D] mb-6 xl:mb-10">
+            Find verified hostels, PGs, coaching centers, libraries, and mess services — all in one place. Trusted by{" "}
+            <span className="font-semibold text-[#5A4BDA]">25,000+ students</span> across India.
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center xl:justify-start">
+            <button
+              onClick={() => navigate("/listings")}
+              className="px-[28px] py-[14px] w-full sm:w-[200px] rounded-md hover:bg-[#4437B8] transition-all duration-200 bg-[#5A4BDA] items-center text-white font-semibold text-[17px] flex items-center justify-center gap-2"
+            >
+              Get Started
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => navigate("/login", { state: { startTab: "register", authType: "vendor" } })}
+              className="px-[28px] py-[14px] w-full sm:w-[220px] rounded-md border-2 border-[#5A4BDA] text-[#5A4BDA] font-semibold text-[17px] hover:bg-[#5A4BDA]/5 transition-all duration-200"
+            >
+              List Your Service
+            </button>
+          </div>
+
+          {/* Stats row */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-wrap gap-6 mt-8 justify-center xl:justify-start"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Why Choose CO-PARENTS?
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Book Your Perfect Accommodation – Take the hassle out of securing your student home for the best years of your life
-            </p>
+            {[
+              { value: "25,000+", label: "Happy Students" },
+              { value: "10,000+", label: "Verified Listings" },
+              { value: "500+", label: "Trusted Vendors" },
+            ].map((stat, i) => (
+              <div key={i} className="text-center xl:text-left">
+                <div className="text-xl font-bold text-[#1B2124]">{stat.value}</div>
+                <div className="text-xs text-[#3D3D3D]/70">{stat.label}</div>
+              </div>
+            ))}
           </motion.div>
+        </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group p-6 bg-card rounded-2xl shadow-card hover:shadow-lg transition-all duration-300 hover:-translate-y-2"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-display text-lg font-bold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
-                </motion.div>
-              );
-            })}
+        {/* Right: Student image with speech bubbles */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="sm:py-4 py-6 xl:w-[55%] w-full flex justify-center"
+        >
+          <div className="relative justify-items-center sm:text-[14px] sm:leading-[20px] text-[12px] leading-[18px] font-[500]">
+            {/* Student image — use local hero image as fallback */}
+            <img
+              alt="hero-student"
+              className="sm:hidden block h-[225px] w-[320px] object-cover object-top rounded-2xl"
+              src={heroImage}
+            />
+            <img
+              alt="hero-student"
+              className="sm:block hidden h-[318px] w-[600px] object-cover object-top rounded-2xl"
+              src={heroImage}
+            />
+
+            {/* Speech bubble 1 — white, right side (question) */}
+            <div className="bg-white p-2 sm:h-[36px] h-[34px] absolute sm:right-[180px] sm:top-[85px] right-[85px] top-[48px] rounded-md z-0 shadow-[0_0_8px_0_rgba(0,0,0,0.08)] flex items-center whitespace-nowrap">
+              {/* Arrow */}
+              <div className="w-[20px] h-full absolute flex right-[-13px] top-0 z-[-1]">
+                <div className="bg-white sm:w-[14px] sm:h-[14px] w-[12px] h-[12px] rounded-sm my-auto rotate-45" />
+              </div>
+              <p className="text-[#1B2124] text-xs sm:text-sm">What is CO-PARENTS?</p>
+            </div>
+
+            {/* Speech bubble 2 — dark, left side (answer line 1) */}
+            <div className="bg-[#140D52] p-2 sm:h-[36px] h-[34px] text-white absolute sm:left-[170px] sm:top-[158px] left-[85px] top-[115px] rounded-md z-0 shadow-[0_0_8px_0_rgba(0,0,0,0.08)] flex items-center whitespace-nowrap">
+              <div className="w-[20px] h-full absolute flex left-[-6px] top-0 z-[-1]">
+                <div className="bg-[#140D52] sm:w-[14px] sm:h-[14px] w-[12px] h-[12px] rounded-sm my-auto rotate-45" />
+              </div>
+              <p className="text-xs sm:text-sm">CO-PARENTS is where students find</p>
+            </div>
+
+            {/* Speech bubble 3 — dark, left side (answer line 2) */}
+            <div className="bg-[#140D52] px-2 pt-1 pb-2 sm:h-[30px] h-[28px] text-white absolute sm:left-[170px] sm:top-[185px] left-[85px] top-[141px] rounded-md z-[1] shadow-[0_0_8px_0_rgba(0,0,0,0.08)] sm:w-[240px] w-[210px] flex items-center">
+              <p className="text-xs sm:text-sm">homes, coaching &amp; more ❤️</p>
+            </div>
           </div>
-        </div>
-      </section> */}
-    </>
+        </motion.div>
+      </div>
+    </section>
   );
 }
