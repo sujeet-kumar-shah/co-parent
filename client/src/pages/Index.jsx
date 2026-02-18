@@ -13,21 +13,24 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="space-y-20 md:space-y-32 pb-20">
+      <main className="space-y-10 md:space-y-16">
         <LaunchCountdown />
-        <HeroSection />
+        <div>
+          <CarouselCustomNavigation />
+          <HeroSection />
+        </div>
         {/* Offers Section */}
-        <section className="space-y-8">
-          <div className="container text-center">
+        {/* <section className="space-y-8"> */}
+        {/* <div className="container text-center">
             <h2 className="font-display text-3xl md:text-4xl font-bold">
               Student Specials ⚡
             </h2>
             <p className="text-muted-foreground text-lg">
               Grab the best discounts on Hostels, Coaching, and more.
             </p>
-          </div>
-          <CarouselCustomNavigation />
-        </section>
+          </div> */}
+
+        {/* </section> */}
         <CategorySection />
         <TestimonialsSection />
         <VideoCarouselSection />

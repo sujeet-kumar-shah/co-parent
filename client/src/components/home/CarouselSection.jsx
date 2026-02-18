@@ -49,13 +49,13 @@ export function CarouselCustomNavigation() {
   }, [page, isPaused]);
 
   return (
-    <section className="container">
+    <section className="w-full">
       <div
-        className="relative rounded-2xl overflow-hidden shadow-sm group border border-border/50 bg-background"
+        className="relative overflow-hidden shadow-sm group bg-background"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        <div className="relative w-full h-[300px] md:h-[500px] overflow-hidden">
+        <div className="relative w-full h-[500px] md:h-[500px] overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
             <motion.img
               key={page}
