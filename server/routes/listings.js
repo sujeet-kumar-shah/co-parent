@@ -101,7 +101,7 @@ router.get('/:id', async (req, res) => {
 // @desc    Create a listing
 // @route   POST /api/listings
 // @access  Private (Vendor only)
-router.post('/', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 5 }]), async (req, res) => {
+router.post('/', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 10 }]), async (req, res) => {
     try {
         if (req.user.type !== 'vendor') {
             return res.status(403).json({ message: 'Only vendors can create listings' });

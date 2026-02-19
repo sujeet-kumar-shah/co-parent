@@ -142,7 +142,7 @@ const ListingForm = () => {
             formData.amenities.split(',').map(a => a.trim()).filter(Boolean)
         ));
 
-        form.append('street', formData.street,);
+        form.append('street', formData.street);
         form.append('nearbyCoaching', formData.nearbyCoaching);
         form.append('coachingDistance', formData.coachingDistance);
 
