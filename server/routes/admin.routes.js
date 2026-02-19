@@ -109,6 +109,34 @@ router.put('/users/:id/status', protect, admin, async (req, res) => {
     }
 });
 
+// @desc    Update User Role
+// @route   PUT /api/admin/users/:id/role
+// @access  Private/Admin
+router.put('/users/:id/role', protect, admin, async (req, res) => {
+    try {
+        const { type } = req.body; // student, vendor, admin
+        if (!['student', 'vendor'].includes(type)) {
+            return res.status(400).json({ message: 'Invalid role type' });
+        }
+
+        const user = await User.findById(req.params.id);
+
+        if (user) {
+            user.type = type;
+            const updatedUser = await user.save();
+            res.json({
+                _id: updatedUser._id,
+                type: updatedUser.type,
+                message: `User role updated to ${type}`
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // @desc    Seed Admin User
 // @route   POST /api/admin/seed
 // @access  Public (Run once then remove or protect)
@@ -140,8 +168,8 @@ router.post('/seed', async (req, res) => {
 });
 router.get('/query', async (req, res) => {
     try {
-        
- const { type } = req.query; // student, vendor
+
+        const { type } = req.query; // student, vendor
         let query = {};
         if (type) {
             query.status = type;
@@ -154,13 +182,13 @@ router.get('/query', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-    
+
 });
 
-router.get('/listing-query',async(req,res)=>{
-   try {
-        
- const { type } = req.query; // student, vendor
+router.get('/listing-query', async (req, res) => {
+    try {
+
+        const { type } = req.query; // student, vendor
         let query = {};
         if (type) {
             query.status = type;
@@ -173,7 +201,7 @@ router.get('/listing-query',async(req,res)=>{
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-    
+
 })
 
 export default router;

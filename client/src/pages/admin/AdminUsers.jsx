@@ -15,6 +15,13 @@ import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom'
 import { getApiUrl } from '@/config/api';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
@@ -80,6 +87,47 @@ const AdminUsers = () => {
             });
         }
     };
+    const handleRoleUpdate = async (id, newRole) => {
+        if (!window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) return;
+
+        try {
+            const response = await fetch(getApiUrl(`/api/admin/users/${id}/role`), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ type: newRole })
+            });
+
+            if (response.ok) {
+                toast({
+                    title: "Success",
+                    description: `User role updated to ${newRole} successfully.`
+                });
+
+                // Update local state and filter out if it no longer matches current view
+                setUsers(users.map(u => u._id === id ? { ...u, type: newRole } : u));
+                if (filter !== 'admin' && newRole !== filter) {
+                    setUsers(prev => prev.filter(u => u._id !== id));
+                }
+            } else {
+                const data = await response.json();
+                toast({
+                    title: "Error",
+                    description: data.message || "Failed to update user role.",
+                    variant: "destructive"
+                });
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to update user role.",
+                variant: "destructive"
+            });
+        }
+    };
+
     const handleBack = () => {
         navigate(-1);
     }
@@ -92,7 +140,7 @@ const AdminUsers = () => {
                 </div>
                 <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                        Back
+                    Back
                 </Button>
             </div>
 
@@ -110,6 +158,7 @@ const AdminUsers = () => {
                             <TableHead>Name</TableHead>
                             <TableHead>Email</TableHead>
                             <TableHead>Contact Number</TableHead>
+                            <TableHead>Role</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -140,6 +189,20 @@ const AdminUsers = () => {
                                                 {user.phone}
                                             </div>
                                         )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <Select
+                                            value={user.type}
+                                            onValueChange={(value) => handleRoleUpdate(user._id, value)}
+                                        >
+                                            <SelectTrigger className="w-[120px]">
+                                                <SelectValue placeholder="Select role" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="student">Student</SelectItem>
+                                                <SelectItem value="vendor">Vendor</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant={user.isActive ? "success" : "destructive"} className={user.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}>
