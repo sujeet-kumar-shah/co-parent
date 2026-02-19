@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 5 * 1024 * 1024 // 10 MB in bytes
+        fileSize: 70 * 1024 * 1024 // 70 MB in bytes
     }
 });
 
@@ -88,7 +88,7 @@ router.get('/listings', protect, async (req, res) => {
 // @desc    Update a listing
 // @route   PUT /api/vendor/listings/:id
 // @access  Private (Vendor only)
-router.put('/listings/:id', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 5 }]), async (req, res) => {
+router.put('/listings/:id', protect, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 10 }]), async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id);
 
