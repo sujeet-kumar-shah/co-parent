@@ -21,6 +21,7 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Terms from "./pages/Terms";
+import Feedback from "./pages/Feedback";
 import AuthUser from "./pages/authUser";
 import CounselingForm from "./pages/counselingForm";
 import AdminQuery from "./pages/admin/counselingQuery";
@@ -41,16 +42,17 @@ const App = () => (
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
-            <Route path="/login" element={ <AuthUser><Login /></AuthUser>}  />
+            <Route path="/login" element={<AuthUser><Login /></AuthUser>} />
             <Route path="/forgot-password" element={<AuthUser><Forget /></AuthUser>} />
-            <Route path="/verify-otp" element ={<AuthUser><Otp /></AuthUser>} />
-            <Route path="/reset-password" element ={<AuthUser><ResetPassword /></AuthUser>} />
+            <Route path="/verify-otp" element={<AuthUser><Otp /></AuthUser>} />
+            <Route path="/reset-password" element={<AuthUser><ResetPassword /></AuthUser>} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route path="/listings" element={<Listings />} />
             <Route path="/listing/:id" element={<ListingDetail />} />
-            <Route path="/counseling" element = {<CounselingForm />} />
+            <Route path="/counseling" element={<CounselingForm />} />
             {/* Protected User Route */}
             <Route path="/profile" element={<Profile />} />
 

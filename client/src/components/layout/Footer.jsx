@@ -13,6 +13,7 @@ const footerLinks = {
     { label: "About Us", href: "/about" },
     // { label: "Careers", href: "/careers" },
     { label: "Blog", href: "/blog" },
+    { label: "Feedback", href: "/feedback" },
     // { label: "Press", href: "/press" },
   ],
   support: [
@@ -30,11 +31,11 @@ const socialLinks = [
   { icon: Youtube, href: "https://youtube.com/@coparents_official?si=zaRKXH8Y4DUYDZUw", label: "Youtube" },
 ];
 const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  }
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
 export function Footer() {
   return (
     <footer className="bg-foreground text-primary-foreground">
@@ -112,7 +113,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"   
+                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors"
                   >
                     {link.label}
                   </Link>
