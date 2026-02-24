@@ -1,6 +1,8 @@
 import express from 'express';
 import Counseling from '../models/Counseling.js';
 import ListingQuery from '../models/ListingQuery.js';
+import Feedback from '../models/Feedback.js';
+
 const router = express.Router();
 
 router.post('/counselingForm', async (req, res) => {
@@ -10,7 +12,7 @@ router.post('/counselingForm', async (req, res) => {
         name: name,
         query_type: query_type,
         message: message,
-        contact_number: contact_number,
+        contact_number,
         percent: percentage,
     });
 
@@ -65,4 +67,42 @@ router.post('/listing-status/:id', async (req, res) => {
         data: queryData
     });
 })
+
+router.post('/feedback', async (req, res) => {
+    try {
+        const { name, rating, message } = req.body;
+        const feedbackData = new Feedback({
+            name,
+            rating,
+            message
+        });
+
+        const feedback = await feedbackData.save();
+        res.status(201).json({
+            success: true,
+            data: feedback
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+router.get('/feedback', async (req, res) => {
+    try {
+        const feedback = await Feedback.find().sort({ created_at: -1 });
+        res.status(200).json({
+            success: true,
+            data: feedback
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
 export default router;
