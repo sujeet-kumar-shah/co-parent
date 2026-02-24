@@ -46,6 +46,7 @@ import vendorRoutes from './routes/vendor.js';
 import adminRoutes from './routes/admin.routes.js';
 import queryRoutes from './routes/queryRoutes.js';
 import areasRoutes from './routes/areas.js';
+import reviewRoutes from './routes/reviews.js';
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -54,6 +55,7 @@ app.use('/api/vendor', vendorRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/query', queryRoutes);
 app.use('/api/areas', areasRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Serve uploaded files (images) statically
 // const __dirname = path.resolve(); // Removed in favor of top-level declaration
