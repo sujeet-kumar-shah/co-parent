@@ -48,7 +48,7 @@ const cities = ["All Cities", "Pune", "Bangalore", "Delhi", "Chennai", "Jaipur"]
 export default function Listings() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
   const initialCategory = searchParams.get("category") || "all";
   const initialCity = searchParams.get("city") || "";
 
@@ -73,15 +73,19 @@ export default function Listings() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await fetch(getApiUrl("/api/listings"));
+        const url = new URL(getApiUrl("/api/listings"));
+        if (user?._id) url.searchParams.append('userId', user._id);
+        const response = await fetch(url);
         const data = await response.json();
+        // If we want to show which items the user liked, we need the backend to support it.
+        // For now, I'll enhance the backend listings route to optionally return liked info if userId is provided.
         setListings(data);
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
     };
     fetchListings();
-  }, []);
+  }, [user]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -119,6 +123,25 @@ export default function Listings() {
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
+  };
+
+  const handleLike = async (e, listingId, currentLiked) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent navigation to detail page
+    try {
+      const response = await axios.post(getApiUrl('/api/listings/like'), {
+        propertyId: listingId,
+        liked: currentLiked,
+        userId: user._id
+      });
+      if (response.data.success) {
+        setListings(prev => prev.map(l =>
+          l._id === listingId ? { ...l, isLiked: response.data.liked } : l
+        ));
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
   };
 
   if (loading) {
@@ -340,8 +363,11 @@ export default function Listings() {
                               {listing.category}
                             </Badge>
                           </div>
-                          <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors">
-                            <Heart className="w-4 h-4 text-muted-foreground" />
+                          <button
+                            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center hover:bg-card transition-colors z-10"
+                            onClick={(e) => handleLike(e, listing._id, listing.isLiked)}
+                          >
+                            <Heart className={`w-4 h-4 ${listing.isLiked ? "fill-accent text-accent" : "text-muted-foreground"}`} />
                           </button>
                         </div>
                         <div className="p-5 flex-1">

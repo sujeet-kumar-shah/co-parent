@@ -50,6 +50,12 @@ export default function ListingDetail() {
     phone: '',
     message: '',
   })
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [reviewForm, setReviewForm] = useState({
+    rating: 5,
+    comment: '',
+  });
   const handleChange = (e) => {
     const { name, value } = e.target;
     setQueryForm(prev => ({ ...prev, [name]: value }));
@@ -111,7 +117,10 @@ export default function ListingDetail() {
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        const response = await fetch(getApiUrl(`/api/listings/${id}`));
+        const url = new URL(getApiUrl(`/api/listings/${id}`));
+        if (user?._id) url.searchParams.append('userId', user._id);
+
+        const response = await fetch(url);
         if (response.ok) {
           const data = await response.json();
           setListing(data.listing);
@@ -126,6 +135,21 @@ export default function ListingDetail() {
       }
     };
     fetchListing();
+
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(getApiUrl(`/api/reviews/listing/${id}`));
+        if (response.ok) {
+          const data = await response.json();
+          setReviews(data);
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      } finally {
+        setReviewsLoading(false);
+      }
+    };
+    fetchReviews();
   }, [id]);
 
   useEffect(() => {
@@ -198,6 +222,58 @@ export default function ListingDetail() {
       toast({
         title: "Error",
         description: "Failed to send inquiry. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!reviewForm.rating || !reviewForm.comment) {
+      toast({
+        title: "Missing fields",
+        description: "Please provide a rating and a comment.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await axios.post(getApiUrl('/api/reviews'), {
+        listingId: id,
+        rating: reviewForm.rating,
+        comment: reviewForm.comment,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("coparents_token")}`
+        }
+      });
+
+      if (response.status === 201) {
+        toast({
+          title: "Review Submitted!",
+          description: "Thank you for your feedback.",
+        });
+        setReviewForm({ rating: 5, comment: '' });
+        // Refresh reviews and listing data (for new avg rating)
+        const [reviewsRes, listingRes] = await Promise.all([
+          fetch(getApiUrl(`/api/reviews/listing/${id}`)),
+          fetch(getApiUrl(`/api/listings/${id}`))
+        ]);
+        if (reviewsRes.ok) setReviews(await reviewsRes.json());
+        if (listingRes.ok) {
+          const data = await listingRes.json();
+          setListing(data.listing);
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      toast({
+        title: "Error",
+        description: error.response?.data?.message || "Failed to submit review.",
         variant: "destructive",
       });
     } finally {
@@ -374,7 +450,7 @@ export default function ListingDetail() {
                 <TabsList className="w-full justify-start bg-secondary p-1 rounded-xl">
                   <TabsTrigger value="overview" className="rounded-lg">Overview</TabsTrigger>
                   <TabsTrigger value="amenities" className="rounded-lg">Amenities</TabsTrigger>
-                  <TabsTrigger value="reviews" className="rounded-lg hidden">Reviews</TabsTrigger>
+                  <TabsTrigger value="reviews" className="rounded-lg ">Reviews</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-6">
@@ -430,30 +506,69 @@ export default function ListingDetail() {
                       <span className="font-display text-2xl font-bold">{listing.rating}</span>
                     </div>
                   </div>
+
+                  {/* Review Submission Form */}
+                  <div className="p-6 bg-card rounded-2xl border border-border">
+                    <h3 className="font-semibold mb-4">Write a Review</h3>
+                    <form onSubmit={handleReviewSubmit} className="space-y-4">
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            type="button"
+                            onClick={() => setReviewForm(prev => ({ ...prev, rating: star }))}
+                            className="focus:outline-none"
+                          >
+                            <Star className={`w-6 h-6 ${reviewForm.rating >= star ? "fill-accent text-accent" : "text-muted-foreground"}`} />
+                          </button>
+                        ))}
+                      </div>
+                      <Textarea
+                        placeholder="Share your experience..."
+                        value={reviewForm.comment}
+                        onChange={(e) => setReviewForm(prev => ({ ...prev, comment: e.target.value }))}
+                        rows={3}
+                      />
+                      <Button type="submit" disabled={submitting}>
+                        {submitting ? "Submitting..." : "Submit Review"}
+                      </Button>
+                    </form>
+                  </div>
+
                   <div className="space-y-4">
-                    {mockReviews.map((review) => (
-                      <div key={review.id} className="p-5 bg-secondary rounded-xl">
-                        <div className="flex items-start gap-4">
-                          <img
-                            src={review.avatar}
-                            alt={review.name}
-                            className="w-12 h-12 rounded-full object-cover"
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-2">
-                              <h4 className="font-semibold">{review.name}</h4>
-                              <span className="text-sm text-muted-foreground">{review.date}</span>
+                    {reviewsLoading ? (
+                      <p className="text-center text-muted-foreground">Loading reviews...</p>
+                    ) : reviews.length > 0 ? (
+                      reviews.map((review) => (
+                        <div key={review._id} className="p-5 bg-secondary rounded-xl">
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                              {review.user?.profileImage ? (
+                                <img src={getUploadUrl(review.user.profileImage)} alt={review.user.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <span className="font-bold text-primary">{review.user?.name?.charAt(0) || 'U'}</span>
+                              )}
                             </div>
-                            <div className="flex gap-0.5 mb-2">
-                              {Array.from({ length: review.rating }).map((_, i) => (
-                                <Star key={i} className="w-4 h-4 fill-accent text-accent" />
-                              ))}
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="font-semibold">{review.user?.name || "Anonymous"}</h4>
+                                <span className="text-sm text-muted-foreground">
+                                  {new Date(review.createdAt).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <div className="flex gap-0.5 mb-2">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star key={i} className={`w-4 h-4 ${review.rating > i ? "fill-accent text-accent" : "text-muted-foreground"}`} />
+                                ))}
+                              </div>
+                              <p className="text-muted-foreground">{review.comment}</p>
                             </div>
-                            <p className="text-muted-foreground">{review.text}</p>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      <p className="text-center text-muted-foreground">No reviews yet. Be the first to review!</p>
+                    )}
                   </div>
                 </TabsContent>
               </Tabs>

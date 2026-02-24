@@ -70,7 +70,16 @@ router.get('/', async (req, res) => {
             if (sort === 'reviews') listingsQuery = listingsQuery.sort({ reviews: -1 });
         }
 
-        const listings = await listingsQuery;
+        let listings = await listingsQuery;
+
+        if (req.query.userId) {
+            const userLikes = await Liked.find({ userId: req.query.userId, status: true });
+            const likedListingIds = userLikes.map(l => l.listingId.toString());
+            listings = listings.map(l => ({
+                ...l.toObject(),
+                isLiked: likedListingIds.includes(l._id.toString())
+            }));
+        }
 
         res.json(listings);
     } catch (error) {
@@ -85,9 +94,9 @@ router.get('/:id', async (req, res) => {
     try {
         const listing = await Listing.findById(req.params.id).populate('vendor', 'name email').populate('location', 'name');
 
-        const likedStatus = await Liked.findOne({ listingId: req.params.id })
+        const userId = req.headers['user-id'] || req.query.userId;
+        const likedStatus = userId ? await Liked.findOne({ listingId: req.params.id, userId }) : null;
         if (listing) {
-            console.log(likedStatus);
             res.json({ listing, likedStatus });
         } else {
             res.status(404).json({ message: 'Listing not found' });
@@ -176,7 +185,8 @@ router.post('/like', async (req, res) => {
     try {
         const propertyId = req.body.propertyId;
         const userId = req.body.userId;
-        const status = !req.body.liked;
+        const liked = req.body.liked; // Current liked state from frontend
+        const status = !liked;
 
         if (!propertyId) {
             return res.status(400).json({ message: 'propertyId is required' });
