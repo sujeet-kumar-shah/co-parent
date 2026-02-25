@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote, ChevronLeft, ChevronRight, Zap, Tag, Headphones, Shield } from "lucide-react";
+import { getApiUrl } from "@/config/api";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
@@ -54,7 +55,7 @@ export function TestimonialsSection() {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/query/feedback`);
+        const response = await axios.get(getApiUrl('/api/query/feedback'));
         if (response.data.success && response.data.data.length > 0) {
           setFeedback(response.data.data);
         } else {
