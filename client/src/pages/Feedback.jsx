@@ -8,6 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import axios from 'axios';
+import { getApiUrl } from '@/config/api';
 
 const Feedback = () => {
     const { toast } = useToast();
@@ -30,17 +31,21 @@ const Feedback = () => {
             return;
         }
         setLoading(true);
+        const url = getApiUrl('/api/query/feedback');
         try {
-            await axios.post(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/query/feedback`, {
+            const response = await axios.post(url, {
                 ...formData,
                 rating
             });
-            toast({
-                title: "Feedback Submitted!",
-                description: "Thank you for your valuable feedback.",
-            });
-            setFormData({ name: '', message: '' });
-            setRating(0);
+
+            if (response.data.success) {
+                toast({
+                    title: "Feedback Submitted!",
+                    description: "Thank you for your valuable feedback.",
+                });
+                setFormData({ name: '', message: '' });
+                setRating(0);
+            }
         } catch (error) {
             toast({
                 title: "Submission Failed",
@@ -92,8 +97,8 @@ const Feedback = () => {
                                             >
                                                 <Star
                                                     className={`w-8 h-8 ${star <= (hover || rating)
-                                                            ? "fill-yellow-400 text-yellow-400"
-                                                            : "text-muted-foreground"
+                                                        ? "fill-yellow-400 text-yellow-400"
+                                                        : "text-muted-foreground"
                                                         }`}
                                                 />
                                             </button>
