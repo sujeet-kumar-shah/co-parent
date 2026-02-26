@@ -133,7 +133,7 @@ const AdminListings = () => {
                 </div>
                 <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                        Back
+                    Back
                 </Button>
             </div>
 
@@ -186,7 +186,7 @@ const AdminListings = () => {
                                         <div className="text-xs text-muted-foreground">{listing.vendor?.businessName}</div>
                                     </TableCell>
                                     <TableCell>{listing.vendor?.phone}</TableCell>
-                                    <TableCell>{listing.location.name}</TableCell>
+                                    <TableCell>{listing.location?.name}</TableCell>
                                     <TableCell>₹{listing.price}</TableCell>
                                     <TableCell>{getStatusBadge(listing.status)}</TableCell>
                                     <TableCell className="text-right">

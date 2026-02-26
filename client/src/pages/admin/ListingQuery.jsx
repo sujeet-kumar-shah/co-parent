@@ -80,7 +80,7 @@ const AdminListingQuery = () => {
             });
         }
     };
-    
+
     const handleBack = () => {
         navigate(-1);
     }
@@ -131,7 +131,7 @@ const AdminListingQuery = () => {
                             users.map((user) => (
                                 <TableRow key={user._id}>
                                     <TableCell className="font-medium">{user.name}</TableCell>
-                                    <TableCell> <Link to={`/listing/${user.listingId._id}`} className="hover:text-blue-600 transition-colors">{user.listingId.title}</Link></TableCell>
+                                    <TableCell> <Link to={`/listing/${user.listingId?._id}`} className="hover:text-blue-600 transition-colors">{user.listingId?.title}</Link></TableCell>
                                     <TableCell>{user.message}</TableCell>
                                     <TableCell>
 

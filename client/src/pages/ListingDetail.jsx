@@ -435,7 +435,7 @@ export default function ListingDetail() {
                 <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
-                    {listing.location.name}
+                    {listing.location?.name || (typeof listing.location === 'string' ? listing.location : 'N/A')}
                   </div>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 fill-accent text-accent" />
@@ -457,7 +457,7 @@ export default function ListingDetail() {
                   <div>
                     <h2 className="font-display text-xl font-semibold mb-4">About</h2>
                     <p className="text-muted-foreground whitespace-pre-line leading-relaxed">
-                      {listing.description || `Experience comfortable living at ${listing.title}. Located in ${listing.location}, we provide safe and affordable accommodation with all necessary amenities.`}
+                      {listing.description || `Experience comfortable living at ${listing.title}. Located in ${listing.location?.name || listing.location || 'your area'}, we provide safe and affordable accommodation with all necessary amenities.`}
                     </p>
                   </div>
 

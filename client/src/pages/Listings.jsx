@@ -103,7 +103,9 @@ export default function Listings() {
         const matchesSearch =
           !searchQuery ||
           listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          listing.location.toLowerCase().includes(searchQuery.toLowerCase());
+          (typeof listing.location === 'string'
+            ? listing.location.toLowerCase().includes(searchQuery.toLowerCase())
+            : listing.location?.name?.toLowerCase().includes(searchQuery.toLowerCase()));
         const matchesPrice =
           listing.price >= priceRange[0] && listing.price <= priceRange[1];
         return matchesCategory && matchesCity && matchesSearch && matchesPrice;
@@ -373,7 +375,7 @@ export default function Listings() {
                         <div className="p-5 flex-1">
                           <div className="flex items-center gap-1 text-sm text-muted-foreground mb-2">
                             <MapPin className="w-4 h-4" />
-                            {listing.location.name}
+                            {listing.location?.name || (typeof listing.location === 'string' ? listing.location : 'N/A')}
                           </div>
                           <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                             {listing.title}
