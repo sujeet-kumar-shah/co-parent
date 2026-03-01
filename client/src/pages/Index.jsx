@@ -14,9 +14,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="space-y-10 md:space-y-16">
-        <LaunchCountdown />
+        {/* <LaunchCountdown /> */}
         <div>
-          <CarouselCustomNavigation />
+          {/* <CarouselCustomNavigation /> */}
           <HeroSection />
         </div>
         {/* Offers Section */}
@@ -33,7 +33,7 @@ const Index = () => {
         {/* </section> */}
         <CategorySection />
         <TestimonialsSection />
-        <VideoCarouselSection />
+        {/* <VideoCarouselSection /> */}
         <PartnersSection />
 
         {/* <VendorCTASection /> */}

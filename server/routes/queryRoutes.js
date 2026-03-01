@@ -2,8 +2,35 @@ import express from 'express';
 import Counseling from '../models/Counseling.js';
 import ListingQuery from '../models/ListingQuery.js';
 import Feedback from '../models/Feedback.js';
+import User from '../models/User.js';
+import Listing from '../models/Listing.js';
 
 const router = express.Router();
+
+// @desc    Get Public Stats for Hero Section
+// @route   GET /api/query/stats
+// @access  Public
+router.get('/stats', async (req, res) => {
+    try {
+        const totalStudents = await User.countDocuments({ type: 'student' });
+        const totalVendors = await User.countDocuments({ type: 'vendor' });
+        const activeListings = await Listing.countDocuments({ status: 'approved' });
+
+        res.json({
+            success: true,
+            data: {
+                students: totalStudents,
+                vendors: totalVendors,
+                listings: activeListings
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
 
 router.post('/counselingForm', async (req, res) => {
     const { name, contact_number, message, percentage, query_type, userId } = req.body
