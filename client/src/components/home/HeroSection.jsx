@@ -1,13 +1,58 @@
-import { motion } from "framer-motion";
+import { motion, useSpring, useTransform, animate } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
 import heroImage from "@/assets/hero-students.jpg";
+import axios from "axios";
 
 export function HeroSection() {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    students: 0,
+    listings: 0,
+    vendors: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/query/stats");
+        if (response.data.success) {
+          const { students, vendors, listings } = response.data.data;
+          setStats({
+            students: 100 + students,
+            listings: 300 + listings,
+            vendors: 50 + vendors,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching hero stats:", error);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const CountUp = ({ value, suffix = "+" }) => {
+    const [displayValue, setDisplayValue] = useState(0);
+
+    useEffect(() => {
+      const controls = animate(0, value, {
+        duration: 2,
+        onUpdate: (latest) => setDisplayValue(Math.floor(latest)),
+      });
+      return () => controls.stop();
+    }, [value]);
+
+    return (
+      <span>
+        {displayValue.toLocaleString()}
+        {suffix}
+      </span>
+    );
+  };
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #f0eeff 0%, #e8f4ff 50%, #f5f3ff 100%)" }}>
+    <section className="relative mt-16 w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #f0eeff 0%, #e8f4ff 50%, #f5f3ff 100%)" }}>
       {/* Decorative blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#5A4BDA]/8 rounded-full blur-[80px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-72 h-72 bg-blue-400/8 rounded-full blur-[60px] pointer-events-none" />
@@ -61,12 +106,14 @@ export function HeroSection() {
             className="flex flex-wrap gap-6 mt-8 justify-center xl:justify-start"
           >
             {[
-              { value: "25,000+", label: "Happy Students" },
-              { value: "10,000+", label: "Verified Listings" },
-              { value: "500+", label: "Trusted Vendors" },
+              { value: stats.students, label: "Happy Students" },
+              { value: stats.listings, label: "Verified Listings" },
+              { value: stats.vendors, label: "Trusted Vendors" },
             ].map((stat, i) => (
               <div key={i} className="text-center xl:text-left">
-                <div className="text-xl font-bold text-[#1B2124]">{stat.value}</div>
+                <div className="text-xl font-bold text-[#1B2124]">
+                  <CountUp value={stat.value} />
+                </div>
                 <div className="text-xs text-[#3D3D3D]/70">{stat.label}</div>
               </div>
             ))}
