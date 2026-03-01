@@ -23,7 +23,7 @@ export function HeroSection() {
           setStats({
             students: 100 + students,
             listings: 300 + listings,
-            vendors: 50 + vendors,
+            vendors: 0 + vendors,
           });
         }
       } catch (error) {
