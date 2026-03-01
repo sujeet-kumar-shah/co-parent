@@ -21,9 +21,9 @@ export function HeroSection() {
         if (response.data.success) {
           const { students, vendors, listings } = response.data.data;
           setStats({
-            students: 25000 + students,
-            listings: 10000 + listings,
-            vendors: 500 + vendors,
+            students: 100 + students,
+            listings: 300 + listings,
+            vendors: 50 + vendors,
           });
         }
       } catch (error) {
