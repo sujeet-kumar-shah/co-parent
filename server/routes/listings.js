@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
             if (maxPrice) query.price.$lte = Number(maxPrice);
         }
 
-        let listingsQuery = Listing.find(query);
+        let listingsQuery = Listing.find(query).populate('location', 'name');
 
         if (sort) {
             if (sort === 'rating') listingsQuery = listingsQuery.sort({ rating: -1 });
