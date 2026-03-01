@@ -389,6 +389,11 @@ export default function ListingDetail() {
                 />
               ))}
             </div>
+            <div className="absolute top-4 left-4 flex gap-2">
+              <Badge className="bg-[#140D52] hover:bg-[#140D52] text-white border-none px-3 py-1 capitalize">
+                {listing.gender}
+              </Badge>
+            </div>
             <div className="absolute top-4 right-4 flex gap-2">
               <button
                 onClick={handleLike}
@@ -477,6 +482,28 @@ export default function ListingDetail() {
                       ))}
                     </div>
                   </div>
+
+                  {listing.nearbyCoaching && (
+                    <div>
+                      <h2 className="font-display text-xl font-semibold mb-4 text-[#140D52]">Nearby Coaching</h2>
+                      <div className="p-4 bg-secondary rounded-xl flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <Users className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <p className="font-medium">{listing.nearbyCoaching}</p>
+                            <p className="text-sm text-muted-foreground">Nearby Institute</p>
+                          </div>
+                        </div>
+                        {listing.coachingDistance && (
+                          <Badge variant="outline" className="text-primary border-primary">
+                            {listing.coachingDistance}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </TabsContent>
 
                 <TabsContent value="amenities">
@@ -646,18 +673,24 @@ export default function ListingDetail() {
                 {/* Vendor Info */}
                 <div className="border-t border-border mt-6 pt-6  hidden">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="font-display font-bold text-primary">SP</span>
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+                      {listing.vendor?.profileImage ? (
+                        <img src={getUploadUrl(listing.vendor.profileImage)} alt={listing.vendor.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="font-display font-bold text-primary">
+                          {listing.vendor?.name?.charAt(0) || 'V'}
+                        </span>
+                      )}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold">{vendorInfo.name}</span>
-                        {vendorInfo.verified && (
+                        <span className="font-semibold">{listing.vendor?.businessName || listing.vendor?.name}</span>
+                        {listing.vendor?.verified && (
                           <Check className="w-4 h-4 text-primary" />
                         )}
                       </div>
-                      <span className="text-sm text-muted-foreground">
-                        {vendorInfo.responseTime || "Responds quickly"}
+                      <span className="text-sm text-muted-foreground uppercase text-[10px] tracking-wider font-bold">
+                        {listing.vendor?.type || "Vendor"}
                       </span>
                     </div>
                   </div>
