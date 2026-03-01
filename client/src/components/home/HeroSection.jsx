@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import heroImage from "@/assets/hero-students.jpg";
 import axios from "axios";
+import { getApiUrl } from "@/config/api";
 
 export function HeroSection() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function HeroSection() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/query/stats");
+        const response = await axios.get(getApiUrl("/api/query/stats"));
         if (response.data.success) {
           const { students, vendors, listings } = response.data.data;
           setStats({
