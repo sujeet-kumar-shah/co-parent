@@ -21,9 +21,9 @@ export function HeroSection() {
         if (response.data.success) {
           const { students, vendors, listings } = response.data.data;
           setStats({
-            students: 100 + students,
-            listings: 300 + listings,
-            vendors: 0 + vendors,
+            students: 25000 + students,
+            listings: 10000 + listings,
+            vendors: 500 + vendors,
           });
         }
       } catch (error) {
@@ -80,7 +80,7 @@ export function HeroSection() {
 
           <div className="text-sm md:text-[16px] px-4 md:px-0 text-center xl:text-start text-[#3D3D3D] mb-6 xl:mb-10">
             Find verified hostels, PGs, coaching centers, libraries, and mess services — all in one place. Trusted by{" "}
-            <span className="font-semibold text-[#5A4BDA]">25,000+ students</span> across India.
+            <span className="font-semibold text-[#5A4BDA]">{stats.students.toLocaleString()}+ students</span> across India.
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center xl:justify-start">
