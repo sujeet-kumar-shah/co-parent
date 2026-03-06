@@ -5,7 +5,72 @@ import { protect } from '../middleware/authMiddleware.js';
 import { admin } from '../middleware/adminMiddleware.js';
 import counseling from '../models/Counseling.js'
 import ListingQuery from '../models/ListingQuery.js';
+import CounselingOption from '../models/CounselingOption.js';
 const router = express.Router();
+
+// --- Counseling Options Routes ---
+
+// @desc    Get all Counseling Options
+// @route   GET /api/admin/counseling-options
+// @access  Private/Admin
+router.get('/counseling-options', protect, admin, async (req, res) => {
+    try {
+        const options = await CounselingOption.find().sort({ createdAt: -1 });
+        res.json(options);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Create a Counseling Option
+// @route   POST /api/admin/counseling-options
+// @access  Private/Admin
+router.post('/counseling-options', protect, admin, async (req, res) => {
+    try {
+        const { name, value } = req.body;
+        const option = await CounselingOption.create({ name, value });
+        res.status(201).json(option);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Update a Counseling Option
+// @route   PUT /api/admin/counseling-options/:id
+// @access  Private/Admin
+router.put('/counseling-options/:id', protect, admin, async (req, res) => {
+    try {
+        const { name, value, isActive } = req.body;
+        const option = await CounselingOption.findById(req.params.id);
+        if (option) {
+            option.name = name || option.name;
+            option.value = value || option.value;
+            if (isActive !== undefined) option.isActive = isActive;
+            const updatedOption = await option.save();
+            res.json(updatedOption);
+        } else {
+            res.status(404).json({ message: 'Option not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Delete a Counseling Option
+// @route   DELETE /api/admin/counseling-options/:id
+// @access  Private/Admin
+router.delete('/counseling-options/:id', protect, admin, async (req, res) => {
+    try {
+        const option = await CounselingOption.findByIdAndDelete(req.params.id);
+        if (option) {
+            res.json({ message: 'Option deleted' });
+        } else {
+            res.status(404).json({ message: 'Option not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 // @desc    Get Admin Dashboard Stats
 // @route   GET /api/admin/stats

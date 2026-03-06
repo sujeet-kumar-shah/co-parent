@@ -55,6 +55,7 @@ const AdminLayout = () => {
         { icon: List, label: 'Manage Listings', path: '/admin/listings' },
         { icon: Users, label: 'Manage Users', path: '/admin/users' },
         { icon: Mail, label: 'Counseling Query', path: '/admin/query' },
+        { icon: LayoutDashboard, label: 'Counseling Options', path: '/admin/counseling-options' },
         { icon: BookMinus, label: 'Proeprty Query', path: '/admin/listing-query' },
         { icon: Locate, label: 'Area Location', path: '/admin/location' },
     ];
