@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,12 +14,26 @@ import { getApiUrl } from '@/config/api';
 const CounselingForm = () => {
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]);
     const { user } = useAuth();
 
-    // Scroll to top on mount
+    // Scroll to top and fetch options on mount
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetchOptions();
     }, []);
+
+    const fetchOptions = async () => {
+        try {
+            const response = await fetch(getApiUrl('/api/query/counseling-options'));
+            if (response.ok) {
+                const data = await response.json();
+                setCategories(data.data);
+            }
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -145,9 +159,9 @@ const CounselingForm = () => {
                                         name="query_type"
                                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                     >
-                                        <option value="jee">JEE</option>
-                                        <option value="neet">NEET</option>
-                                        <option value="privateCollage">Private Collage</option>
+                                        {categories.map((cat) => (
+                                            <option key={cat._id} value={cat.value}>{cat.name}</option>
+                                        ))}
                                     </select>
                                 </div>
                                 <div className="space-y-2">

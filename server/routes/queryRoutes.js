@@ -4,8 +4,21 @@ import ListingQuery from '../models/ListingQuery.js';
 import Feedback from '../models/Feedback.js';
 import User from '../models/User.js';
 import Listing from '../models/Listing.js';
+import CounselingOption from '../models/CounselingOption.js';
 
 const router = express.Router();
+
+// @desc    Get Active Counseling Options
+// @route   GET /api/query/counseling-options
+// @access  Public
+router.get('/counseling-options', async (req, res) => {
+    try {
+        const options = await CounselingOption.find({ isActive: true });
+        res.json({ success: true, data: options });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 // @desc    Get Public Stats for Hero Section
 // @route   GET /api/query/stats
@@ -35,7 +48,7 @@ router.get('/stats', async (req, res) => {
 router.post('/counselingForm', async (req, res) => {
     const { name, contact_number, message, percentage, query_type, userId } = req.body
     const queryData = new Counseling({
-        userId: userId,
+        userId: userId || null,
         name: name,
         query_type: query_type,
         message: message,
