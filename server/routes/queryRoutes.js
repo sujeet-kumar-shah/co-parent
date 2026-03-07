@@ -5,8 +5,21 @@ import Feedback from '../models/Feedback.js';
 import User from '../models/User.js';
 import Listing from '../models/Listing.js';
 import CounselingOption from '../models/CounselingOption.js';
+import Mentor from '../models/Mentor.js';
 
 const router = express.Router();
+
+// @desc    Get Active Mentors
+// @route   GET /api/query/mentors
+// @access  Public
+router.get('/mentors', async (req, res) => {
+    try {
+        const mentors = await Mentor.find({ isActive: true }).sort({ createdAt: -1 });
+        res.json({ success: true, data: mentors });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 // @desc    Get Active Counseling Options
 // @route   GET /api/query/counseling-options
@@ -46,9 +59,10 @@ router.get('/stats', async (req, res) => {
 });
 
 router.post('/counselingForm', async (req, res) => {
-    const { name, contact_number, message, percentage, query_type, userId } = req.body
+    const { name, contact_number, message, percentage, query_type, userId, mentorId } = req.body
     const queryData = new Counseling({
         userId: userId || null,
+        mentorId: mentorId || null,
         name: name,
         query_type: query_type,
         message: message,

@@ -6,6 +6,11 @@ const QyerySchema = new mongoose.Schema({
         ref: 'User',
         required: false,
     },
+    mentorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentor',
+        required: false,
+    },
     name: {
         type: String,
         require: true,

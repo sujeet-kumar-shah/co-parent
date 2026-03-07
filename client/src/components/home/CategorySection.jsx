@@ -4,7 +4,7 @@ import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight, Brain, U
 import { useAuth } from "@/context/AuthContext";
 
 const categories = [
-   {
+  {
     id: "mentorship",
     name: "Mentorship",
     description: "Get guidance from IIT, NEET toppers & experienced mentors",
@@ -22,7 +22,7 @@ const categories = [
     color: "coaching",
     gradient: "from-coaching/20 to-coaching/5",
   },
-   {
+  {
     id: "school-admission",
     name: "School Admission Support",
     description: "Professional assistance for school admissions & entrance exams",
@@ -96,7 +96,9 @@ export function CategorySection() {
   const { isAuthenticated, user } = useAuth();
 
   const handleCategoryClick = (categoryId) => {
-    if (isAuthenticated && user.type === 'student' && (categoryId === 'counseling' || categoryId === 'mentorship')) {
+    if (isAuthenticated && user.type === 'student' && categoryId === 'mentorship') {
+      navigate(`/mentors`);
+    } else if (isAuthenticated && user.type === 'student' && categoryId === 'counseling') {
       navigate(`/counseling`);
     } else if (isAuthenticated && user.type === 'student') {
       navigate(`/listings?category=${categoryId}`);
@@ -125,7 +127,7 @@ export function CategorySection() {
             Everything Students Need
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            From accommodation to education, we've got all your essential services covered 
+            From accommodation to education, we've got all your essential services covered
             in one place.
           </p>
         </motion.div>

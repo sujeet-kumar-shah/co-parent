@@ -92,7 +92,7 @@ const AdminQuery = () => {
                 </div>
                 <Button variant="outline" className="inline-flex items-center gap-2  text-muted-foreground hover:text-foreground mb-6" id="backbutton" onClick={handleBack}>
                     <ArrowLeft className="w-4 h-4" />
-                        Back
+                    Back
                 </Button>
             </div>
 
@@ -111,7 +111,7 @@ const AdminQuery = () => {
                             <TableHead>About</TableHead>
                             <TableHead>message</TableHead>
                             <TableHead>Contact Number</TableHead>
-                            {/* <TableHead>percentage</TableHead> */}
+                            <TableHead>Selected Mentor</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -134,13 +134,15 @@ const AdminQuery = () => {
                                     <TableCell>{user.query_type}</TableCell>
                                     <TableCell>{user.message}</TableCell>
                                     <TableCell>
-
                                         <div className="text-sm text-muted-foreground capitalize">
                                             {user.contact_number}
                                         </div>
-
                                     </TableCell>
-                                    {/* <TableCell>{user.percent}</TableCell> */}
+                                    <TableCell>
+                                        <div className="text-sm font-medium">
+                                            {user.mentorId?.name || 'General'}
+                                        </div>
+                                    </TableCell>
                                     <TableCell>
                                         <Badge variant={user.status == 'success' ? 'Success' : 'Pending'} className={user.status == "pending" ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}>
                                             {user.status == 'success' ? 'Success' : 'Pending'}

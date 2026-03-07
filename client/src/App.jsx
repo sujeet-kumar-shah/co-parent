@@ -31,6 +31,8 @@ import ResetPassword from "./pages/resetPassword";
 import AdminListingQuery from "./pages/admin/ListingQuery";
 import AdminLocation from "./pages/admin/AdminAreaLocation";
 import AdminCounselingOptions from "./pages/admin/AdminCounselingOptions";
+import AdminMentors from "./pages/admin/AdminMentors";
+import MentorsPage from "./pages/MentorsPage";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -54,6 +56,7 @@ const App = () => (
             <Route path="/listings" element={<Listings />} />
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/counseling" element={<CounselingForm />} />
+            <Route path="/mentors" element={<MentorsPage />} />
             {/* Protected User Route */}
             <Route path="/profile" element={<Profile />} />
 
@@ -64,6 +67,7 @@ const App = () => (
               <Route path="users" element={<AdminUsers />} />
               <Route path="query" element={<AdminQuery />} />
               <Route path="counseling-options" element={<AdminCounselingOptions />} />
+              <Route path="mentors" element={<AdminMentors />} />
               <Route path="listing-query" element={<AdminListingQuery />} />
               <Route path="location" element={<AdminLocation />} />
             </Route>

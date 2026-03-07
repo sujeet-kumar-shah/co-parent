@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,8 @@ const CounselingForm = () => {
     const [loading, setLoading] = useState(false);
     const [categories, setCategories] = useState([]);
     const { user } = useAuth();
+    const location = useLocation();
+    const mentorId = location.state?.mentorId;
 
     // Scroll to top and fetch options on mount
     useEffect(() => {
@@ -42,6 +45,7 @@ const CounselingForm = () => {
         const data = e.currentTarget
         const formData = new FormData(data);
         formData.append('userId', user._id);
+        if (mentorId) formData.append('mentorId', mentorId);
         const payloadObject = Object.fromEntries(formData.entries())
         const url = getApiUrl("/api/query/counselingForm")
         try {
