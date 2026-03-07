@@ -1,4 +1,9 @@
 import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import multer from 'multer';
 import User from '../models/User.js';
 import Listing from '../models/Listing.js';
 import { protect } from '../middleware/authMiddleware.js';
@@ -6,7 +11,104 @@ import { admin } from '../middleware/adminMiddleware.js';
 import counseling from '../models/Counseling.js'
 import ListingQuery from '../models/ListingQuery.js';
 import CounselingOption from '../models/CounselingOption.js';
+import Mentor from '../models/Mentor.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '..', 'uploads');
+        if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5 MB
+    }
+});
+
+// --- Mentor Routes ---
+
+// @desc    Get all Mentors
+// @route   GET /api/admin/mentors
+// @access  Private/Admin
+router.get('/mentors', protect, admin, async (req, res) => {
+    try {
+        const mentors = await Mentor.find().sort({ createdAt: -1 });
+        res.json(mentors);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Create a Mentor
+// @route   POST /api/admin/mentors
+// @access  Private/Admin
+router.post('/mentors', protect, admin, upload.single('image'), async (req, res) => {
+    try {
+        const { name, counselingType, description } = req.body;
+        const imageUrl = req.file ? req.file.filename : req.body.imageUrl;
+        const mentor = await Mentor.create({ name, counselingType, description, imageUrl });
+        res.status(201).json(mentor);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Update a Mentor
+// @route   PUT /api/admin/mentors/:id
+// @access  Private/Admin
+router.put('/mentors/:id', protect, admin, upload.single('image'), async (req, res) => {
+    try {
+        const { name, counselingType, description, isActive } = req.body;
+        const mentor = await Mentor.findById(req.params.id);
+        if (mentor) {
+            mentor.name = name || mentor.name;
+            mentor.counselingType = counselingType || mentor.counselingType;
+            mentor.description = description || mentor.description;
+            if (req.file) {
+                mentor.imageUrl = req.file.filename;
+            } else if (req.body.imageUrl !== undefined) {
+                mentor.imageUrl = req.body.imageUrl;
+            }
+            if (isActive !== undefined) mentor.isActive = isActive;
+
+            const updatedMentor = await mentor.save();
+            res.json(updatedMentor);
+        } else {
+            res.status(404).json({ message: 'Mentor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Delete a Mentor
+// @route   DELETE /api/admin/mentors/:id
+// @access  Private/Admin
+router.delete('/mentors/:id', protect, admin, async (req, res) => {
+    try {
+        const mentor = await Mentor.findByIdAndDelete(req.params.id);
+        if (mentor) {
+            res.json({ message: 'Mentor deleted' });
+        } else {
+            res.status(404).json({ message: 'Mentor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 // --- Counseling Options Routes ---
 
@@ -242,7 +344,7 @@ router.get('/query', async (req, res) => {
             query.type = { $ne: 'admin' };
         }
 
-        const queryData = await counseling.find(query);
+        const queryData = await counseling.find(query).populate('mentorId', 'name');
         res.json(queryData);
     } catch (error) {
         res.status(500).json({ message: error.message });
