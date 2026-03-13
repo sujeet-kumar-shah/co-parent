@@ -76,6 +76,15 @@ const categories = [
     color: "counseling",
     gradient: "from-counseling/20 to-counseling/5",
   },
+  {
+    id: "formUpdate",
+    name: "Exam Form Updates",
+    description: "Get Update of latest exam form details and also door step form filling service available",
+    icon: Brain,
+    count: 1400,
+    color: "counseling",
+    gradient: "from-counseling/80 to-counseling/5",
+  },
 ];
 
 const containerVariants = {
@@ -121,7 +130,7 @@ export function CategorySection() {
           className="text-center mb-12"
         >
           <span className="text-primary font-medium text-sm tracking-wider uppercase">
-            Our Services
+            Our Solutions
           </span>
           <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-4">
             Everything Students Need
