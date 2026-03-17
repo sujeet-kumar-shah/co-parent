@@ -76,15 +76,15 @@ const categories = [
     color: "counseling",
     gradient: "from-counseling/20 to-counseling/5",
   },
-  {
-    id: "formUpdate",
-    name: "Exam Form Updates",
-    description: "Get Update of latest exam form details and also door step form filling service available",
-    icon: Brain,
-    count: 1400,
-    color: "counseling",
-    gradient: "from-counseling/80 to-counseling/5",
-  },
+  // {
+  //   id: "formUpdate",
+  //   name: "Exam Form Updates",
+  //   description: "Get Update of latest exam form details and also door step form filling service available",
+  //   icon: Brain,
+  //   count: 1400,
+  //   color: "counseling",
+  //   gradient: "from-counseling/80 to-counseling/5",
+  // },
 ];
 
 const containerVariants = {
