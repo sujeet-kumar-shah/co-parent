@@ -119,8 +119,7 @@ const CounselingForm = () => {
                                         <div>
                                             <h3 className="font-medium mb-1">Visit Us</h3>
                                             <p className="text-muted-foreground">
-                                                123 Education Hub, Knowledge Park<br />
-                                                Pune, Maharashtra 411001
+                                                117,safalya read, rajeev gandhi nagar kota, Rajasthan, India
                                             </p>
                                         </div>
                                     </div>

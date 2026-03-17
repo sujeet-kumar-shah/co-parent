@@ -69,13 +69,14 @@ export function HeroSection() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-[#5A4BDA]/10 border border-[#5A4BDA]/20 rounded-full px-4 py-1.5 mb-4">
             <span className="w-2 h-2 bg-[#5A4BDA] rounded-full animate-pulse" />
-            <span className="text-[#5A4BDA] text-sm font-semibold">India's #1 Student Services Platform</span>
+            <span className="text-[#5A4BDA] text-sm font-semibold">India's #1 Student Solution Platform</span>
           </div>
 
           <h1 className="font-bold text-2xl px-[50px] md:px-0 text-[#1B2124] xl:text-[40px] md:text-[32px] md:leading-[48px] xl:leading-[50px] mb-[6px]">
-            India's{" "}
+            All Student Problems, <span className="text-[ #66ff99]">One Complete Solution</span>{" "}Your Trusted Local Guardian.
+            {/* India's{" "}
             <span className="text-[#5A4BDA]">Trusted &amp; Affordable</span>{" "}
-            Student Guardian Ecosystem
+            Student Guardian Ecosystem */}
           </h1>
 
           <div className="text-sm md:text-[16px] px-4 md:px-0 text-center xl:text-start text-[#3D3D3D] mb-6 xl:mb-10">
