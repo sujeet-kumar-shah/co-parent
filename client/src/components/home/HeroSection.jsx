@@ -73,7 +73,7 @@ export function HeroSection() {
           </div>
 
           <h1 className="font-bold text-2xl px-[50px] md:px-0 text-[#1B2124] xl:text-[40px] md:text-[32px] md:leading-[48px] xl:leading-[50px] mb-[6px]">
-            All Student Problems, <span className="text-[ #66ff99]">One Complete Solution</span>{" "}Your Trusted Local Guardian.
+            All Student Problems, <span className="text-[#5A4BDA]">One Complete Solution</span>{" "}Your Trusted Local Guardian.
             {/* India's{" "}
             <span className="text-[#5A4BDA]">Trusted &amp; Affordable</span>{" "}
             Student Guardian Ecosystem */}
@@ -87,14 +87,14 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center xl:justify-start">
             <button
               onClick={() => navigate("/listings")}
-              className="px-[28px] py-[14px] w-full sm:w-[200px] rounded-md hover:bg-[#4437B8] transition-all duration-200 bg-[#5A4BDA] items-center text-white font-semibold text-[17px] flex items-center justify-center gap-2"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md h-[48px] rounded-md px-[28px] text-[17px] w-full sm:w-[200px]"
             >
               Get Started
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={() => navigate("/login", { state: { startTab: "register", authType: "vendor" } })}
-              className="px-[28px] py-[14px] w-full sm:w-[220px] rounded-md border-2 border-[#5A4BDA] text-[#5A4BDA] font-semibold text-[17px] hover:bg-[#5A4BDA]/5 transition-all duration-200"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-primary bg-background text-primary hover:bg-primary/10 shadow-sm hover:shadow-md h-[48px] rounded-md px-[28px] text-[17px] w-full sm:w-[220px]"
             >
               List Your Service
             </button>
