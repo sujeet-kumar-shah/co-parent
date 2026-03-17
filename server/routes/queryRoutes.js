@@ -6,6 +6,7 @@ import User from '../models/User.js';
 import Listing from '../models/Listing.js';
 import CounselingOption from '../models/CounselingOption.js';
 import Mentor from '../models/Mentor.js';
+import School from '../models/School.js';
 
 const router = express.Router();
 
@@ -16,6 +17,18 @@ router.get('/mentors', async (req, res) => {
     try {
         const mentors = await Mentor.find({ isActive: true }).sort({ createdAt: -1 });
         res.json({ success: true, data: mentors });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// @desc    Get Active Schools
+// @route   GET /api/query/schools
+// @access  Public
+router.get('/schools', async (req, res) => {
+    try {
+        const schools = await School.find({ isActive: true }).sort({ createdAt: -1 });
+        res.json({ success: true, data: schools });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

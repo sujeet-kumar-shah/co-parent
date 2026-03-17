@@ -12,6 +12,7 @@ import counseling from '../models/Counseling.js'
 import ListingQuery from '../models/ListingQuery.js';
 import CounselingOption from '../models/CounselingOption.js';
 import Mentor from '../models/Mentor.js';
+import School from '../models/School.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -104,6 +105,78 @@ router.delete('/mentors/:id', protect, admin, async (req, res) => {
             res.json({ message: 'Mentor deleted' });
         } else {
             res.status(404).json({ message: 'Mentor not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// --- School Routes ---
+
+// @desc    Get all Schools
+// @route   GET /api/admin/schools
+// @access  Private/Admin
+router.get('/schools', protect, admin, async (req, res) => {
+    try {
+        const schools = await School.find().sort({ createdAt: -1 });
+        res.json(schools);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Create a School
+// @route   POST /api/admin/schools
+// @access  Private/Admin
+router.post('/schools', protect, admin, upload.single('image'), async (req, res) => {
+    try {
+        const { name, board, description } = req.body;
+        const imageUrl = req.file ? req.file.filename : req.body.imageUrl;
+        const school = await School.create({ name, board, description, imageUrl });
+        res.status(201).json(school);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Update a School
+// @route   PUT /api/admin/schools/:id
+// @access  Private/Admin
+router.put('/schools/:id', protect, admin, upload.single('image'), async (req, res) => {
+    try {
+        const { name, board, description, isActive } = req.body;
+        const school = await School.findById(req.params.id);
+        if (school) {
+            school.name = name || school.name;
+            school.board = board || school.board;
+            school.description = description || school.description;
+            if (req.file) {
+                school.imageUrl = req.file.filename;
+            } else if (req.body.imageUrl !== undefined) {
+                school.imageUrl = req.body.imageUrl;
+            }
+            if (isActive !== undefined) school.isActive = isActive;
+
+            const updatedSchool = await school.save();
+            res.json(updatedSchool);
+        } else {
+            res.status(404).json({ message: 'School not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// @desc    Delete a School
+// @route   DELETE /api/admin/schools/:id
+// @access  Private/Admin
+router.delete('/schools/:id', protect, admin, async (req, res) => {
+    try {
+        const school = await School.findByIdAndDelete(req.params.id);
+        if (school) {
+            res.json({ message: 'School deleted' });
+        } else {
+            res.status(404).json({ message: 'School not found' });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });

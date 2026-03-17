@@ -13,6 +13,7 @@ import {
     User,
     Locate,
     BookMinus,
+    BookOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
@@ -57,6 +58,7 @@ const AdminLayout = () => {
         { icon: Mail, label: 'Counseling Query', path: '/admin/query' },
         { icon: LayoutDashboard, label: 'Counseling Options', path: '/admin/counseling-options' },
         { icon: User, label: 'Manage Mentors', path: '/admin/mentors' },
+        { icon: BookOpen, label: 'Manage Schools', path: '/admin/schools' },
         { icon: BookMinus, label: 'Proeprty Query', path: '/admin/listing-query' },
         { icon: Locate, label: 'Area Location', path: '/admin/location' },
     ];

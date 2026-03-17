@@ -83,7 +83,7 @@ export function TestimonialsSection() {
 
   return (
     <>
-      <section className="py-16 bg-background overflow-hidden">
+      <section className="py-8 bg-background overflow-hidden">
         <div className="container px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
