@@ -32,7 +32,9 @@ import AdminListingQuery from "./pages/admin/ListingQuery";
 import AdminLocation from "./pages/admin/AdminAreaLocation";
 import AdminCounselingOptions from "./pages/admin/AdminCounselingOptions";
 import AdminMentors from "./pages/admin/AdminMentors";
+import AdminSchools from "./pages/admin/AdminSchools";
 import MentorsPage from "./pages/MentorsPage";
+import SchoolsPage from "./pages/SchoolsPage";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -57,6 +59,7 @@ const App = () => (
             <Route path="/listing/:id" element={<ListingDetail />} />
             <Route path="/counseling" element={<CounselingForm />} />
             <Route path="/mentors" element={<MentorsPage />} />
+            <Route path="/schools" element={<SchoolsPage />} />
             {/* Protected User Route */}
             <Route path="/profile" element={<Profile />} />
 
@@ -68,6 +71,7 @@ const App = () => (
               <Route path="query" element={<AdminQuery />} />
               <Route path="counseling-options" element={<AdminCounselingOptions />} />
               <Route path="mentors" element={<AdminMentors />} />
+              <Route path="schools" element={<AdminSchools />} />
               <Route path="listing-query" element={<AdminListingQuery />} />
               <Route path="location" element={<AdminLocation />} />
             </Route>

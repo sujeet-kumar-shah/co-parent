@@ -107,6 +107,8 @@ export function CategorySection() {
   const handleCategoryClick = (categoryId) => {
     if (isAuthenticated && user.type === 'student' && categoryId === 'mentorship') {
       navigate(`/mentors`);
+    } else if (isAuthenticated && user.type === 'student' && categoryId === 'school-admission') {
+      navigate(`/schools`);
     } else if (isAuthenticated && user.type === 'student' && categoryId === 'counseling') {
       navigate(`/counseling`);
     } else if (isAuthenticated && user.type === 'student') {
