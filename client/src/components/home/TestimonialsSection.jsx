@@ -1,16 +1,106 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Star, Quote, ChevronLeft, ChevronRight, Zap, Tag, Headphones, Shield } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, Home, Utensils, Landmark, BookOpen, HeartHandshake, School } from "lucide-react";
 import { getApiUrl } from "@/config/api";
 import useEmblaCarousel from 'embla-carousel-react';
 import { Button } from "@/components/ui/button";
 import axios from 'axios';
 
 const features = [
-  { icon: Zap, title: "Quick & Easy Bookings", desc: "Time is money. Save both when you book with us." },
-  { icon: Tag, title: "Price-Match Guarantee", desc: "Find a lower price and we'll match it." },
-  { icon: Headphones, title: "24x7 Assistance", desc: "If you have a doubt or a query, we're always a call away." },
-  { icon: Shield, title: "100% Verified Listings", desc: "We promise to deliver what you see on the website." },
+  {
+    icon: Home,
+    title: "Safe & Budget Living Support",
+    bgGradient: "from-blue-500/20 to-blue-500/5",
+    borderColor: "border-blue-500/10",
+    hoverBorderColor: "group-hover:border-blue-500/30",
+    iconColor: "text-blue-500",
+    accent: "group-hover:text-blue-500",
+    hoverShadow: "hover:shadow-blue-500/10",
+    points: [
+      "Verified PG / Hostel / Flats",
+      "Budget-based recommendations",
+      "Safe locations near coaching institutes",
+      "Regular monitoring & support"
+    ]
+  },
+  {
+    icon: Utensils,
+    title: "Food & Mess Support System",
+    bgGradient: "from-orange-500/20 to-orange-500/5",
+    borderColor: "border-orange-500/10",
+    hoverBorderColor: "group-hover:border-orange-500/30",
+    iconColor: "text-orange-500",
+    accent: "group-hover:text-orange-500",
+    hoverShadow: "hover:shadow-orange-500/10",
+    points: [
+      "Shortlisted hygienic mess options",
+      "Monthly food quality monitoring",
+      "Menu sharing with parents",
+      "Home-style tiffin from local families"
+    ]
+  },
+  {
+    icon: Landmark,
+    title: "Coaching Admission Support",
+    bgGradient: "from-emerald-500/20 to-emerald-500/5",
+    borderColor: "border-emerald-500/10",
+    hoverBorderColor: "group-hover:border-emerald-500/30",
+    iconColor: "text-emerald-500",
+    accent: "group-hover:text-emerald-500",
+    hoverShadow: "hover:shadow-emerald-500/10",
+    points: [
+      "Minimum possible fee negotiation",
+      "Scholarship guidance",
+      "Right batch selection assistance"
+    ]
+  },
+  {
+    icon: BookOpen,
+    title: "Academic & Mentorship Support",
+    bgGradient: "from-violet-500/20 to-violet-500/5",
+    borderColor: "border-violet-500/10",
+    hoverBorderColor: "group-hover:border-violet-500/30",
+    iconColor: "text-violet-500",
+    accent: "group-hover:text-violet-500",
+    hoverShadow: "hover:shadow-violet-500/10",
+    points: [
+      "Extra study materials",
+      "Doubt-solving support",
+      "Mentorship from IIT / Medical students",
+      "Weekly performance tracking & updates"
+    ]
+  },
+  {
+    icon: HeartHandshake,
+    title: "Emotional & Exam Support",
+    bgGradient: "from-rose-500/20 to-rose-500/5",
+    borderColor: "border-rose-500/10",
+    hoverBorderColor: "group-hover:border-rose-500/30",
+    iconColor: "text-rose-500",
+    accent: "group-hover:text-rose-500",
+    hoverShadow: "hover:shadow-rose-500/10",
+    points: [
+      "Regular check-ins",
+      "Stress management during exams",
+      "Complete JEE/NEET form filling support",
+      "College counselling & admission assistance"
+    ]
+  },
+  {
+    icon: School,
+    title: "School & Board Support",
+    bgGradient: "from-amber-500/20 to-amber-500/5",
+    borderColor: "border-amber-500/10",
+    hoverBorderColor: "group-hover:border-amber-500/30",
+    iconColor: "text-amber-500",
+    accent: "group-hover:text-amber-500",
+    hoverShadow: "hover:shadow-amber-500/10",
+    points: [
+      "Dummy school admission guidance",
+      "Board registration support",
+      "Documentation assistance"
+    ]
+  },
 ];
 
 const fallbackTestimonials = [
@@ -163,8 +253,11 @@ export function TestimonialsSection() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-gradient-to-b from-background to-secondary/30">
-        <div className="container px-4">
+      <section className="py-24 relative overflow-hidden bg-background">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="container relative z-10 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -172,31 +265,48 @@ export function TestimonialsSection() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Why Choose CO-PARENTS?
+            <span className="text-primary font-medium text-sm tracking-wider uppercase mb-3 block">
+              The CO-PARENTS Advantage
+            </span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">
+              Why Choose <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">CO-PARENTS?</span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Book Your Perfect Accommodation – Take the hassle out of securing your student home for the best years of your life
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+              Your Local Guardians in Kota – Providing complete support from living to college admissions, ensuring a stress-free environment for students and parents.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group p-8 bg-card rounded-2xl shadow-card border border-border/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-2"
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className={`group relative p-8 bg-card/60 backdrop-blur-xl rounded-[2rem] shadow-sm border border-border/50 hover:shadow-2xl ${feature.hoverShadow} transition-all duration-500 hover:-translate-y-2 overflow-hidden`}
                 >
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="w-8 h-8 text-primary" />
+                  {/* Hover Gradient Background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.bgGradient} via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+
+                  <div className="relative z-10">
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.bgGradient} flex items-center justify-center mb-8 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shadow-inner border ${feature.borderColor} ${feature.hoverBorderColor}`}>
+                      <Icon className={`w-8 h-8 ${feature.iconColor} transition-transform duration-500`} />
+                    </div>
+                    <h3 className={`font-display text-2xl font-bold mb-4 ${feature.accent} transition-colors duration-300`}>
+                      {feature.title}
+                    </h3>
+                    <ul className="text-muted-foreground leading-relaxed text-[15px] space-y-2.5">
+                      {feature.points.map((point, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className={`${feature.iconColor} mr-2 text-lg leading-none mt-[2px] opacity-80`}>•</span>
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <h3 className="font-display text-xl font-bold mb-3">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
                 </motion.div>
               );
             })}
