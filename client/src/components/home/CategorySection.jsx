@@ -1,22 +1,31 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight, Brain, Users, BookOpen } from "lucide-react";
+import { Building2, Home, GraduationCap, Library, Utensils, ArrowRight, Brain, Users, BookOpen, FileText } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 const categories = [
   {
-    id: "mentorship",
-    name: "Mentorship",
-    description: "Get guidance from IIT, NEET toppers & experienced mentors",
-    icon: Users,
-    count: 2500,
+    id: "hostel+pg",
+    name: "Safe & Budget Housing (Hostels, PG, Flats)",
+    description: "Verified budget-friendly accommodations with regular check-ups",
+    icon: Building2,
+    count: 5700,
     color: "hostel",
     gradient: "from-hostel/20 to-hostel/5",
   },
   {
+    id: "mess",
+    name: "Best Mess & Home-made Food From Local Homes",
+    description: "Hygienic, high-quality mess and home-style tiffin services",
+    icon: Utensils,
+    count: 1400,
+    color: "mess",
+    gradient: "from-mess/20 to-mess/5",
+  },
+  {
     id: "coaching",
-    name: "Coaching",
-    description: "Top-rated coaching institutes for competitive exams & school",
+    name: "Coaching Admission Support",
+    description: "Expert guidance for selecting the best coaching institutes",
     icon: GraduationCap,
     count: 1800,
     color: "coaching",
@@ -24,67 +33,49 @@ const categories = [
   },
   {
     id: "school-admission",
-    name: "School Admission Support",
-    description: "Professional assistance for school admissions & entrance exams",
+    name: "School Admission & Board Support",
+    description: "Reliable support for school admissions and board preparations",
     icon: BookOpen,
     count: 980,
     color: "coaching",
     gradient: "from-coaching/20 to-coaching/5",
   },
   {
-    id: "hostel",
-    name: "Hostels",
-    description: "Safe & secure hostels near your college with all amenities",
-    icon: Building2,
+    id: "mentorship",
+    name: "Academic and Mentorship Support",
+    description: "Get guidance from IIT, NEET toppers & experienced mentors",
+    icon: Users,
     count: 2500,
     color: "hostel",
     gradient: "from-hostel/20 to-hostel/5",
   },
   {
-    id: "pg",
-    name: "PG Accommodations",
-    description: "Comfortable paying guest facilities with home-like environment",
-    icon: Home,
-    count: 3200,
-    color: "pg",
-    gradient: "from-pg/20 to-pg/5",
+    id: "emotional-counseling",
+    name: "Emotional & Stress Management Counselling",
+    description: "Professional support to help you manage stress and anxiety",
+    icon: Brain,
+    count: 1200,
+    color: "counseling",
+    gradient: "from-counseling/20 to-counseling/5",
   },
   {
-    id: "mess",
-    name: "Mess & Tiffin",
-    description: "Hygienic and affordable meal services for students",
-    icon: Utensils,
-    count: 1400,
-    color: "mess",
-    gradient: "from-mess/20 to-mess/5",
-  },
-  {
-    id: "library",
-    name: "Libraries",
-    description: "Quiet study spaces with AC and all-day access",
-    icon: Library,
-    count: 950,
+    id: "form-update",
+    name: "Examination & Forms Related Updates",
+    description: "Get updates of latest exam forms and filling assistance",
+    icon: FileText,
+    count: 1500,
     color: "library",
     gradient: "from-library/20 to-library/5",
   },
   {
-    id: "counseling",
-    name: "Career Counseling",
-    description: "Expert guidance for JEE, NEET, college admission & career planning",
-    icon: Brain,
+    id: "college-counseling",
+    name: "Counselling-JEE/NEET & Pvt. College",
+    description: "Expert career counseling for JEE, NEET, and college admissions",
+    icon: Library,
     count: 1400,
     color: "counseling",
     gradient: "from-counseling/20 to-counseling/5",
   },
-  // {
-  //   id: "formUpdate",
-  //   name: "Exam Form Updates",
-  //   description: "Get Update of latest exam form details and also door step form filling service available",
-  //   icon: Brain,
-  //   count: 1400,
-  //   color: "counseling",
-  //   gradient: "from-counseling/80 to-counseling/5",
-  // },
 ];
 
 const containerVariants = {
@@ -105,14 +96,16 @@ export function CategorySection() {
   const { isAuthenticated, user } = useAuth();
 
   const handleCategoryClick = (categoryId) => {
-    if (isAuthenticated && user.type === 'student' && categoryId === 'mentorship') {
-      navigate(`/mentors`);
-    } else if (isAuthenticated && user.type === 'student' && categoryId === 'school-admission') {
-      navigate(`/schools`);
-    } else if (isAuthenticated && user.type === 'student' && categoryId === 'counseling') {
-      navigate(`/counseling`);
-    } else if (isAuthenticated && user.type === 'student') {
-      navigate(`/listings?category=${categoryId}`);
+    if (isAuthenticated && user.type === 'student') {
+      if (categoryId === 'mentorship') {
+        navigate(`/mentors`);
+      } else if (categoryId === 'school-admission') {
+        navigate(`/schools`);
+      } else if (categoryId === 'emotional-counseling' || categoryId === 'college-counseling') {
+        navigate(`/counseling`);
+      } else {
+        navigate(`/listings?category=${categoryId}`);
+      }
     } else if (isAuthenticated && user.type === 'vendor') {
       navigate("/", { state: true });
     } else if (isAuthenticated && user.type === 'Admin') {
