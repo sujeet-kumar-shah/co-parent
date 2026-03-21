@@ -166,7 +166,7 @@ export function CategorySection() {
                 <p className="text-muted-foreground text-sm mb-4">
                   {category.description}
                 </p>
-                <span className="text-sm font-medium text-foreground/60">
+                <span className="text-sm font-medium text-foreground/60 hidden">
                   {category.count.toLocaleString()}+ listings
                 </span>
               </button>
